@@ -26,6 +26,14 @@ collections:
               - {label: "Ancho del Logo (px)", name: "logo_width", widget: "number", default: 120, value_type: "int"}
               - {label: "Alineación del Header", name: "header_align", widget: "select", options: [{label: "Izquierda", value: "left"}, {label: "Centro", value: "center"}, {label: "Derecha", value: "right"}], default: "center"}
               - {label: "Color de Acento", name: "accent_color", widget: "color", default: "#A0D94A"}
+          - label: "Textos del Sitio"
+            name: "texts"
+            widget: "object"
+            fields:
+              - {label: "Título Principal / Slogan", name: "main_title", widget: "string", required: false}
+              - {label: "Texto de Bienvenida", name: "description", widget: "text", required: false}
+              - {label: "Créditos (Footer)", name: "footer_text", widget: "string", required: false}
+              - {label: "Etiqueta de Botones", name: "button_label", widget: "string", default: "Cotizar ahora"}
 
   - name: "products"
     label: "Catálogo de Productos"
