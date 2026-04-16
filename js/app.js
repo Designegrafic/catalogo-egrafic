@@ -99,22 +99,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderCategories(products) {
         const menuContainer = document.getElementById('category-menu');
-        const categories = {};
-
-        // Agrupar por categoría y subcategoría
-        products.forEach(p => {
-            if (!categories[p.category]) {
-                categories[p.category] = new Set();
-            }
-            if (p.subcategory) {
-                categories[p.category].add(p.subcategory);
-            }
+        const categoriesDef = window.appConfig.categories || [];
+        
+        // Mapeo útil de categorías (hacia nombres visuales, orden e iconos)
+        const catMap = {};
+        categoriesDef.forEach(c => {
+            catMap[c.id] = { name: c.name, order: c.order || 0 };
         });
 
-        // Generar HTML del menú anidado
+        // Agrupar IDs por los que tienen productos
+        const usedCategories = {};
+        products.forEach(p => {
+            if (!usedCategories[p.category]) usedCategories[p.category] = new Set();
+            if (p.subcategory) usedCategories[p.category].add(p.subcategory);
+        });
+
+        // Ordenamiento natural o por peso predefinido en config
+        let sortedCatIds = Object.keys(usedCategories);
+        if (categoriesDef.length > 0) {
+            sortedCatIds.sort((a, b) => {
+                const orderA = catMap[a] ? catMap[a].order : 999;
+                const orderB = catMap[b] ? catMap[b].order : 999;
+                return orderA - orderB;
+            });
+        }
+
         menuContainer.innerHTML = '';
         
-        // Botón para resetear filtros
+        // Toggle de vistas
         const allBtn = document.createElement('div');
         allBtn.className = 'category-group';
         allBtn.innerHTML = '<div class="category-name" style="color: var(--accent-color)">Mostrar Todo</div>';
@@ -124,22 +136,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         menuContainer.appendChild(allBtn);
 
-        Object.keys(categories).forEach(catName => {
+        sortedCatIds.forEach(catId => {
             const group = document.createElement('div');
             group.className = 'category-group open';
             
+            const catNameDisplay = catMap[catId] ? catMap[catId].name : catId;
             const catHeader = document.createElement('div');
             catHeader.className = 'category-name';
-            catHeader.textContent = catName;
+            catHeader.textContent = catNameDisplay;
             catHeader.addEventListener('click', () => {
                 group.classList.toggle('open');
-                renderProducts(allProducts.filter(p => p.category === catName));
+                renderProducts(allProducts.filter(p => p.category === catId));
             });
 
             const subList = document.createElement('ul');
             subList.className = 'subcategory-list';
             
-            categories[catName].forEach(subName => {
+            usedCategories[catId].forEach(subName => {
                 const subItem = document.createElement('li');
                 subItem.className = 'subcategory-item';
                 subItem.textContent = subName;
@@ -147,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.stopPropagation();
                     document.querySelectorAll('.subcategory-item').forEach(el => el.classList.remove('active'));
                     subItem.classList.add('active');
-                    renderProducts(allProducts.filter(p => p.category === catName && p.subcategory === subName));
+                    renderProducts(allProducts.filter(p => p.category === catId && p.subcategory === subName));
                 });
                 subList.appendChild(subItem);
             });
@@ -162,6 +175,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const app = document.getElementById('app');
         app.innerHTML = '';
         
+        const categoriesDef = window.appConfig.categories || [];
+        const catMap = {};
+        categoriesDef.forEach(c => catMap[c.id] = c.name);
+        
         if(products.length === 0) {
             app.innerHTML = '<p>No se encontraron productos.</p>';
             return;
@@ -173,11 +190,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const currency = window.appConfig?.currency || 'USD';
             const priceText = p.price ? `$${p.price} ${currency}` : 'Consultar precio';
+            const catDisplay = catMap[p.category] || p.category;
 
             card.innerHTML = `
                 <img src="${p.image}" alt="${p.title}" class="product-image" loading="lazy">
                 <div class="product-info">
-                    <span class="product-category">${p.category} | ${p.subcategory}</span>
+                    <span class="product-category">${catDisplay} | ${p.subcategory}</span>
                     <h2 class="product-title">${p.title}</h2>
                     <p style="font-size:0.95rem">${p.description}</p>
                     <span class="product-price">${priceText}</span>

@@ -35,6 +35,16 @@ collections:
               - {label: "Créditos (Footer)", name: "footer_text", widget: "string", required: false}
               - {label: "Etiqueta de Botones", name: "button_label", widget: "string", default: "Cotizar ahora"}
 
+          - label: "Administrador de Categorías"
+            name: "categories"
+            widget: "list"
+            summary: "{{fields.name}}"
+            fields:
+              - {label: "ID Único (en minúsculas, ej: laser)", name: "id", widget: "string"}
+              - {label: "Nombre Visible", name: "name", widget: "string"}
+              - {label: "Orden", name: "order", widget: "number", value_type: "int", default: 0}
+              - {label: "Ícono (URL o SVG)", name: "icon", widget: "string", required: false}
+
   - name: "products"
     label: "Catálogo de Productos"
     folder: "data/products"
@@ -55,6 +65,10 @@ collections:
         required: false
       - label: "Categoría"
         name: "category"
-        widget: "select"
-        options: ["Corte Láser", "DTF UV", "Gigantografías", "Diseño Gráfico", "Desarrollo Web", "Marketing Digital", "Papelería", "Impresos"]
+        widget: "relation"
+        collection: "config"
+        file: "settings"
+        search_fields: ["categories.*.name", "categories.*.id"]
+        display_fields: ["categories.*.name"]
+        value_field: "categories.*.id"
       - {label: "Subcategoría", name: "subcategory", widget: "string"}
