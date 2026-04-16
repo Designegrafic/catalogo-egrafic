@@ -17,8 +17,15 @@ collections:
         fields:
           - {label: "Nombre de la Empresa", name: "company_name", widget: "string"}
           - {label: "WhatsApp", name: "whatsapp", widget: "string"}
-          - {label: "Logo", name: "logo", widget: "image", required: false}
           - {label: "Moneda", name: "currency", widget: "string", default: "USD"}
+          - label: "Apariencia del Sitio"
+            name: "appearance"
+            widget: "object"
+            fields:
+              - {label: "Logo", name: "logo", widget: "image", required: false}
+              - {label: "Ancho del Logo (px)", name: "logo_width", widget: "number", default: 120, value_type: "int"}
+              - {label: "Alineación del Header", name: "header_align", widget: "select", options: [{label: "Izquierda", value: "left"}, {label: "Centro", value: "center"}, {label: "Derecha", value: "right"}], default: "center"}
+              - {label: "Color de Acento", name: "accent_color", widget: "color", default: "#A0D94A"}
 
   - name: "products"
     label: "Catálogo de Productos"

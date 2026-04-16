@@ -16,12 +16,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.title = `Catálogo ${config.company_name}`;
             }
             
-            if (config.logo) {
+            // Configuraciones de Apariencia (si el objeto existe en JSON)
+            const appearance = config.appearance || {};
+            const logoPath = appearance.logo || config.logo; // retrocompatibilidad
+            
+            // 1. Color de Acento Dinámico
+            if (appearance.accent_color) {
+                document.documentElement.style.setProperty('--accent-color', appearance.accent_color);
+            }
+            
+            // 2. Alineación Dinámica del Header
+            if (appearance.header_align) {
+                const header = document.querySelector('header');
+                if (header) {
+                    header.style.textAlign = appearance.header_align;
+                    logoContainer.style.justifyContent = appearance.header_align === 'left' ? 'flex-start' : 
+                                                       appearance.header_align === 'right' ? 'flex-end' : 'center';
+                }
+            }
+            
+            // 3. Modificador de Logo Dinámico
+            if (logoPath) {
                 const img = document.createElement('img');
-                img.src = config.logo;
+                img.src = logoPath;
                 img.alt = config.company_name || 'Logo corporativo';
                 img.className = 'site-logo';
-                logoContainer.innerHTML = ''; // Limpiar el h1 previo (fallback)
+                // Si el ancho está definido en el CMS, lo aplicamos explícitamente y aflojamos el alto para evitar distorsión
+                if (appearance.logo_width) {
+                    img.style.maxWidth = `${appearance.logo_width}px`;
+                    img.style.width = '100%'; 
+                    img.style.maxHeight = 'none'; // Overrides CSS max-height restrictivo temporal
+                }
+                logoContainer.innerHTML = ''; // Limpiar el fallback (texto h1)
                 logoContainer.appendChild(img);
             }
         })
