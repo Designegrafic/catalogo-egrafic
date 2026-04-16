@@ -50,6 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 logoContainer.innerHTML = ''; // Limpiar el fallback (texto h1)
                 logoContainer.appendChild(img);
             }
+            
+            // Asignar Link de WhatsApp para Botón Flotante
+            const floatingWa = document.getElementById('floating-wa');
+            if (floatingWa) {
+                const phone = config.whatsapp || '+593959127634';
+                floatingWa.href = `https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent('Hola E-Grafic, vengo desde su Catálogo móvil y deseo una cotización.')}`;
+            }
         })
         .catch(err => console.error('Error al cargar config:', err));
 
