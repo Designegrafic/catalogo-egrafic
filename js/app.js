@@ -6,6 +6,24 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(res => res.json())
         .then(config => {
             window.appConfig = config;
+            
+            // Renderizado dinámico del Header (Logo y Título)
+            const logoContainer = document.getElementById('header-logo-container');
+            const titleEl = document.getElementById('header-title');
+            
+            if (config.company_name) {
+                if (titleEl) titleEl.textContent = config.company_name;
+                document.title = `Catálogo ${config.company_name}`;
+            }
+            
+            if (config.logo) {
+                const img = document.createElement('img');
+                img.src = config.logo;
+                img.alt = config.company_name || 'Logo corporativo';
+                img.className = 'site-logo';
+                logoContainer.innerHTML = ''; // Limpiar el h1 previo (fallback)
+                logoContainer.appendChild(img);
+            }
         })
         .catch(err => console.error('Error al cargar config:', err));
 
