@@ -1,0 +1,274 @@
+:root {
+    --font-heading: 'Poppins', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --bg-color: #FAF9F6;
+    --text-color: #666666;
+    --title-color: #333333;
+    --accent-color: #A0D94A;
+    
+    /* Espaciado neuroestético - Galería */
+    --space-sm: 0.5rem;
+    --space-md: 2rem;
+    --space-lg: 4rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--title-color);
+    margin-bottom: var(--space-sm);
+    letter-spacing: -0.02em;
+}
+
+header {
+    padding: var(--space-lg) var(--space-md);
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+header p {
+    color: #666;
+    font-size: 1.125rem;
+}
+
+.layout-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--space-md) var(--space-lg);
+    display: flex;
+    gap: var(--space-lg);
+    align-items: flex-start;
+}
+
+.sidebar {
+    width: 280px;
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: var(--space-md);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.05);
+    flex-shrink: 0;
+    position: sticky;
+    top: 2rem;
+}
+
+.sidebar h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    border-bottom: 2px solid var(--bg-color);
+    padding-bottom: 0.5rem;
+}
+
+.category-group {
+    margin-bottom: 1rem;
+}
+
+.category-name {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.05rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.category-name:hover {
+    color: var(--accent-color);
+}
+
+.category-name::after {
+    content: '+';
+    font-weight: 300;
+    font-size: 1.2rem;
+}
+
+.category-group.open .category-name::after {
+    content: '-';
+}
+
+.subcategory-list {
+    list-style: none;
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+    display: none;
+}
+
+.category-group.open .subcategory-list {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.subcategory-item {
+    padding: 0.25rem 0;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.subcategory-item:hover, .subcategory-item.active {
+    color: #000;
+    text-decoration: underline;
+}
+
+main {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-lg);
+}
+
+/* Diseño Neuroestético de Tarjeta de Producto - Materialidad */
+.product-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0,0,0,0.03);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.06);
+}
+
+.product-image {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    background-color: #e9e9e9;
+}
+
+.product-info {
+    padding: var(--space-md);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-category {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #888;
+    margin-bottom: 0.5rem;
+}
+
+.product-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.product-price {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--accent-color);
+    margin-top: auto;
+    padding-top: 1rem;
+}
+
+footer {
+    padding: var(--space-lg) var(--space-md);
+    font-size: 0.875rem;
+    color: #888;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.admin-link {
+    color: inherit;
+    opacity: 0.3;
+    transition: opacity 0.3s ease, color 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.admin-link:hover {
+    opacity: 1;
+    color: var(--accent-color);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Botón WhatsApp */
+.btn-whatsapp {
+    background-color: var(--accent-color);
+    color: #111111;
+    border: none;
+    border-radius: 8px;
+    padding: 0.85rem 1.5rem;
+    font-weight: 500;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 1.5rem;
+    text-decoration: none;
+}
+
+.btn-whatsapp:hover {
+    background-color: #8BCE2C;
+    transform: translateY(-2px);
+}
+
+.btn-whatsapp svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+/* Elementos responsivos */
+@media (max-width: 900px) {
+    .layout-container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        position: static;
+    }
+}
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+}

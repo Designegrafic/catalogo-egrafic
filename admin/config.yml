@@ -1,0 +1,45 @@
+backend:
+  name: git-gateway
+  branch: main # Ramificación a sincronizar
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "config"
+    label: "Configuración General"
+    editor:
+      preview: false
+    files:
+      - label: "Ajustes del Sitio"
+        name: "settings"
+        file: "data/config.json"
+        fields:
+          - {label: "Nombre de la Empresa", name: "company_name", widget: "string"}
+          - {label: "WhatsApp", name: "whatsapp", widget: "string"}
+          - {label: "Logo", name: "logo", widget: "image", required: false}
+          - {label: "Moneda", name: "currency", widget: "string", default: "USD"}
+
+  - name: "products"
+    label: "Catálogo de Productos"
+    folder: "data/products"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Título", name: "title", widget: "string"}
+      - {label: "Descripción", name: "description", widget: "text"}
+      - {label: "Precio", name: "price", widget: "number", value_type: "float"}
+      - label: "Galería de Imágenes"
+        name: "gallery"
+        widget: "list"
+        summary: '{{fields.image}}'
+        field: {label: "Imagen", name: "image", widget: "image"}
+      - label: "Imagen Principal"
+        name: "image"
+        widget: "image"
+        required: false
+      - label: "Categoría"
+        name: "category"
+        widget: "select"
+        options: ["Corte Láser", "DTF UV", "Gigantografías", "Diseño Gráfico", "Desarrollo Web", "Marketing Digital", "Papelería", "Impresos"]
+      - {label: "Subcategoría", name: "subcategory", widget: "string"}
