@@ -6,16 +6,82 @@ document.addEventListener('DOMContentLoaded', () => {
     // Parámetro "cache buster" para evitar carga de JSON viejos
     const cacheBuster = `?v=${Date.now()}`;
 
-    // Cargar Configuración y Productos en parelelo
+    // Función para obtener productos individuales (.md) desde el Front-End
+    async function loadProducts() {
+        let filesFound = [];
+        try {
+            // 1. Escaneo vía API de GitHub para Netlify/Producción
+            const ghRes = await fetch('https://api.github.com/repos/Designegrafic/catalogo-egrafic/contents/content/productos');
+            if (ghRes.ok) {
+                const arr = await ghRes.json();
+                filesFound = arr.filter(f => f.name.endsWith('.md')).map(f => f.name);
+            } else {
+                // 2. Intento local (Live Server directory listing fallback)
+                const localRes = await fetch('content/productos/');
+                if (localRes.ok) {
+                    const text = await localRes.text();
+                    const matches = [...text.matchAll(/href="([^"]+\.md)"/gi)];
+                    filesFound = matches.map(m => m[1].split('/').pop()); 
+                }
+            }
+        } catch (e) {
+            console.warn("No se pudo listar el directorio dinámicamente:", e);
+        }
+
+        // 3. Fallback de archivos fijos migrados
+        if (filesFound.length === 0) {
+            filesFound = [
+                '1-identidad-de-marca.md', 
+                '2-sitio-web-corporativo.md', 
+                '3-gestion-de-redes-sociales.md', 
+                '4-papeleria-premium.md'
+            ];
+        }
+
+        // Proceso de lectura y mapeo
+        const productsList = [];
+        for (const filename of [...new Set(filesFound)]) {
+            try {
+                const mdRes = await fetch(`content/productos/${filename}${cacheBuster}`);
+                if (mdRes.ok) {
+                    const text = await mdRes.text();
+                    // Extraer Frontmatter (YAML)
+                    const fmMatch = text.match(/---\r?\n([\s\S]*?)\r?\n---/);
+                    if (fmMatch) {
+                        const lines = fmMatch[1].split(/\r?\n/);
+                        const product = {};
+                        let currentKey = '';
+                        
+                        lines.forEach(line => {
+                            if (line.startsWith(' ') || line.startsWith('\t')) {
+                                if (currentKey) product[currentKey] += ' ' + line.trim();
+                            } else if (line.trim().length > 0) {
+                                const sepIndex = line.indexOf(':');
+                                if (sepIndex > 0) {
+                                    currentKey = line.substring(0, sepIndex).trim();
+                                    let val = line.substring(sepIndex + 1).trim();
+                                    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+                                        val = val.substring(1, val.length - 1);
+                                    }
+                                    product[currentKey] = val;
+                                }
+                            }
+                        });
+                        productsList.push(product);
+                    }
+                }
+            } catch(e) {}
+        }
+        return productsList;
+    }
+
+    // Cargar Configuración y Productos en paralelo
     Promise.all([
         fetch(`data/config.json${cacheBuster}`).then(res => {
             if (!res.ok) throw new Error('Network response was not ok for config.json');
             return res.json();
         }),
-        fetch(`data/products.json${cacheBuster}`).then(res => {
-            if (!res.ok) throw new Error('Network response was not ok for products.json');
-            return res.json();
-        })
+        loadProducts()
     ])
     .then(([config, products]) => {
         window.appConfig = config;

@@ -47,8 +47,10 @@ collections:
 
   - name: "products"
     label: "Catálogo de Productos"
-    folder: "data/products"
+    folder: "content/productos"
     create: true
+    extension: "md"
+    format: "yaml-frontmatter"
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "Título", name: "title", widget: "string"}
