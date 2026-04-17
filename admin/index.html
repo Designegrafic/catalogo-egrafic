@@ -140,13 +140,29 @@
         var entry = this.props.entry;
         
         // getAsset() es la función mágica: obtiene el Blob de la RAM
-        // Galeria toma la primera foto como destacada en previsualizacion
+        // Obtener la lista y extraer la primera imagen de forma robusta
         var galleryList = entry.getIn(['data', 'gallery']);
-        var imageField = galleryList && galleryList.size > 0 ? galleryList.get(0) : entry.getIn(['data', 'image']);
-        var imageSrc = this.props.getAsset(imageField); 
+        var imageField = null;
+        
+        if (galleryList && galleryList.size > 0) {
+            var firstItem = galleryList.get(0);
+            if (typeof firstItem === 'string') {
+                imageField = firstItem; // Array de strings nativo
+            } else if (firstItem && typeof firstItem.get === 'function') {
+                imageField = firstItem.get('image') || firstItem.get('url'); // Si es un objeto complejo
+            } else {
+                imageField = firstItem;
+            }
+        }
+        
+        if (!imageField) {
+            imageField = entry.getIn(['data', 'image']);
+        }
+
+        var imageSrc = imageField ? this.props.getAsset(imageField) : null; 
         
         return h('div', { className: "product-preview" },
-          imageSrc ? h('img', { src: imageSrc.toString(), alt: entry.getIn(['data', 'title']) }) : null,
+          imageSrc ? h('img', { src: imageSrc.toString(), alt: entry.getIn(['data', 'title']), style: { width: '100%', objectFit: 'cover' } }) : null,
           h('div', { className: "preview-category" }, 
             (entry.getIn(['data', 'classification', 'category']) || entry.getIn(['data', 'category']) || "Categoría") + " | " + (entry.getIn(['data', 'classification', 'subcategory']) || entry.getIn(['data', 'subcategory']) || "Subcategoría")
           ),
