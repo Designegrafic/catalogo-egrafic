@@ -1,101 +1,127 @@
 document.addEventListener('DOMContentLoaded', () => {
     let allProducts = [];
+    const appContainer = document.getElementById('app');
+    const loadingSpinner = document.getElementById('loading-spinner');
     
-    // Cargar configuración de la app
-    fetch('data/config.json')
-        .then(res => res.json())
-        .then(config => {
-            window.appConfig = config;
-            
-            // Renderizado dinámico del Header (Logo y Título)
-            const logoContainer = document.getElementById('header-logo-container');
-            const titleEl = document.getElementById('header-title');
-            
-            if (config.company_name) {
-                if (titleEl) titleEl.textContent = config.company_name;
-                document.title = `Catálogo ${config.company_name}`;
+    // Parámetro "cache buster" para evitar carga de JSON viejos
+    const cacheBuster = `?v=${Date.now()}`;
+
+    // Cargar Configuración y Productos en parelelo
+    Promise.all([
+        fetch(`data/config.json${cacheBuster}`).then(res => {
+            if (!res.ok) throw new Error('Network response was not ok for config.json');
+            return res.json();
+        }),
+        fetch(`data/products.json${cacheBuster}`).then(res => {
+            if (!res.ok) throw new Error('Network response was not ok for products.json');
+            return res.json();
+        })
+    ])
+    .then(([config, products]) => {
+        window.appConfig = config;
+        
+        // Renderizado dinámico del Header (Logo y Título)
+        const logoContainer = document.getElementById('header-logo-container');
+        const titleEl = document.getElementById('header-title');
+        
+        if (config.company_name) {
+            if (titleEl) titleEl.textContent = config.company_name;
+            document.title = `Catálogo ${config.company_name}`;
+        }
+        
+        // Configuraciones de Apariencia
+        const appearance = config.appearance || {};
+        const logoPath = appearance.logo || config.logo; // retrocompatibilidad
+        
+        if (appearance.accent_color) {
+            document.documentElement.style.setProperty('--accent-color', appearance.accent_color);
+        }
+        
+        if (appearance.header_align) {
+            const header = document.querySelector('header');
+            if (header) {
+                header.style.textAlign = appearance.header_align;
+                logoContainer.style.justifyContent = appearance.header_align === 'left' ? 'flex-start' : 
+                                                   appearance.header_align === 'right' ? 'flex-end' : 'center';
             }
-            
-            // Configuraciones de Apariencia (si el objeto existe en JSON)
-            const appearance = config.appearance || {};
-            const logoPath = appearance.logo || config.logo; // retrocompatibilidad
-            
-            // 1. Color de Acento Dinámico
-            if (appearance.accent_color) {
-                document.documentElement.style.setProperty('--accent-color', appearance.accent_color);
+        }
+        
+        if (logoPath) {
+            const img = document.createElement('img');
+            img.src = logoPath;
+            img.alt = config.company_name || 'Logo corporativo';
+            img.className = 'site-logo';
+            if (appearance.logo_width) {
+                img.style.maxWidth = `${appearance.logo_width}px`;
+                img.style.width = '100%'; 
+                img.style.maxHeight = 'none';
             }
-            
-            // 2. Alineación Dinámica del Header
-            if (appearance.header_align) {
-                const header = document.querySelector('header');
-                if (header) {
-                    header.style.textAlign = appearance.header_align;
-                    logoContainer.style.justifyContent = appearance.header_align === 'left' ? 'flex-start' : 
-                                                       appearance.header_align === 'right' ? 'flex-end' : 'center';
-                }
-            }
-            
-            // 3. Modificador de Logo Dinámico
-            if (logoPath) {
-                const img = document.createElement('img');
-                img.src = logoPath;
-                img.alt = config.company_name || 'Logo corporativo';
-                img.className = 'site-logo';
-                // Si el ancho está definido en el CMS, lo aplicamos explícitamente y aflojamos el alto para evitar distorsión
-                if (appearance.logo_width) {
-                    img.style.maxWidth = `${appearance.logo_width}px`;
-                    img.style.width = '100%'; 
-                    img.style.maxHeight = 'none'; // Overrides CSS max-height restrictivo temporal
-                }
-                logoContainer.innerHTML = ''; // Limpiar el fallback (texto h1)
+            if (logoContainer) {
+                logoContainer.innerHTML = '';
                 logoContainer.appendChild(img);
             }
-            
-            // Configuraciones de Textos
-            const texts = config.texts || {};
-            const subtitleEl = document.getElementById('header-subtitle');
-            const footerEl = document.getElementById('footer-text');
-            window.appConfig.buttonLabel = texts.button_label || 'Cotizar ahora';
-            
-            if (subtitleEl) {
-                subtitleEl.textContent = texts.main_title || 'Catálogo Minimalista';
+        }
+        
+        // Configuraciones de Textos
+        const texts = config.texts || {};
+        const subtitleEl = document.getElementById('header-subtitle');
+        const footerEl = document.getElementById('footer-text');
+        window.appConfig.buttonLabel = texts.button_label || 'Cotizar ahora';
+        
+        if (subtitleEl) {
+            subtitleEl.textContent = texts.main_title || 'Catálogo Minimalista';
+        }
+        
+        if (texts.description) {
+            let descEl = document.getElementById('header-description');
+            if (!descEl) {
+                descEl = document.createElement('p');
+                descEl.id = 'header-description';
+                descEl.style.color = 'var(--text-color)';
+                descEl.style.marginTop = '0.5rem';
+                descEl.style.fontSize = '0.95rem';
+                document.querySelector('header').appendChild(descEl);
             }
-            
-            if (texts.description) {
-                let descEl = document.getElementById('header-description');
-                if (!descEl) {
-                    descEl = document.createElement('p');
-                    descEl.id = 'header-description';
-                    descEl.style.color = 'var(--text-color)';
-                    descEl.style.marginTop = '0.5rem';
-                    descEl.style.fontSize = '0.95rem';
-                    document.querySelector('header').appendChild(descEl);
-                }
-                descEl.textContent = texts.description;
-            }
-            
-            if (footerEl) {
-                footerEl.innerHTML = texts.footer_text || '&copy; ' + new Date().getFullYear() + ' E-Grafic';
-            }
-            
-            // Asignar Link de WhatsApp para Botón Flotante
-            const floatingWa = document.getElementById('floating-wa');
-            if (floatingWa) {
-                const phone = config.whatsapp || '+593959127634';
-                floatingWa.href = `https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent('Hola E-Grafic, vengo desde su Catálogo móvil y deseo una cotización.')}`;
-            }
-        })
-        .catch(err => console.error('Error al cargar config:', err));
+            descEl.textContent = texts.description;
+        }
+        
+        if (footerEl) {
+            footerEl.innerHTML = texts.footer_text || '&copy; ' + new Date().getFullYear() + ' E-Grafic';
+        }
+        
+        // WhatsApp link
+        const floatingWa = document.getElementById('floating-wa');
+        if (floatingWa) {
+            const phone = config.whatsapp || '+593959127634';
+            floatingWa.href = `https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent('Hola E-Grafic, vengo desde su Catálogo móvil y deseo una cotización.')}`;
+        }
 
-    // Cargar productos
-    fetch('data/products.json')
-        .then(res => res.json())
-        .then(products => {
-            allProducts = products;
-            renderCategories(products);
-            renderProducts(products);
-        })
-        .catch(err => console.error('Error al cargar productos:', err));
+        // Asignación de Productos y quitar loader
+        allProducts = products || [];
+        
+        if (loadingSpinner) {
+            loadingSpinner.style.display = 'none';
+        }
+
+        renderCategories(allProducts);
+        renderProducts(allProducts);
+
+    })
+    .catch(err => {
+        console.error('Error inicializando el catálogo:', err);
+        if (loadingSpinner) {
+            loadingSpinner.style.display = 'none';
+        }
+        if (appContainer) {
+            appContainer.innerHTML = `
+                <div style="text-align:center; padding:3rem; color:var(--text-color);">
+                    <h2 style="color:red; margin-bottom:1rem;">Problema de Conexión</h2>
+                    <p>No se pudieron cargar los datos del catálogo. Por favor, revisa tu conexión y vuelve a intentarlo.</p>
+                    <button onclick="window.location.reload()" style="margin-top:1.5rem; padding:10px 20px; border-radius:5px; background:var(--accent-color, #128C7E); color:white; border:none; cursor:pointer;">Recargar Página</button>
+                </div>
+            `;
+        }
+    });
 
     function renderCategories(products) {
         const menuContainer = document.getElementById('category-menu');
