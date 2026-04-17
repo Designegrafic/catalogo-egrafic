@@ -55,7 +55,20 @@ collections:
     extension: "md"
     format: "yaml-frontmatter"
     slug: "{{slug}}"
-    summary: '{{fields.title}} - {{fields.gallery[0]}}'
+    summary: "{{title}}"
+    view_filters:
+      - label: "Diseño Gráfico"
+        field: "classification.category"
+        pattern: "Diseño Gráfico"
+      - label: "Desarrollo Web"
+        field: "classification.category"
+        pattern: "Desarrollo Web"
+      - label: "Marketing"
+        field: "classification.category"
+        pattern: "Marketing Digital"
+      - label: "Impresión"
+        field: "classification.category"
+        pattern: "Impresión UV DTF"
     fields:
       - {label: "Título", name: "title", widget: "string"}
       - {label: "Descripción", name: "description", widget: "text"}

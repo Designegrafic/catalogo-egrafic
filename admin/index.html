@@ -176,13 +176,14 @@
     // Registrar el componente de previsualización in-memory para la colección "products"
     CMS.registerPreviewTemplate("products", ProductPreview);
 
-    // Botón Global de "Ver Catálogo" anclado al body
+    // Inyección de estilos y logica para Cards de Imágenes de Galería y Botón elegante
     window.addEventListener('DOMContentLoaded', () => {
+      // 1. Botón "Ver Catálogo" moderno y pequeño
       const btn = document.createElement('a');
       btn.href = 'https://catalogoegrafic.netlify.app';
       btn.target = '_blank';
-      btn.innerHTML = '👁️ Ver Catálogo';
-      btn.style.cssText = 'position:fixed; top:12px; right:150px; z-index:99999; background:#128C7E; color:#fff; padding:8px 16px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:14px; display:flex; align-items:center; gap:8px; box-shadow:0 4px 10px rgba(0,0,0,0.1);';
+      btn.innerHTML = '👁️ Catálogo';
+      btn.style.cssText = 'position:fixed; top:12px; right:150px; z-index:99999; background:rgba(0,0,0,0.8); color:#fff; padding:6px 12px; border-radius:20px; text-decoration:none; font-weight:500; font-size:12px; display:flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(0,0,0,0.15); backdrop-filter:blur(4px); transition:0.3s ease;';
       
       const style = document.createElement('style');
       style.textContent = `
@@ -193,10 +194,28 @@
             bottom: 16px !important;
           }
         }
+        
+        /* Ocultar el texto crudo de imágenes en la tarjeta e insertar CSS en la vista */
+        .nc-collectionPage-card {
+           position:relative;
+        }
       `;
       document.head.appendChild(style);
       btn.id = 'btn-ver-catalogo';
       document.body.appendChild(btn);
+
+      // 2. Observer: Si en la vista de lista detecta una URL de imagen viva, la vuelve miniatura tipo thumbnail de 80px
+      const observer = new MutationObserver(() => {
+        document.querySelectorAll('span, p, div').forEach(node => {
+          if (node.childNodes.length === 1 && node.childNodes[0].nodeType === 3) {
+            const text = node.textContent.trim();
+            if ((text.startsWith('http') || text.startsWith('/assets/')) && (text.endsWith('.png') || text.endsWith('.jpg') || text.endsWith('.jpeg'))) {
+              node.innerHTML = \`<img src="\${text}" style="width:80px; height:80px; object-fit:cover; border-radius:8px; display:block; margin:8px 0;" alt="thumbnail">\`;
+            }
+          }
+        });
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
     });
   </script>
 </body>
