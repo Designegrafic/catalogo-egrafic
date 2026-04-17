@@ -175,6 +175,29 @@
 
     // Registrar el componente de previsualización in-memory para la colección "products"
     CMS.registerPreviewTemplate("products", ProductPreview);
+
+    // Botón Global de "Ver Catálogo" anclado al body
+    window.addEventListener('DOMContentLoaded', () => {
+      const btn = document.createElement('a');
+      btn.href = 'https://catalogoegrafic.netlify.app';
+      btn.target = '_blank';
+      btn.innerHTML = '👁️ Ver Catálogo';
+      btn.style.cssText = 'position:fixed; top:12px; right:150px; z-index:99999; background:#128C7E; color:#fff; padding:8px 16px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:14px; display:flex; align-items:center; gap:8px; box-shadow:0 4px 10px rgba(0,0,0,0.1);';
+      
+      const style = document.createElement('style');
+      style.textContent = `
+        @media(max-width: 768px) {
+          #btn-ver-catalogo {
+            right: 16px !important;
+            top: auto !important;
+            bottom: 16px !important;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+      btn.id = 'btn-ver-catalogo';
+      document.body.appendChild(btn);
+    });
   </script>
 </body>
 </html>

@@ -54,7 +54,8 @@ collections:
     create: true
     extension: "md"
     format: "yaml-frontmatter"
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{slug}}"
+    summary: '{{fields.title}} - {{fields.gallery[0]}}'
     fields:
       - {label: "Título", name: "title", widget: "string"}
       - {label: "Descripción", name: "description", widget: "text"}
