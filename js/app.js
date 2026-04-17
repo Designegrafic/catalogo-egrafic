@@ -48,26 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Extraer Frontmatter (YAML)
                     const fmMatch = text.match(/---\r?\n([\s\S]*?)\r?\n---/);
                     if (fmMatch) {
-                        const lines = fmMatch[1].split(/\r?\n/);
-                        const product = {};
-                        let currentKey = '';
-                        
-                        lines.forEach(line => {
-                            if (line.startsWith(' ') || line.startsWith('\t')) {
-                                if (currentKey) product[currentKey] += ' ' + line.trim();
-                            } else if (line.trim().length > 0) {
-                                const sepIndex = line.indexOf(':');
-                                if (sepIndex > 0) {
-                                    currentKey = line.substring(0, sepIndex).trim();
-                                    let val = line.substring(sepIndex + 1).trim();
-                                    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
-                                        val = val.substring(1, val.length - 1);
-                                    }
-                                    product[currentKey] = val;
-                                }
-                            }
-                        });
-                        productsList.push(product);
+                        try {
+                            const product = jsyaml.load(fmMatch[1]);
+                            productsList.push(product);
+                        } catch(err) {
+                            console.error("Error parseando YAML de " + filename, err);
+                        }
                     }
                 }
             } catch(e) {}
@@ -199,11 +185,15 @@ document.addEventListener('DOMContentLoaded', () => {
             catMap[c.id] = { name: c.name, order: c.order || 0 };
         });
 
-        // Agrupar IDs por los que tienen productos
+        // Agrupar IDs por los que tienen productos usando la nueva estructura 'classification'
         const usedCategories = {};
         products.forEach(p => {
-            if (!usedCategories[p.category]) usedCategories[p.category] = new Set();
-            if (p.subcategory) usedCategories[p.category].add(p.subcategory);
+            const cat = p.classification?.category || p.category;
+            const sub = p.classification?.subcategory || p.subcategory;
+            if (cat) {
+                 if (!usedCategories[cat]) usedCategories[cat] = new Set();
+                 if (sub) usedCategories[cat].add(sub);
+            }
         });
 
         // Ordenamiento natural o por peso predefinido en config
@@ -238,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
             catHeader.textContent = catNameDisplay;
             catHeader.addEventListener('click', () => {
                 group.classList.toggle('open');
-                renderProducts(allProducts.filter(p => p.category === catId));
+                renderProducts(allProducts.filter(p => (p.classification?.category || p.category) === catId));
             });
 
             const subList = document.createElement('ul');
@@ -252,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.stopPropagation();
                     document.querySelectorAll('.subcategory-item').forEach(el => el.classList.remove('active'));
                     subItem.classList.add('active');
-                    renderProducts(allProducts.filter(p => p.category === catId && p.subcategory === subName));
+                    renderProducts(allProducts.filter(p => (p.classification?.category || p.category) === catId && (p.classification?.subcategory || p.subcategory) === subName));
                 });
                 subList.appendChild(subItem);
             });
@@ -282,12 +272,28 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const currency = window.appConfig?.currency || 'USD';
             const priceText = p.price ? `$${p.price} ${currency}` : 'Consultar precio';
-            const catDisplay = catMap[p.category] || p.category;
+            
+            const catId = p.classification?.category || p.category;
+            const subCatDisplay = p.classification?.subcategory || p.subcategory || '';
+            const catDisplay = catMap[catId] || catId;
+
+            // Galería con fallback a image legacy
+            const thumb = (p.gallery && p.gallery.length > 0) ? p.gallery[0] : (p.image || '');
+
+            let hiddenGalleryHTML = '';
+            if (p.gallery && p.gallery.length > 1) {
+                hiddenGalleryHTML = p.gallery.slice(1).map(imgUrl => 
+                    `<a href="${imgUrl}" class="glightbox" data-gallery="gallery-${p.id}" style="display:none;"></a>`
+                ).join('');
+            }
 
             card.innerHTML = `
-                <img src="${p.image}" alt="${p.title}" class="product-image" loading="lazy">
+                <a href="${thumb}" class="glightbox" data-gallery="gallery-${p.id}">
+                    <img src="${thumb}" alt="${p.title}" class="product-image" loading="lazy">
+                </a>
+                ${hiddenGalleryHTML}
                 <div class="product-info">
-                    <span class="product-category">${catDisplay} | ${p.subcategory}</span>
+                    <span class="product-category">${catDisplay} | ${subCatDisplay}</span>
                     <h2 class="product-title">${p.title}</h2>
                     <p style="font-size:0.95rem">${p.description}</p>
                     <span class="product-price">${priceText}</span>
@@ -298,13 +304,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             
-            card.addEventListener('click', () => {
-                const phone = window.appConfig?.whatsapp || '+593959127634';
-                const msg = encodeURIComponent(`Hola, me interesa el servicio: ${p.title}`);
-                window.open(`https://wa.me/${phone.replace('+','')}?text=${msg}`, '_blank');
-            });
+            const waBtn = card.querySelector('.btn-whatsapp');
+            if (waBtn) {
+                waBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const phone = window.appConfig?.whatsapp || '+593959127634';
+                    const msg = encodeURIComponent(`Hola e-grafic, quiero cotizar ${p.title}`);
+                    window.open(`https://wa.me/${phone.replace('+','')}?text=${msg}`, '_blank');
+                });
+            }
 
             app.appendChild(card);
         });
+
+        // Iniciar GLightbox
+        if (typeof GLightbox !== 'undefined') {
+            GLightbox({
+                selector: '.glightbox',
+                touchNavigation: true,
+                loop: true
+            });
+        }
     }
 });

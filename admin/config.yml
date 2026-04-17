@@ -56,21 +56,21 @@ collections:
       - {label: "Título", name: "title", widget: "string"}
       - {label: "Descripción", name: "description", widget: "text"}
       - {label: "Precio", name: "price", widget: "number", value_type: "float"}
+      - label: "Clasificación"
+        name: "classification"
+        widget: "object"
+        fields:
+          - label: "Categoría Principal"
+            name: "category"
+            widget: "relation"
+            collection: "config"
+            file: "settings"
+            search_fields: ["categories.*.name", "categories.*.id"]
+            display_fields: ["categories.*.name"]
+            value_field: "categories.*.id"
+          - {label: "Subcategoría", name: "subcategory", widget: "string"}
       - label: "Galería de Imágenes"
         name: "gallery"
         widget: "list"
-        summary: '{{fields.image}}'
+        summary: 'Imagen de galería'
         field: {label: "Imagen", name: "image", widget: "image"}
-      - label: "Imagen Principal"
-        name: "image"
-        widget: "image"
-        required: false
-      - label: "Categoría"
-        name: "category"
-        widget: "relation"
-        collection: "config"
-        file: "settings"
-        search_fields: ["categories.*.name", "categories.*.id"]
-        display_fields: ["categories.*.name"]
-        value_field: "categories.*.id"
-      - {label: "Subcategoría", name: "subcategory", widget: "string"}

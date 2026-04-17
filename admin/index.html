@@ -139,14 +139,16 @@
       render: function() {
         var entry = this.props.entry;
         
-        // getAsset() es la función mágica: obtiene el Blob de la RAM en lugar de buscar la URL web cruda fallida
-        var imageField = entry.getIn(['data', 'image']);
+        // getAsset() es la función mágica: obtiene el Blob de la RAM
+        // Galeria toma la primera foto como destacada en previsualizacion
+        var galleryList = entry.getIn(['data', 'gallery']);
+        var imageField = galleryList && galleryList.size > 0 ? galleryList.get(0) : entry.getIn(['data', 'image']);
         var imageSrc = this.props.getAsset(imageField); 
         
         return h('div', { className: "product-preview" },
           imageSrc ? h('img', { src: imageSrc.toString(), alt: entry.getIn(['data', 'title']) }) : null,
           h('div', { className: "preview-category" }, 
-            (entry.getIn(['data', 'category']) || "Categoría") + " | " + (entry.getIn(['data', 'subcategory']) || "Subcategoría")
+            (entry.getIn(['data', 'classification', 'category']) || entry.getIn(['data', 'category']) || "Categoría") + " | " + (entry.getIn(['data', 'classification', 'subcategory']) || entry.getIn(['data', 'subcategory']) || "Subcategoría")
           ),
           h('h1', {}, entry.getIn(['data', 'title']) || "Título del Producto"),
           h('p', {}, entry.getIn(['data', 'description']) || "Descripción..."),
