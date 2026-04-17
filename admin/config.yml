@@ -62,12 +62,8 @@ collections:
         fields:
           - label: "Categoría Principal"
             name: "category"
-            widget: "relation"
-            collection: "config"
-            file: "settings"
-            search_fields: ["categories.*.name", "categories.*.id"]
-            display_fields: ["categories.*.name"]
-            value_field: "categories.*.id"
+            widget: "select"
+            options: ["Diseño Gráfico", "Impresión UV DTF", "Letreros y Corpóreos", "Textiles y Merchandising"]
           - {label: "Subcategoría", name: "subcategory", widget: "string"}
       - label: "Galería de Imágenes"
         name: "gallery"
