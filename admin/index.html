@@ -2,13 +2,122 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Evita el autozoom en iOS cuando se hace foco, se puede mejorar usando initial-scale y maximum-scale -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Admin - Decap CMS</title>
-  <!-- Widget para Netlify Identity: Requerido para la autenticación segura -->
+  
+  <!-- Widget para Netlify Identity -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <!-- Bloque de estilos inyectados directamente para forzar Responsive Design en la UI de Decap CMS -->
+  <style>
+    /* VARIABLES GLOBALES PARA MOVILES */
+    :root {
+      --touch-size: 48px;
+    }
+
+    @media (max-width: 768px) {
+      /* 
+       * 1. Panel de Navegación (Sidebar colapsable o ajustable) 
+       * Hacemos que el layout principal ponga el sidebar arriba o abajo y ocupe el full width
+       */
+      div[class*="AppMainContainer"] {
+        flex-direction: column !important;
+      }
+      aside {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        padding: 16px !important;
+        border-right: none !important;
+        border-bottom: 2px solid #eaeaea !important;
+      }
+      
+      /* Ajuste a las tarjetas de colecciones en la página de inicio */
+      div[class*="CardContainer"] {
+        width: 100% !important;
+        margin: 0 0 16px 0 !important;
+      }
+
+      /* 
+       * 2. Formularios Mobile-Friendly (Inputs y Selectores 100%)
+       * Usamos font-size: 16px para evitar Auto-Zoom de iOS 
+       */
+      input, select, textarea, div[role="textbox"] {
+        width: 100% !important;
+        font-size: 16px !important; 
+        box-sizing: border-box !important;
+        padding: 12px !important; /* Más área de tapeo */
+      }
+      
+      /* Las etiquetas de input más amigables */
+      label {
+        font-size: 15px !important;
+        margin-top: 12px !important;
+      }
+
+      /* 
+       * 3. Botones de Acción (Publish y Save más grandes y amigables)
+       */
+      button {
+        min-height: var(--touch-size) !important;
+        font-size: 16px !important;
+        border-radius: 8px !important;
+      }
+      
+      /* La Navbar de los botones de Guardar y Publicar en el Editor */
+      header[class*="ToolbarContainer"], 
+      div[class*="EditorToolbar"] {
+        flex-wrap: wrap !important;
+        height: auto !important;
+        padding: 10px !important;
+      }
+      /* Expandir botones específicos del Header/Editor */
+      header button, 
+      div[class*="EditorToolbar"] button {
+        width: 100% !important;
+        margin-bottom: 8px !important;
+        padding: 14px !important;
+        font-weight: 700 !important;
+      }
+
+      /* 
+       * 4. Previsualización (Ajustar Panel para no estorbar)
+       * Eliminamos la previsualización en vista móvil para que no interrumpa al escribir
+       */
+      div[class*="EditorContainer"] {
+        flex-direction: column !important;
+      }
+      div[class*="PreviewPaneContainer"] {
+        display: none !important; /* Ocultamos el Preview en mobile por defecto */
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- Incluye Decap CMS para la administración visual -->
+  <!-- Incluye Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  
+  <!-- Inyección de Estilos CMS: registerPreviewStyle -->
+  <script>
+    // Este bloque registra el estilo DENTRO del iframe de previsualización 
+    // en caso de que un administrador entre desde una tablet u ordenador.
+    const previewStyles = `
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        line-height: 1.5;
+        padding: 20px;
+        margin: 0;
+        background-color: #f9f9f9;
+        font-size: 16px; /* Para prevenir zoom internamente también por si aplica */
+      }
+      img {
+        max-width: 100%;
+        border-radius: 8px;
+        height: auto;
+      }
+    `;
+    CMS.registerPreviewStyle(previewStyles, { raw: true });
+  </script>
 </body>
 </html>
