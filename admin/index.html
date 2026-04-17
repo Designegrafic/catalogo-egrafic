@@ -98,10 +98,9 @@
   <!-- Incluye Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   
-  <!-- Inyección de Estilos CMS: registerPreviewStyle -->
+  <!-- Inyección de Estilos CMS y Script de Previsualización Local -->
   <script>
-    // Este bloque registra el estilo DENTRO del iframe de previsualización 
-    // en caso de que un administrador entre desde una tablet u ordenador.
+    // Estilos base para la previsualización
     const previewStyles = `
       body {
         font-family: system-ui, -apple-system, sans-serif;
@@ -109,15 +108,55 @@
         padding: 20px;
         margin: 0;
         background-color: #f9f9f9;
-        font-size: 16px; /* Para prevenir zoom internamente también por si aplica */
+        font-size: 16px;
       }
       img {
         max-width: 100%;
         border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         height: auto;
+      }
+      .preview-category {
+        font-size: 0.9em;
+        text-transform: uppercase;
+        color: #128C7E;
+        letter-spacing: 1px;
+        font-weight: 600;
+        margin-top: 15px;
+      }
+      .preview-price {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #222;
+        margin: 10px 0;
       }
     `;
     CMS.registerPreviewStyle(previewStyles, { raw: true });
+
+    // Carga Local: Haz que el Dashboard use la imagen cargada en la memoria del navegador 
+    // Esto previene que las imágenes salgan 'rotas' antes de enviar a GitHub
+    var ProductPreview = createClass({
+      render: function() {
+        var entry = this.props.entry;
+        
+        // getAsset() es la función mágica: obtiene el Blob de la RAM en lugar de buscar la URL web cruda fallida
+        var imageField = entry.getIn(['data', 'image']);
+        var imageSrc = this.props.getAsset(imageField); 
+        
+        return h('div', { className: "product-preview" },
+          imageSrc ? h('img', { src: imageSrc.toString(), alt: entry.getIn(['data', 'title']) }) : null,
+          h('div', { className: "preview-category" }, 
+            (entry.getIn(['data', 'category']) || "Categoría") + " | " + (entry.getIn(['data', 'subcategory']) || "Subcategoría")
+          ),
+          h('h1', {}, entry.getIn(['data', 'title']) || "Título del Producto"),
+          h('p', {}, entry.getIn(['data', 'description']) || "Descripción..."),
+          h('div', { className: "preview-price" }, "$" + (entry.getIn(['data', 'price']) || "0.00"))
+        );
+      }
+    });
+
+    // Registrar el componente de previsualización in-memory para la colección "products"
+    CMS.registerPreviewTemplate("products", ProductPreview);
   </script>
 </body>
 </html>

@@ -3,7 +3,7 @@ backend:
   branch: main # Ramificación a sincronizar
 
 media_folder: "assets/images"
-public_folder: "/assets/images"
+public_folder: "assets/images"
 
 collections:
   - name: "config"
