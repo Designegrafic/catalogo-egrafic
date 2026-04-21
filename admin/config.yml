@@ -13,6 +13,7 @@ media_library:
   config:
     cloud_name: "dt2cqqdl8"
     api_key: "782179442224397"
+    api_secret: "rxbwEqwmUy4O4_jyfi3ETGmF-C8"
 
 collections:
   - name: "config"
