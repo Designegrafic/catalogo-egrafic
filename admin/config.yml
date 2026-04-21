@@ -8,6 +8,12 @@ site_url: "/"
 media_folder: "assets/images"
 public_folder: "assets/images"
 
+media_library:
+  name: cloudinary
+  config:
+    cloud_name: "dt2cqqdl8"
+    api_key: "782179442224397"
+
 collections:
   - name: "config"
     label: "Configuración General"
