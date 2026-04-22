@@ -1,6 +1,7 @@
 backend:
   name: git-gateway
   branch: main # Ramificación a sincronizar
+  base_url: https://catalogoegrafic.netlify.app
 
 display_url: "/" # Habilita la resolución en tiempo real para previsualizaciones relativas
 site_url: "/"
