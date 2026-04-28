@@ -5,16 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Grafic Catálogo Nuevo</title>
     <meta name="description" content="Catálogo web minimalista y neuroestético">
-    <!-- 1. Carga prioritaria de estilos y fuentes -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
-
+    <!-- CSS CRÍTICO: Preloader inmediato para evitar FOUC -->
     <style>
-        /* CSS CRÍTICO: Preloader inmediato para evitar FOUC */
         :root { --accent-color: #A0D94A; }
         body { margin: 0; padding: 0; background-color: #FAF9F6; }
         
@@ -46,6 +38,14 @@
         body.loaded #main-content { opacity: 1; }
         body.loaded #preloader { opacity: 0; visibility: hidden; }
     </style>
+
+    <!-- 1. Carga prioritaria de estilos y fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
 </head>
 <body>
     <!-- Preloader Sólido -->
