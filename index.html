@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <style> html { visibility: hidden; opacity: 0; } </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Grafic Catálogo Nuevo</title>
     <meta name="description" content="Catálogo web minimalista y neuroestético">
-
-    <style> body { opacity: 0 !important; background-color: #ffffff !important; } body.loaded { opacity: 1 !important; transition: opacity 0.5s ease-in !important; } </style>
-
     <!-- 1. Carga prioritaria de estilos y fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,7 +57,7 @@
     <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js" defer></script>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
     <script src="js/app.js" defer></script>
-    <script> window.addEventListener('load', function() { document.body.classList.add('loaded'); }); </script>
+    <script> window.addEventListener('load', function() { document.documentElement.style.visibility = 'visible'; document.documentElement.style.opacity = '1'; document.documentElement.style.transition = 'opacity 0.4s ease-in'; }); </script>
     <script>
       if (window.netlifyIdentity) {
         window.netlifyIdentity.on("init", user => {
