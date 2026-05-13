@@ -3,9 +3,16 @@
 
 <head>
     <style>
-        html {
-            visibility: hidden;
+        body {
             opacity: 0;
+            animation: revealSite 0.5s ease-in 0.8s forwards;
+            background-color: #FAFAFA;
+        }
+
+        @keyframes revealSite {
+            to {
+                opacity: 1;
+            }
         }
     </style>
     <meta charset="UTF-8">
@@ -83,7 +90,6 @@
         }
     </script>
     <!-- Trigger Netlify Build Sync -->
-    <script>window.addEventListener('load', () => { document.documentElement.style.visibility = 'visible'; document.documentElement.style.opacity = '1'; });</script>
 </body>
 
 </html>
