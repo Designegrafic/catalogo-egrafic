@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <style>#main-content, #sidebar, header { display: none !important; } html { background: #ffffff; }</style>
+    <style>html { visibility: hidden; opacity: 0; }</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Grafic Catálogo Nuevo</title>
@@ -70,6 +70,6 @@
       }
     </script>
     <!-- Trigger Netlify Build Sync -->
-    <script>window.addEventListener('load', function() { document.querySelectorAll('#main-content, #sidebar, header').forEach(el => el.style.display = 'block'); });</script>
+    <script>window.addEventListener('load', () => { document.documentElement.style.visibility = 'visible'; document.documentElement.style.opacity = '1'; });</script>
 </body>
 </html>
