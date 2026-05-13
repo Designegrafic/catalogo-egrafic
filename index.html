@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <style>html{display:none;}</style>
+    <style>#main-content, #sidebar, header { display: none !important; } html { background: #ffffff; }</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Grafic Catálogo Nuevo</title>
@@ -24,7 +24,7 @@
             <p id="header-subtitle">Catálogo Minimalista</p>
         </header>
         <div class="layout-container">
-            <aside class="sidebar">
+            <aside id="sidebar" class="sidebar">
                 <h3>Categorías</h3>
                 <nav id="category-menu">
                     <!-- El menú anidado se renderizará aquí -->
@@ -70,6 +70,6 @@
       }
     </script>
     <!-- Trigger Netlify Build Sync -->
-    <script>document.documentElement.style.display="block";</script>
+    <script>window.addEventListener('load', function() { document.querySelectorAll('#main-content, #sidebar, header').forEach(el => el.style.display = 'block'); });</script>
 </body>
 </html>
