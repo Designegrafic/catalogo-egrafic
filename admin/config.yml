@@ -82,6 +82,7 @@ collections:
       - {label: "Título", name: "title", widget: "string"}
       - {label: "Descripción", name: "description", widget: "text"}
       - {label: "Precio", name: "price", widget: "number", value_type: "float"}
+      - {label: "Orden", name: "orden", widget: "number", value_type: "int", default: 0}
       - label: "Clasificación"
         name: "classification"
         widget: "object"

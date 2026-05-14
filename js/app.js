@@ -151,6 +151,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Asignación de Productos y quitar loader
         allProducts = products || [];
         
+        // Ordenar productos según el campo "orden" (ascendente)
+        allProducts.sort((a, b) => {
+            const orderA = typeof a.orden === 'number' ? a.orden : 999;
+            const orderB = typeof b.orden === 'number' ? b.orden : 999;
+            return orderA - orderB;
+        });
+        
         if (loadingSpinner) {
             loadingSpinner.style.display = 'none';
         }
