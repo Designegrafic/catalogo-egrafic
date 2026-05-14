@@ -4,13 +4,13 @@
   "currency": "USD",
   "logo": "/images/uploads/qr_logo-trans.png",
   "appearance": {
-    "logo_width": 250,
+    "logo_width": 180,
     "header_align": "center",
     "accent_color": "#ffffff"
   },
   "texts": {
-    "button_label": "Bienvenidos",
-    "description": "Bienvenidos",
+    "button_label": "Cotiza",
+    "description": "",
     "main_title": "Bienvenidos"
   }
 }
