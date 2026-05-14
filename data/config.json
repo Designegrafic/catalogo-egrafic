@@ -2,5 +2,13 @@
   "whatsapp": "+593959127634",
   "company_name": "E-Grafic",
   "currency": "USD",
-  "logo": "/images/uploads/qr_logo-trans.png"
+  "logo": "/images/uploads/qr_logo-trans.png",
+  "appearance": {
+    "logo_width": 250,
+    "header_align": "center",
+    "accent_color": "#ffffff"
+  },
+  "texts": {
+    "button_label": "Bienvenidos"
+  }
 }
