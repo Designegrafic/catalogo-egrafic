@@ -9,6 +9,8 @@
     "accent_color": "#ffffff"
   },
   "texts": {
-    "button_label": "Bienvenidos"
+    "button_label": "Bienvenidos",
+    "description": "Bienvenidos",
+    "main_title": "Bienvenidos"
   }
 }
