@@ -151,11 +151,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Asignación de Productos y quitar loader
         allProducts = products || [];
         
-        // Ordenar productos según el campo "prioridad" (ascendente)
+        // Ordenar productos según el campo "orden" (ascendente)
         allProducts.sort((a, b) => {
-            const priorityA = typeof a.prioridad === 'number' ? a.prioridad : 99;
-            const priorityB = typeof b.prioridad === 'number' ? b.prioridad : 99;
-            return priorityA - priorityB;
+            const orderA = typeof a.orden === 'number' ? a.orden : 99;
+            const orderB = typeof b.orden === 'number' ? b.orden : 99;
+            return orderA - orderB;
         });
         
         if (loadingSpinner) {
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Mapeo útil de categorías (hacia nombres visuales, orden e iconos)
         const catMap = {};
         categoriesDef.forEach(c => {
-            catMap[c.id] = { name: c.name, order: c.order || 0 };
+            catMap[c.id] = { name: c.name, orden: typeof c.orden === 'number' ? c.orden : 99 };
         });
 
         // Agrupar IDs por los que tienen productos usando la nueva estructura 'classification'
@@ -207,8 +207,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let sortedCatIds = Object.keys(usedCategories);
         if (categoriesDef.length > 0) {
             sortedCatIds.sort((a, b) => {
-                const orderA = catMap[a] ? catMap[a].order : 999;
-                const orderB = catMap[b] ? catMap[b].order : 999;
+                const orderA = catMap[a] ? catMap[a].orden : 99;
+                const orderB = catMap[b] ? catMap[b].orden : 99;
                 return orderA - orderB;
             });
         }

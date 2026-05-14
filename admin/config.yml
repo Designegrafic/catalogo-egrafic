@@ -54,7 +54,7 @@ collections:
             fields:
               - {label: "ID Único (en minúsculas, ej: laser)", name: "id", widget: "string"}
               - {label: "Nombre Visible", name: "name", widget: "string"}
-              - {label: "Orden", name: "order", widget: "number", value_type: "int", default: 0}
+              - {label: 'Orden Visual', name: 'orden', widget: 'number', value_type: 'int', required: false, default: 99}
               - {label: "Ícono (URL o SVG)", name: "icon", widget: "string", required: false}
 
   - name: "products"
@@ -82,7 +82,7 @@ collections:
       - {label: "Título", name: "title", widget: "string"}
       - {label: "Descripción", name: "description", widget: "text"}
       - {label: "Precio", name: "price", widget: "number", value_type: "float"}
-      - {label: "Prioridad", name: "prioridad", widget: "number", value_type: "int", default: 99, required: false}
+      - {label: 'Orden Visual', name: 'orden', widget: 'number', value_type: 'int', required: false, default: 99}
       - label: "Clasificación"
         name: "classification"
         widget: "object"
