@@ -9,8 +9,15 @@
     "accent_color": "#ffffff"
   },
   "texts": {
-    "button_label": "Cotiza",
+    "button_label": "Bajo Cotización / Visita Técnica",
     "description": "",
     "main_title": "Bienvenidos"
-  }
+  },
+  "categories": [
+    {
+      "orden": 1,
+      "id": "Branding Espacial e Instalaciones",
+      "name": "Branding Espacial e Instalaciones"
+    }
+  ]
 }
