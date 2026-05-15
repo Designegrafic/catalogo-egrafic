@@ -66,9 +66,9 @@ collections:
     slug: "{{slug}}"
     summary: "{{title}}"
     view_filters:
-      - label: "Impresión, Producción e Instalación"
+      - label: "Diseño Gráfico"
         field: "classification.category"
-        pattern: "Impresión, Producción e Instalación"
+        pattern: "Diseño Gráfico"
       - label: "Desarrollo Web"
         field: "classification.category"
         pattern: "Desarrollo Web"
@@ -90,7 +90,7 @@ collections:
           - label: "Categoría Principal"
             name: "category"
             widget: "select"
-            options: ["Diseño Gráfico", "Impresión UV DTF", "Letreros y Corpóreos", "Textiles y Merchandising"]
+            options: ["Impresión, Producción e Instalación", "Remodelaciones Visuales y Montaje", "Diseño de Marca y Renderizado 3D", "Herramientas y Catálogos Digitales"]
           - {label: "Subcategoría", name: "subcategory", widget: "string"}
       - label: "Galería de Imágenes"
         name: "gallery"
