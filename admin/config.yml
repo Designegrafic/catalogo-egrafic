@@ -66,9 +66,9 @@ collections:
     slug: "{{slug}}"
     summary: "{{title}}"
     view_filters:
-      - label: "Diseño Gráfico"
+      - label: "Impresión, Producción e Instalación"
         field: "classification.category"
-        pattern: "Diseño Gráfico"
+        pattern: "Impresión, Producción e Instalación"
       - label: "Desarrollo Web"
         field: "classification.category"
         pattern: "Desarrollo Web"
