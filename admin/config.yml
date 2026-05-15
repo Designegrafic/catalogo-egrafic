@@ -66,18 +66,18 @@ collections:
     slug: "{{slug}}"
     summary: "{{title}}"
     view_filters:
-      - label: "Diseño Gráfico"
+      - label: "Impresión, Producción e Instalación"
         field: "classification.category"
-        pattern: "Diseño Gráfico"
-      - label: "Desarrollo Web"
+        pattern: "Impresión, Producción e Instalación"
+      - label: "Remodelaciones Visuales y Montaje"
         field: "classification.category"
-        pattern: "Desarrollo Web"
-      - label: "Marketing"
+        pattern: "Remodelaciones Visuales y Montaje"
+      - label: "Diseño de Marca y Renderizado 3D"
         field: "classification.category"
-        pattern: "Marketing Digital"
-      - label: "Impresión"
+        pattern: "Diseño de Marca y Renderizado 3D"
+      - label: "Herramientas y Catálogos Digitales"
         field: "classification.category"
-        pattern: "Impresión UV DTF"
+        pattern: "Herramientas y Catálogos Digitales"
     fields:
       - {label: "Título", name: "title", widget: "string"}
       - {label: "Descripción", name: "description", widget: "text"}
