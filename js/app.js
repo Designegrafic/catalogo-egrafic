@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let allProducts = [];
     const appContainer = document.getElementById('app');
     const loadingSpinner = document.getElementById('loading-spinner');
-    
+
     // Parámetro "cache buster" para evitar carga de JSON viejos
     const cacheBuster = `?v=${Date.now()}`;
 
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (localRes.ok) {
                     const text = await localRes.text();
                     const matches = [...text.matchAll(/href="([^"]+\.md)"/gi)];
-                    filesFound = matches.map(m => m[1].split('/').pop()); 
+                    filesFound = matches.map(m => m[1].split('/').pop());
                 }
             }
         } catch (e) {
@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. Fallback de archivos fijos migrados
         if (filesFound.length === 0) {
             filesFound = [
-                '1-identidad-de-marca.md', 
-                '2-sitio-web-corporativo.md', 
-                '3-gestion-de-redes-sociales.md', 
+                '1-identidad-de-marca.md',
+                '2-sitio-web-corporativo.md',
+                '3-gestion-de-redes-sociales.md',
                 '4-papeleria-premium.md'
             ];
         }
@@ -51,12 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         try {
                             const product = jsyaml.load(fmMatch[1]);
                             productsList.push(product);
-                        } catch(err) {
+                        } catch (err) {
                             console.error("Error parseando YAML de " + filename, err);
                         }
                     }
                 }
-            } catch(e) {}
+            } catch (e) { }
         }
         return productsList;
     }
@@ -69,123 +69,123 @@ document.addEventListener('DOMContentLoaded', () => {
         }),
         loadProducts()
     ])
-    .then(([config, products]) => {
-        window.appConfig = config;
-        
-        // Renderizado dinámico del Header (Logo y Título)
-        const logoContainer = document.getElementById('header-logo-container');
-        const titleEl = document.getElementById('header-title');
-        
-        if (config.company_name) {
-            if (titleEl) titleEl.textContent = config.company_name;
-            document.title = `Catálogo ${config.company_name}`;
-        }
-        
-        // Configuraciones de Apariencia
-        const appearance = config.appearance || {};
-        const logoPath = appearance.logo || config.logo; // retrocompatibilidad
-        
-        if (appearance.accent_color) {
-            document.documentElement.style.setProperty('--accent-color', appearance.accent_color);
-        }
-        
-        if (appearance.header_align) {
-            const header = document.querySelector('header');
-            if (header) {
-                header.style.textAlign = appearance.header_align;
-                logoContainer.style.justifyContent = appearance.header_align === 'left' ? 'flex-start' : 
-                                                   appearance.header_align === 'right' ? 'flex-end' : 'center';
-            }
-        }
-        
-        if (logoPath) {
-            const img = document.createElement('img');
-            img.src = logoPath;
-            img.alt = config.company_name || 'Logo corporativo';
-            img.className = 'site-logo';
-            if (appearance.logo_width) {
-                img.style.maxWidth = `${appearance.logo_width}px`;
-                img.style.width = '100%'; 
-                img.style.maxHeight = 'none';
-            }
-            if (logoContainer) {
-                logoContainer.innerHTML = '';
-                logoContainer.appendChild(img);
-            }
-        }
-        
-        // Configuraciones de Textos
-        const texts = config.texts || {};
-        const subtitleEl = document.getElementById('header-subtitle');
-        const footerEl = document.getElementById('footer-text');
-        window.appConfig.buttonLabel = texts.button_label || 'Cotizar ahora';
-        
-        if (subtitleEl) {
-            subtitleEl.textContent = texts.main_title || 'Catálogo Minimalista';
-        }
-        
-        if (texts.description) {
-            let descEl = document.getElementById('header-description');
-            if (!descEl) {
-                descEl = document.createElement('p');
-                descEl.id = 'header-description';
-                descEl.style.color = 'var(--text-color)';
-                descEl.style.marginTop = '0.5rem';
-                descEl.style.fontSize = '0.95rem';
-                document.querySelector('header').appendChild(descEl);
-            }
-            descEl.textContent = texts.description;
-        }
-        
-        if (footerEl) {
-            footerEl.innerHTML = texts.footer_text || '&copy; ' + new Date().getFullYear() + ' E-Grafic';
-        }
-        
-        // WhatsApp link
-        const floatingWa = document.getElementById('floating-wa');
-        if (floatingWa) {
-            const phone = config.whatsapp || '+593959127634';
-            floatingWa.href = `https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent('Hola E-Grafic, vengo desde su Catálogo móvil y deseo una cotización.')}`;
-        }
+        .then(([config, products]) => {
+            window.appConfig = config;
 
-        // Asignación de Productos y quitar loader
-        allProducts = products || [];
-        
-        // Ordenar productos según el campo "orden" (ascendente)
-        allProducts.sort((a, b) => {
-            const orderA = typeof a.orden === 'number' ? a.orden : 99;
-            const orderB = typeof b.orden === 'number' ? b.orden : 99;
-            return orderA - orderB;
-        });
-        
-        if (loadingSpinner) {
-            loadingSpinner.style.display = 'none';
-        }
+            // Renderizado dinámico del Header (Logo y Título)
+            const logoContainer = document.getElementById('header-logo-container');
+            const titleEl = document.getElementById('header-title');
 
-        renderCategories(allProducts);
-        renderProducts(allProducts);
+            if (config.company_name) {
+                if (titleEl) titleEl.textContent = config.company_name;
+                document.title = `Catálogo ${config.company_name}`;
+            }
 
-    })
-    .catch(err => {
-        console.error('Error inicializando el catálogo:', err);
-        if (loadingSpinner) {
-            loadingSpinner.style.display = 'none';
-        }
-        if (appContainer) {
-            appContainer.innerHTML = `
+            // Configuraciones de Apariencia
+            const appearance = config.appearance || {};
+            const logoPath = appearance.logo || config.logo; // retrocompatibilidad
+
+            if (appearance.accent_color) {
+                document.documentElement.style.setProperty('--accent-color', appearance.accent_color);
+            }
+
+            if (appearance.header_align) {
+                const header = document.querySelector('header');
+                if (header) {
+                    header.style.textAlign = appearance.header_align;
+                    logoContainer.style.justifyContent = appearance.header_align === 'left' ? 'flex-start' :
+                        appearance.header_align === 'right' ? 'flex-end' : 'center';
+                }
+            }
+
+            if (logoPath) {
+                const img = document.createElement('img');
+                img.src = logoPath;
+                img.alt = config.company_name || 'Logo corporativo';
+                img.className = 'site-logo';
+                if (appearance.logo_width) {
+                    img.style.maxWidth = `${appearance.logo_width}px`;
+                    img.style.width = '100%';
+                    img.style.maxHeight = 'none';
+                }
+                if (logoContainer) {
+                    logoContainer.innerHTML = '';
+                    logoContainer.appendChild(img);
+                }
+            }
+
+            // Configuraciones de Textos
+            const texts = config.texts || {};
+            const subtitleEl = document.getElementById('header-subtitle');
+            const footerEl = document.getElementById('footer-text');
+            window.appConfig.buttonLabel = texts.button_label || 'Bajo Cotización / Visita Técnica';
+
+            if (subtitleEl) {
+                subtitleEl.textContent = texts.main_title || 'Catálogo Minimalista';
+            }
+
+            if (texts.description) {
+                let descEl = document.getElementById('header-description');
+                if (!descEl) {
+                    descEl = document.createElement('p');
+                    descEl.id = 'header-description';
+                    descEl.style.color = 'var(--text-color)';
+                    descEl.style.marginTop = '0.5rem';
+                    descEl.style.fontSize = '0.95rem';
+                    document.querySelector('header').appendChild(descEl);
+                }
+                descEl.textContent = texts.description;
+            }
+
+            if (footerEl) {
+                footerEl.innerHTML = texts.footer_text || '&copy; ' + new Date().getFullYear() + ' E-Grafic';
+            }
+
+            // WhatsApp link
+            const floatingWa = document.getElementById('floating-wa');
+            if (floatingWa) {
+                const phone = config.whatsapp || '+593959127634';
+                floatingWa.href = `https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent('Hola E-Grafic, vengo desde su Catálogo móvil y deseo una cotización.')}`;
+            }
+
+            // Asignación de Productos y quitar loader
+            allProducts = products || [];
+
+            // Ordenar productos según el campo "orden" (ascendente)
+            allProducts.sort((a, b) => {
+                const orderA = typeof a.orden === 'number' ? a.orden : 99;
+                const orderB = typeof b.orden === 'number' ? b.orden : 99;
+                return orderA - orderB;
+            });
+
+            if (loadingSpinner) {
+                loadingSpinner.style.display = 'none';
+            }
+
+            renderCategories(allProducts);
+            renderProducts(allProducts);
+
+        })
+        .catch(err => {
+            console.error('Error inicializando el catálogo:', err);
+            if (loadingSpinner) {
+                loadingSpinner.style.display = 'none';
+            }
+            if (appContainer) {
+                appContainer.innerHTML = `
                 <div style="text-align:center; padding:3rem; color:var(--text-color);">
                     <h2 style="color:red; margin-bottom:1rem;">Problema de Conexión</h2>
                     <p>No se pudieron cargar los datos del catálogo. Por favor, revisa tu conexión y vuelve a intentarlo.</p>
                     <button onclick="window.location.reload()" style="margin-top:1.5rem; padding:10px 20px; border-radius:5px; background:var(--accent-color, #128C7E); color:white; border:none; cursor:pointer;">Recargar Página</button>
                 </div>
             `;
-        }
-    });
+            }
+        });
 
     function renderCategories(products) {
         const menuContainer = document.getElementById('category-menu');
         const categoriesDef = window.appConfig.categories || [];
-        
+
         // Mapeo útil de categorías (hacia nombres visuales, orden e iconos)
         const catMap = {};
         categoriesDef.forEach(c => {
@@ -198,8 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const cat = p.classification?.category || p.category;
             const sub = p.classification?.subcategory || p.subcategory;
             if (cat) {
-                 if (!usedCategories[cat]) usedCategories[cat] = new Set();
-                 if (sub) usedCategories[cat].add(sub);
+                if (!usedCategories[cat]) usedCategories[cat] = new Set();
+                if (sub) usedCategories[cat].add(sub);
             }
         });
 
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         menuContainer.innerHTML = '';
-        
+
         // Toggle de vistas
         const allBtn = document.createElement('div');
         allBtn.className = 'category-group';
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sortedCatIds.forEach(catId => {
             const group = document.createElement('div');
             group.className = 'category-group open';
-            
+
             const catNameDisplay = catMap[catId] ? catMap[catId].name : catId;
             const catHeader = document.createElement('div');
             catHeader.className = 'category-name';
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const subList = document.createElement('ul');
             subList.className = 'subcategory-list';
-            
+
             usedCategories[catId].forEach(subName => {
                 const subItem = document.createElement('li');
                 subItem.className = 'subcategory-item';
@@ -263,12 +263,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderProducts(products) {
         const app = document.getElementById('app');
         app.innerHTML = '';
-        
+
         const categoriesDef = window.appConfig.categories || [];
         const catMap = {};
         categoriesDef.forEach(c => catMap[c.id] = c.name);
-        
-        if(products.length === 0) {
+
+        if (products.length === 0) {
             app.innerHTML = '<p>No se encontraron productos.</p>';
             return;
         }
@@ -276,10 +276,10 @@ document.addEventListener('DOMContentLoaded', () => {
         products.forEach(p => {
             const card = document.createElement('article');
             card.className = 'product-card';
-            
+
             const currency = window.appConfig?.currency || 'USD';
             const priceText = p.price ? `$${p.price} ${currency}` : 'Consultar precio';
-            
+
             const catId = p.classification?.category || p.category;
             const subCatDisplay = p.classification?.subcategory || p.subcategory || '';
             const catDisplay = catMap[catId] || catId;
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let hiddenGalleryHTML = '';
             if (p.gallery && p.gallery.length > 1) {
-                hiddenGalleryHTML = p.gallery.slice(1).map(imgUrl => 
+                hiddenGalleryHTML = p.gallery.slice(1).map(imgUrl =>
                     `<a href="${imgUrl}" class="glightbox" data-gallery="gallery-${p.id}" style="display:none;"></a>`
                 ).join('');
             }
@@ -310,14 +310,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     </button>
                 </div>
             `;
-            
+
             const waBtn = card.querySelector('.btn-whatsapp');
             if (waBtn) {
                 waBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const phone = window.appConfig?.whatsapp || '+593959127634';
                     const msg = encodeURIComponent(`Hola e-grafic, quiero cotizar ${p.title}`);
-                    window.open(`https://wa.me/${phone.replace('+','')}?text=${msg}`, '_blank');
+                    window.open(`https://wa.me/${phone.replace('+', '')}?text=${msg}`, '_blank');
                 });
             }
 
