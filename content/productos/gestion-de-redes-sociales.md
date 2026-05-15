@@ -4,6 +4,7 @@ title: Gestión de Redes Sociales
 description: Creación de contenido neuroestético y estrategia digital para marcas premium.
 price: 300
 prioridad: 2
+orden: 3
 classification:
   category: Marketing Digital
   subcategory: Social Media
