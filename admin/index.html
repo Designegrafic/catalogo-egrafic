@@ -4,20 +4,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Workspace | Admin</title>
+  <title>Workspace | Admin E-Grafic</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@600;700&display=swap"
+    rel="stylesheet">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Syne', 'sans-serif']
+          },
           colors: {
-            egrafic: { DEFAULT: '#6DBB3B', light: '#88D455' },
-            admin: { bg: '#0f0f11', card: '#18181b', border: '#27272a' }
+            egrafic: {
+              DEFAULT: '#6DBB3B',
+              light: '#88D455',
+              dark: '#4A8A24'
+            },
+            admin: {
+              bg: '#0a0a0c',
+              card: '#141417',
+              border: '#27272a'
+            }
           }
         }
       }
@@ -25,7 +38,7 @@
   </script>
   <style>
     body {
-      background-color: #0f0f11;
+      background-color: #0a0a0c;
       color: #ffffff;
       -webkit-tap-highlight-color: transparent;
     }
@@ -34,10 +47,16 @@
       display: none;
     }
 
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
     .mobile-card {
-      background: #18181b;
-      border: 1px solid #27272a;
-      border-radius: 20px;
+      background: rgba(20, 20, 23, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
     }
 
     input:focus,
@@ -47,134 +66,367 @@
       border-color: #6DBB3B;
       box-shadow: 0 0 0 1px #6DBB3B;
     }
+
+    /* Estilo del interruptor (Switch) */
+    .switch-input:checked+.switch-label {
+      background-color: #6DBB3B;
+    }
+
+    .switch-input:checked+.switch-label .switch-dot {
+      transform: translateX(100%);
+    }
   </style>
 </head>
 
-<body class="antialiased pb-24">
+<body class="antialiased pb-28">
 
-  <!-- App Bar Superior con botón para salir apuntando a ../index.html (para ir a la raíz) -->
+  <!-- Cabecera de la App -->
   <header
-    class="sticky top-0 z-50 bg-admin-bg/90 backdrop-blur-md border-b border-admin-border px-5 py-4 flex justify-between items-center">
+    class="sticky top-0 z-50 bg-admin-bg/95 backdrop-blur-md border-b border-admin-border/50 px-5 py-4 flex justify-between items-center">
     <a href="../index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
       <i class="ph-fill ph-aperture text-egrafic text-2xl"></i>
-      <span class="font-semibold tracking-tight">Workspace</span>
+      <span class="font-display font-bold tracking-tight text-lg uppercase">Workspace</span>
     </a>
+
+    <!-- Botón Salir (Regresa a index.html en la raíz) -->
     <a href="../index.html"
-      class="w-9 h-9 rounded-full bg-admin-card flex items-center justify-center border border-admin-border active:scale-95 transition-transform text-gray-400 hover:text-egrafic hover:border-egrafic"
-      title="Volver al Catálogo">
-      <i class="ph ph-sign-out text-xl"></i>
+      class="w-10 h-10 rounded-full bg-admin-card flex items-center justify-center border border-admin-border text-gray-400 hover:text-egrafic hover:border-egrafic active:scale-90 transition-all"
+      title="Salir al Catálogo">
+      <i class="ph ph-sign-out text-lg"></i>
     </a>
   </header>
 
-  <main class="p-5 space-y-6 max-w-md mx-auto">
-    <div>
-      <h1 class="text-2xl font-bold tracking-tight mb-1">Nuevo Producto</h1>
-      <p class="text-gray-400 text-sm">Actualiza tu catálogo en segundos.</p>
+  <!-- Menú de Pestañas Deslizantes (Estilo T-Leva adaptado a E-Grafic) -->
+  <div class="sticky top-[73px] z-40 bg-admin-bg border-b border-admin-border/50">
+    <div class="flex gap-1 overflow-x-auto no-scrollbar py-2.5 px-5 max-w-md mx-auto">
+      <button onclick="switchTab('productos')" id="btn-productos"
+        class="tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 bg-egrafic text-white">
+        <i class="ph-fill ph-shopping-bag"></i> Productos
+      </button>
+      <button onclick="switchTab('identidad')" id="btn-identidad"
+        class="tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 text-gray-400 hover:text-white bg-transparent">
+        <i class="ph ph-fingerprint"></i> Identidad
+      </button>
+      <button onclick="switchTab('textos')" id="btn-textos"
+        class="tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 text-gray-400 hover:text-white bg-transparent">
+        <i class="ph ph-text-aa"></i> Textos
+      </button>
+      <button onclick="switchTab('enlaces')" id="btn-enlaces"
+        class="tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 text-gray-400 hover:text-white bg-transparent">
+        <i class="ph ph-share-network"></i> Enlaces
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenido Principal -->
+  <main class="p-5 max-w-md mx-auto space-y-6">
+
+    <!-- ================= PESTAÑA 1: PRODUCTOS ================= -->
+    <div id="tab-productos" class="tab-content space-y-5">
+      <div>
+        <h2 class="text-xl font-bold tracking-tight">Gestión de Catálogo</h2>
+        <p class="text-gray-400 text-xs">Agrega o remueve elementos de tu galería.</p>
+      </div>
+
+      <!-- Formulario Nuevo Producto -->
+      <form id="product-form" class="space-y-4" onsubmit="event.preventDefault(); publishProduct();">
+        <div class="mobile-card p-5 space-y-4">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic">Nuevo Producto / Servicio</h3>
+
+          <!-- Drop Zone Cloudinary para Productos -->
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Imagen</label>
+            <div id="drop-zone-product"
+              class="border border-dashed border-zinc-700 hover:border-egrafic rounded-xl p-5 text-center cursor-pointer active:bg-zinc-900/40 transition-all group">
+              <input type="file" id="file-product" class="hidden" accept="image/*">
+              <div id="product-upload-prompt" class="space-y-1">
+                <i class="ph ph-camera text-xl text-egrafic"></i>
+                <p class="text-xs font-medium">Sube una foto</p>
+                <p class="text-[10px] text-gray-500">Compresión Cloudinary automática</p>
+              </div>
+              <div id="product-preview-container" class="hidden relative w-full h-32 rounded-lg overflow-hidden">
+                <img id="product-img-preview" class="w-full h-full object-cover" src="">
+                <div class="absolute bottom-2 right-2 bg-black/80 px-2 py-1 rounded-full flex items-center gap-1">
+                  <i class="ph ph-arrows-clockwise text-[10px]"></i>
+                  <span class="text-[9px]">Cambiar</span>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" id="product-image-url" required>
+          </div>
+
+          <!-- Campos de Texto -->
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Categoría</label>
+            <select id="prod-category"
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 appearance-none"
+              required>
+              <option value="" disabled selected>Selecciona una...</option>
+              <option value="Impresión">Impresión</option>
+              <option value="Remodelaciones">Remodelaciones</option>
+              <option value="Diseño de Marca 3D">Diseño de Marca 3D</option>
+              <option value="Herramientas Digitales">Herramientas Digitales</option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Título</label>
+            <input type="text" id="prod-title" placeholder="Ej: Letreros 3D Premium"
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 placeholder-gray-600"
+              required>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Inversión / Precio</label>
+            <input type="text" id="prod-price" placeholder="Desde $120.00 o 'Previa Cotización'"
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 placeholder-gray-600"
+              required>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Descripción Corta</label>
+            <textarea id="prod-desc" rows="2" placeholder="Detalles clave del producto..."
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 placeholder-gray-600 resize-none"
+              required></textarea>
+          </div>
+
+          <button type="submit"
+            class="w-full bg-egrafic/10 text-egrafic hover:bg-egrafic hover:text-white border border-egrafic/20 py-3 rounded-xl text-xs font-bold transition-all active:scale-95 flex items-center justify-center gap-1.5">
+            <i class="ph-bold ph-plus-circle"></i> Agregar Producto
+          </button>
+        </div>
+      </form>
+
+      <!-- Lista de Productos Existentes (Simulación Visual) -->
+      <div class="space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 px-1">Productos Publicados</h3>
+        <div class="space-y-2" id="products-list">
+          <!-- Inyectados de forma interactiva por JS -->
+        </div>
+      </div>
     </div>
 
-    <form class="space-y-5" id="admin-form" onsubmit="event.preventDefault(); guardarProducto();">
-      <div class="space-y-2">
-        <label class="block text-sm font-medium text-gray-300 ml-1">Imagen (Cloudinary Automático)</label>
-        <div id="drop-zone"
-          class="mobile-card border-dashed p-6 text-center cursor-pointer active:bg-zinc-800 transition-colors group">
-          <input type="file" id="file-input" class="hidden" accept="image/*">
-          <div class="space-y-2" id="upload-prompt">
-            <div class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3">
-              <i class="ph ph-camera text-2xl text-egrafic"></i>
-            </div>
-            <p class="text-[15px] font-medium">Toca para subir foto</p>
-            <p class="text-xs text-gray-500 px-4">Se optimizará el peso automáticamente para no gastar datos.</p>
-          </div>
+    <!-- ================= PESTAÑA 2: IDENTIDAD ================= -->
+    <div id="tab-identidad" class="tab-content space-y-5 hidden">
+      <div>
+        <h2 class="text-xl font-bold tracking-tight">Identidad de Marca</h2>
+        <p class="text-gray-400 text-xs">Sube tu logo y personaliza la visualización.</p>
+      </div>
 
-          <div id="preview-container" class="hidden relative w-full h-48 rounded-xl overflow-hidden">
-            <img id="image-preview" class="w-full h-full object-cover" src="">
-            <div
-              class="absolute bottom-3 right-3 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1">
-              <i class="ph ph-arrows-clockwise text-xs"></i>
-              <span class="text-xs font-medium">Cambiar</span>
+      <div class="mobile-card p-5 space-y-5">
+        <!-- Subida del Logo -->
+        <div class="space-y-2">
+          <label class="block text-xs font-semibold text-gray-400">Imagen del Logo</label>
+          <div id="drop-zone-logo"
+            class="border border-dashed border-zinc-700 hover:border-egrafic rounded-xl p-6 text-center cursor-pointer active:bg-zinc-900/40 transition-all group">
+            <input type="file" id="file-logo" class="hidden" accept="image/*">
+            <div id="logo-upload-prompt" class="space-y-1">
+              <i class="ph ph-image text-2xl text-egrafic"></i>
+              <p class="text-xs font-medium">Toca para cambiar logo</p>
+              <p class="text-[10px] text-gray-500">Soporta formatos SVG, PNG y JPG</p>
             </div>
+            <div id="logo-preview-container"
+              class="hidden relative w-full h-24 flex items-center justify-center bg-zinc-950/60 rounded-lg overflow-hidden p-3">
+              <img id="logo-img-preview" class="h-full object-contain" src="">
+              <div class="absolute bottom-2 right-2 bg-black/80 px-2 py-1 rounded-full flex items-center gap-1">
+                <i class="ph ph-arrows-clockwise text-[10px]"></i>
+                <span class="text-[9px]">Cambiar</span>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" id="logo-image-url">
+        </div>
+
+        <!-- Visibilidad del Texto del Logo -->
+        <div class="flex items-center justify-between py-2 border-b border-zinc-800/40">
+          <div class="space-y-0.5">
+            <label class="text-xs font-semibold text-white">Mostrar nombre comercial</label>
+            <p class="text-[10px] text-gray-500">Muestra el texto "E-Grafic" al lado del logo.</p>
+          </div>
+          <div class="relative flex items-center">
+            <input type="checkbox" id="toggle-logo-text" class="switch-input hidden" checked>
+            <label for="toggle-logo-text"
+              class="switch-label w-11 h-6 bg-zinc-800 rounded-full cursor-pointer transition-colors flex items-center p-0.5">
+              <span class="switch-dot w-5 h-5 bg-white rounded-full shadow transition-transform duration-300"></span>
+            </label>
           </div>
         </div>
-        <input type="hidden" id="cloudinary-url-input" required>
-      </div>
 
-      <div class="space-y-2">
-        <label class="block text-sm font-medium text-gray-300 ml-1">Categoría</label>
-        <select id="producto-categoria"
-          class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 appearance-none"
-          required>
-          <option value="" disabled selected>Selecciona una categoría...</option>
-          <option value="Impresión">Impresión</option>
-          <option value="Remodelaciones">Remodelaciones</option>
-          <option value="Diseño de Marca 3D">Diseño de Marca 3D</option>
-          <option value="Herramientas Digitales">Herramientas Digitales</option>
-        </select>
-        <i class="ph ph-caret-down absolute right-8 mt-[14px] text-gray-400 pointer-events-none"></i>
-      </div>
-
-      <div class="space-y-2">
-        <label class="block text-sm font-medium text-gray-300 ml-1">Título del Producto / Servicio</label>
-        <input type="text" id="producto-titulo" placeholder="Ej: Letreros 3D Luminosos"
-          class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 placeholder-gray-600"
-          required>
-      </div>
-
-      <div class="space-y-2">
-        <label class="block text-sm font-medium text-gray-300 ml-1">Precio o Inversión</label>
-        <div class="relative">
-          <span class="absolute left-4 top-3.5 text-gray-500 font-medium">$</span>
-          <input type="text" id="producto-precio" placeholder="0.00 o 'Previa Cotización'"
-            class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl pl-8 pr-4 py-3.5 placeholder-gray-600"
-            required>
+        <!-- Slider del Tamaño del Logo -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <label class="text-xs font-semibold text-white">Tamaño del Logo</label>
+            <span id="logo-size-val" class="text-xs font-bold text-egrafic">32px</span>
+          </div>
+          <input type="range" id="logo-size-slider" min="20" max="60" value="32"
+            class="w-full accent-egrafic bg-zinc-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+          <p class="text-[10px] text-gray-500">Regula la altura del logotipo en la barra de navegación móvil.</p>
         </div>
       </div>
+    </div>
 
-      <div class="space-y-2">
-        <label class="block text-sm font-medium text-gray-300 ml-1">Descripción corta</label>
-        <textarea id="producto-desc" rows="3" placeholder="Detalles principales..."
-          class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 placeholder-gray-600 resize-none"
-          required></textarea>
+    <!-- ================= PESTAÑA 3: TEXTOS ================= -->
+    <div id="tab-textos" class="tab-content space-y-5 hidden">
+      <div>
+        <h2 class="text-xl font-bold tracking-tight">Textos Principales</h2>
+        <p class="text-gray-400 text-xs">Configura los llamados a la acción de la portada.</p>
       </div>
 
-      <div class="fixed bottom-0 left-0 w-full p-5 bg-gradient-to-t from-admin-bg via-admin-bg to-transparent">
-        <button type="submit"
-          class="w-full max-w-md mx-auto block bg-egrafic text-white font-semibold text-[16px] py-4 rounded-2xl shadow-[0_8px_20px_rgba(109,187,59,0.3)] active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
-          <i class="ph-bold ph-check-circle text-xl"></i>
-          Publicar en Catálogo
-        </button>
+      <div class="mobile-card p-5 space-y-4">
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400">Título del Encabezado</label>
+          <input type="text" id="hero-title" value="Elevamos tu Marca al Futuro."
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3" required>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400">Subtítulo Descriptivo</label>
+          <textarea id="hero-subtitle" rows="3"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 resize-none"
+            required>Soluciones integrales de diseño, impresión y desarrollo espacial. Explora nuestro catálogo interactivo.</textarea>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400">Texto Botón de Cabecera</label>
+          <input type="text" id="hero-btn-text" value="Visita Técnica"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3" required>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= PESTAÑA 4: ENLACES ================= -->
+    <div id="tab-enlaces" class="tab-content space-y-5 hidden">
+      <div>
+        <h2 class="text-xl font-bold tracking-tight">Enlaces y Contacto</h2>
+        <p class="text-gray-400 text-xs">Conecta tus canales de comunicación.</p>
       </div>
 
-      <div class="h-8"></div>
-    </form>
+      <div class="mobile-card p-5 space-y-4">
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400">Número de WhatsApp</label>
+          <div class="relative">
+            <i class="ph ph-whatsapp-logo absolute left-4 top-3 text-lg text-emerald-500"></i>
+            <input type="text" id="contact-whatsapp" value="593990000000"
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl pl-11 pr-4 py-3" required>
+          </div>
+          <p class="text-[9px] text-gray-500 pl-1">Ingresa el código de país sin el símbolo "+" (ej. 593 para Ecuador).
+          </p>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400">Perfil de Instagram</label>
+          <div class="relative">
+            <i class="ph ph-instagram-logo absolute left-4 top-3 text-lg text-pink-500"></i>
+            <input type="text" id="contact-instagram" value="https://instagram.com/egrafic"
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl pl-11 pr-4 py-3" required>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400">Correo Electrónico</label>
+          <div class="relative">
+            <i class="ph ph-envelope-simple absolute left-4 top-3 text-lg text-blue-400"></i>
+            <input type="email" id="contact-email" value="contacto@egrafic.com"
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl pl-11 pr-4 py-3" required>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón de Guardado Flotante en la parte inferior (Estilo T-Leva) -->
+    <div class="fixed bottom-0 left-0 w-full p-5 bg-gradient-to-t from-admin-bg via-admin-bg/95 to-transparent z-50">
+      <button onclick="saveAllChanges();" id="btn-save"
+        class="w-full max-w-md mx-auto bg-egrafic hover:bg-egrafic-light text-white font-bold text-sm py-4 rounded-2xl shadow-[0_8px_25px_rgba(109,187,59,0.3)] active:scale-95 transition-all flex items-center justify-center gap-2">
+        <i class="ph-bold ph-floppy-disk text-lg"></i>
+        GUARDAR Y SALIR
+      </button>
+    </div>
+
+    <!-- Espaciador de seguridad para scroll -->
+    <div class="h-14"></div>
   </main>
 
+  <!-- Notificación emergente flotante (Toast) -->
+  <div id="toast"
+    class="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-zinc-900 border border-egrafic/30 px-5 py-3 rounded-full flex items-center gap-2 shadow-2xl z-50 opacity-0 pointer-events-none transition-all duration-300">
+    <i class="ph-fill ph-check-circle text-egrafic text-lg"></i>
+    <span id="toast-message" class="text-xs font-medium text-white"></span>
+  </div>
+
+  <!-- CONTROLADORES Y LÓGICA DE INTERFAZ -->
   <script>
-    // ¡No olvides cambiar esto luego por tus datos reales de Cloudinary!
+    // ==========================================
+    // CONFIGURACIÓN DE CLOUDINARY (¡Reemplazar!)
+    // ==========================================
     const CLOUD_NAME = "TU_CLOUD_NAME";
     const UPLOAD_PRESET = "TU_UPLOAD_PRESET_UNSIGNED";
-
     const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
 
-    const dropZone = document.getElementById('drop-zone');
-    const fileInput = document.getElementById('file-input');
-    const urlInput = document.getElementById('cloudinary-url-input');
-    const previewContainer = document.getElementById('preview-container');
-    const imagePreview = document.getElementById('image-preview');
-    const uploadPrompt = document.getElementById('upload-prompt');
+    // Datos del catálogo (Inicializados con datos estáticos del index)
+    let mockProducts = [
+      { id: 1, category: "Impresión", title: "Papelería Corporativa Premium", desc: "Tarjetas de presentación con acabados especiales, folletos y papelería fina.", price: "Desde $45.00", image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=1000&auto=format&fit=crop" },
+      { id: 2, category: "Impresión", title: "Gigantografías y Viniles", desc: "Impresión en gran formato para publicidad exterior e interior con tintas UV.", price: "Cotizar por m²", image: "https://images.unsplash.com/photo-1541462608143-67571c6738dd?q=80&w=1000&auto=format&fit=crop" },
+      { id: 3, category: "Remodelaciones", title: "Interiorismo Comercial", desc: "Diseño de espacios, iluminación estratégica y mobiliario a medida.", price: "Previa Visita Técnica", image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop" },
+      { id: 4, category: "Remodelaciones", title: "Stands y Exhibidores", desc: "Construcción de stands impactantes para ferias y puntos de venta.", price: "Previa Cotización", image: "https://images.unsplash.com/photo-1558442074-3c19857bc1dc?q=80&w=1000&auto=format&fit=crop" }
+    ];
 
-    dropZone.onclick = () => fileInput.click();
-    fileInput.onchange = (e) => handleFile(e.target.files[0]);
+    // Cambiar pestañas de manera fluida
+    function switchTab(tabId) {
+      // Ocultar todos los contenidos
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
 
-    async function handleFile(file) {
+      // Mostrar la pestaña seleccionada
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+      // Resetear estilos de todos los botones de pestañas
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.className = "tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 text-gray-400 hover:text-white bg-transparent";
+      });
+
+      // Dar estilo de pestaña activa
+      const activeBtn = document.getElementById(`btn-${tabId}`);
+      activeBtn.className = "tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 bg-egrafic text-white";
+    }
+
+    // --- SUBIDA IMAGEN PRODUCTO (CLOUDINARY) ---
+    const dropZoneProduct = document.getElementById('drop-zone-product');
+    const fileProduct = document.getElementById('file-product');
+    const productImgPreview = document.getElementById('product-img-preview');
+    const productPreviewContainer = document.getElementById('product-preview-container');
+    const productUploadPrompt = document.getElementById('product-upload-prompt');
+    const productImageInput = document.getElementById('product-image-url');
+
+    dropZoneProduct.onclick = () => fileProduct.click();
+    fileProduct.onchange = (e) => handleImageUpload(e.target.files[0], 'product');
+
+    // --- SUBIDA IMAGEN LOGO (CLOUDINARY) ---
+    const dropZoneLogo = document.getElementById('drop-zone-logo');
+    const fileLogo = document.getElementById('file-logo');
+    const logoImgPreview = document.getElementById('logo-img-preview');
+    const logoPreviewContainer = document.getElementById('logo-preview-container');
+    const logoUploadPrompt = document.getElementById('logo-upload-prompt');
+    const logoImageInput = document.getElementById('logo-image-url');
+
+    dropZoneLogo.onclick = () => fileLogo.click();
+    fileLogo.onchange = (e) => handleImageUpload(e.target.files[0], 'logo');
+
+    // Función de subida unificada
+    async function handleImageUpload(file, type) {
       if (!file) return;
-      uploadPrompt.innerHTML = `
-                <div class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="ph ph-spinner animate-spin text-2xl text-egrafic"></i>
+
+      const prompt = type === 'product' ? productUploadPrompt : logoUploadPrompt;
+      const container = type === 'product' ? productPreviewContainer : logoPreviewContainer;
+      const imgPreview = type === 'product' ? productImgPreview : logoImgPreview;
+      const inputVal = type === 'product' ? productImageInput : logoImageInput;
+
+      prompt.innerHTML = `
+                <div class="w-10 h-10 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-2">
+                    <i class="ph ph-spinner animate-spin text-lg text-egrafic"></i>
                 </div>
-                <p class="text-[15px] font-medium text-egrafic">Optimizando foto...</p>
+                <p class="text-xs font-medium text-egrafic">Subiendo y optimizando...</p>
             `;
-      uploadPrompt.classList.remove('hidden');
-      previewContainer.classList.add('hidden');
+      prompt.classList.remove('hidden');
+      container.classList.add('hidden');
 
       const formData = new FormData();
       formData.append('file', file);
@@ -185,42 +437,162 @@
         const data = await response.json();
 
         if (data.secure_url) {
+          // Parámetro f_auto,q_auto inyectado dinámicamente
           const optimizedUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
-          urlInput.value = optimizedUrl;
-          imagePreview.src = optimizedUrl;
-          uploadPrompt.classList.add('hidden');
-          previewContainer.classList.remove('hidden');
+
+          inputVal.value = optimizedUrl;
+          imgPreview.src = optimizedUrl;
+          prompt.classList.add('hidden');
+          container.classList.remove('hidden');
+
+          showToast("¡Imagen subida y optimizada exitosamente!");
         }
       } catch (error) {
         console.error(error);
-        uploadPrompt.innerHTML = `<div class="w-14 h-14 bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-3"><i class="ph ph-warning-circle text-2xl text-red-500"></i></div><p class="text-[15px] font-medium text-red-400">Error al subir</p>`;
+        prompt.innerHTML = `
+                    <i class="ph ph-warning-circle text-xl text-red-500 mb-1"></i>
+                    <p class="text-xs text-red-400">Error al subir</p>
+                    <p class="text-[9px] text-gray-500">Toca de nuevo</p>
+                `;
       }
     }
 
-    function guardarProducto() {
-      if (!urlInput.value) { alert("Sube una imagen primero."); return; }
-      const btn = document.querySelector('button[type="submit"]');
-      const originalText = btn.innerHTML;
-      btn.innerHTML = '<i class="ph ph-spinner animate-spin text-xl"></i> Publicando...';
-      btn.classList.add('opacity-80');
+    // Actualizar visualización del slider de tamaño de logo
+    const slider = document.getElementById('logo-size-slider');
+    const sliderVal = document.getElementById('logo-size-val');
+    slider.oninput = function () {
+      sliderVal.textContent = this.value + "px";
+    }
+
+    // Renderizar lista de productos en el admin para poder administrarlos
+    function renderAdminProducts() {
+      const container = document.getElementById('products-list');
+      container.innerHTML = '';
+
+      mockProducts.forEach(prod => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between p-3 bg-admin-card border border-admin-border/50 rounded-xl gap-3';
+        row.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <img src="${prod.image}" alt="${prod.title}" class="w-12 h-12 rounded-lg object-cover">
+                        <div>
+                            <h4 class="text-xs font-bold text-white line-clamp-1">${prod.title}</h4>
+                            <p class="text-[10px] text-egrafic font-medium">${prod.category} • ${prod.price}</p>
+                        </div>
+                    </div>
+                    <button onclick="deleteProduct(${prod.id})" class="w-8 h-8 rounded-full bg-red-950/20 hover:bg-red-950/40 border border-red-900/15 flex items-center justify-center text-red-400 active:scale-90 transition-all">
+                        <i class="ph ph-trash text-sm"></i>
+                    </button>
+                `;
+        container.appendChild(row);
+      });
+    }
+
+    // Añadir nuevo producto a la lista temporal
+    function publishProduct() {
+      const title = document.getElementById('prod-title').value;
+      const category = document.getElementById('prod-category').value;
+      const price = document.getElementById('prod-price').value;
+      const desc = document.getElementById('prod-desc').value;
+      const image = productImageInput.value;
+
+      if (!image) {
+        showToast("Por favor sube una imagen de producto primero.");
+        return;
+      }
+
+      const newId = mockProducts.length > 0 ? Math.max(...mockProducts.map(p => p.id)) + 1 : 1;
+      mockProducts.unshift({
+        id: newId,
+        title,
+        category,
+        price,
+        desc,
+        image
+      });
+
+      // Limpiar formulario de producto
+      document.getElementById('product-form').reset();
+      productImageInput.value = "";
+      productPreviewContainer.classList.add('hidden');
+      productUploadPrompt.classList.remove('hidden');
+      productUploadPrompt.innerHTML = `
+                <div class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="ph ph-camera text-2xl text-egrafic"></i>
+                </div>
+                <p class="text-[15px] font-medium">Toca para subir foto</p>
+            `;
+
+      renderAdminProducts();
+      showToast("¡Producto añadido al catálogo!");
+    }
+
+    // Eliminar producto de la lista
+    function deleteProduct(id) {
+      mockProducts = mockProducts.filter(p => p.id !== id);
+      renderAdminProducts();
+      showToast("Producto removido del catálogo.");
+    }
+
+    // Mostrar notificación sutil en la pantalla (Toast)
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const msgSpan = document.getElementById('toast-message');
+      msgSpan.textContent = message;
+
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      toast.classList.add('opacity-100');
 
       setTimeout(() => {
-        btn.innerHTML = '<i class="ph-fill ph-check-circle text-xl"></i> ¡Publicado!';
-        btn.classList.replace('bg-egrafic', 'bg-white');
-        btn.classList.replace('text-white', 'text-black');
+        toast.classList.add('opacity-0', 'pointer-events-none');
+        toast.classList.remove('opacity-100');
+      }, 3000);
+    }
+
+    // Guardar todos los cambios y salir
+    function saveAllChanges() {
+      const saveBtn = document.getElementById('btn-save');
+      const originalHTML = saveBtn.innerHTML;
+
+      saveBtn.innerHTML = `<i class="ph ph-spinner animate-spin text-lg"></i> Guardando cambios...`;
+      saveBtn.classList.add('opacity-80');
+
+      // Aquí se estructuran todos los cambios finales del cliente
+      const configuracionCompleta = {
+        productos: mockProducts,
+        identidad: {
+          logo_url: logoImageInput.value,
+          mostrar_nombre: document.getElementById('toggle-logo-text').checked,
+          tamano_logo: document.getElementById('logo-size-slider').value
+        },
+        textos: {
+          titulo_hero: document.getElementById('hero-title').value,
+          subtitulo_hero: document.getElementById('hero-subtitle').value,
+          btn_hero: document.getElementById('hero-btn-text').value
+        },
+        enlaces: {
+          whatsapp: document.getElementById('contact-whatsapp').value,
+          instagram: document.getElementById('contact-instagram').value,
+          email: document.getElementById('contact-email').value
+        }
+      };
+
+      console.log("CONFIGURACIÓN EXPORTABLE PARA BASE DE DATOS:", configuracionCompleta);
+
+      setTimeout(() => {
+        saveBtn.innerHTML = `<i class="ph-fill ph-check-circle text-lg"></i> ¡Guardado Exitosamente!`;
+        saveBtn.classList.replace('bg-egrafic', 'bg-white');
+        saveBtn.classList.replace('text-white', 'text-black');
+
         setTimeout(() => {
-          btn.innerHTML = originalText;
-          btn.classList.replace('bg-white', 'bg-egrafic');
-          btn.classList.replace('text-black', 'text-white');
-          btn.classList.remove('opacity-80');
-          document.getElementById('admin-form').reset();
-          urlInput.value = "";
-          previewContainer.classList.add('hidden');
-          uploadPrompt.classList.remove('hidden');
-          uploadPrompt.innerHTML = `<div class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3"><i class="ph ph-camera text-2xl text-egrafic"></i></div><p class="text-[15px] font-medium">Toca para subir foto</p>`;
-        }, 2000);
+          // Viajar de vuelta al Catálogo Principal
+          window.location.href = "../index.html";
+        }, 1000);
       }, 1500);
     }
+
+    // Iniciar productos en pantalla al cargar
+    renderAdminProducts();
   </script>
 </body>
 
