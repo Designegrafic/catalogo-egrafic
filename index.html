@@ -57,14 +57,18 @@
     <!-- App Bar Superior (Estilo Móvil) -->
     <header
         class="sticky top-0 z-50 bg-admin-bg/90 backdrop-blur-md border-b border-admin-border px-5 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-2">
+        <!-- Logo clickeable para regresar -->
+        <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <i class="ph-fill ph-aperture text-egrafic text-2xl"></i>
             <span class="font-semibold tracking-tight">Workspace</span>
-        </div>
-        <button
-            class="w-9 h-9 rounded-full bg-admin-card flex items-center justify-center border border-admin-border active:scale-95 transition-transform">
-            <i class="ph ph-list text-xl"></i>
-        </button>
+        </a>
+
+        <!-- Botón de salir a la web principal -->
+        <a href="index.html"
+            class="w-9 h-9 rounded-full bg-admin-card flex items-center justify-center border border-admin-border active:scale-95 transition-transform text-gray-400 hover:text-egrafic hover:border-egrafic"
+            title="Volver al Catálogo">
+            <i class="ph ph-sign-out text-xl"></i>
+        </a>
     </header>
 
     <main class="p-5 space-y-6 max-w-md mx-auto">
