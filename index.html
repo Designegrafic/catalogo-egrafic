@@ -3,225 +3,281 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Workspace | Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Grafic | Agencia Creativa</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Syne:wght@500;700;800&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Syne', 'sans-serif'],
+                    },
                     colors: {
-                        egrafic: { DEFAULT: '#6DBB3B', light: '#88D455' },
-                        admin: { bg: '#0f0f11', card: '#18181b', border: '#27272a' }
+                        egrafic: {
+                            DEFAULT: '#6DBB3B',
+                            light: '#88D455',
+                            dark: '#4A8A24',
+                        },
+                        agency: {
+                            black: '#0a0a0c',
+                            dark: '#141417',
+                            gray: '#2a2a2f',
+                            accent: '#6DBB3B',
+                            muted: '#8e8e93'
+                        }
                     }
                 }
             }
         }
     </script>
+
     <style>
         body {
-            background-color: #0f0f11;
+            background-color: #0a0a0c;
             color: #ffffff;
-            -webkit-tap-highlight-color: transparent;
         }
 
-        ::-webkit-scrollbar {
+        .glass-nav {
+            background: rgba(10, 10, 12, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(20, 20, 23, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(109, 187, 59, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(109, 187, 59, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
 
-        .mobile-card {
-            background: #18181b;
-            border: 1px solid #27272a;
-            border-radius: 20px;
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
-        input:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: #6DBB3B;
-            box-shadow: 0 0 0 1px #6DBB3B;
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-up {
+            animation: fadeUp 0.6s ease forwards;
         }
     </style>
 </head>
 
-<body class="antialiased pb-24">
+<body class="antialiased font-sans selection:bg-egrafic selection:text-black">
 
-    <header
-        class="sticky top-0 z-50 bg-admin-bg/90 backdrop-blur-md border-b border-admin-border px-5 py-4 flex justify-between items-center">
-        <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <i class="ph-fill ph-aperture text-egrafic text-2xl"></i>
-            <span class="font-semibold tracking-tight">Workspace</span>
-        </a>
-        <a href="index.html"
-            class="w-9 h-9 rounded-full bg-admin-card flex items-center justify-center border border-admin-border active:scale-95 transition-transform text-gray-400 hover:text-egrafic hover:border-egrafic"
-            title="Volver al Catálogo">
-            <i class="ph ph-sign-out text-xl"></i>
-        </a>
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="font-display font-bold text-2xl tracking-tighter uppercase flex items-center gap-2">
+                <i class="ph-fill ph-aperture text-egrafic text-3xl"></i>
+                E-Grafic
+            </div>
+            <a href="#contacto"
+                class="hidden md:flex items-center gap-2 bg-white text-black px-5 py-2.5 rounded-full font-medium text-sm hover:bg-egrafic hover:text-white transition-colors duration-300 shadow-[0_0_0_rgba(109,187,59,0)] hover:shadow-[0_0_15px_rgba(109,187,59,0.4)]">
+                Visita Técnica <i class="ph-bold ph-arrow-up-right"></i>
+            </a>
+        </div>
+    </nav>
+
+    <header class="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 overflow-hidden">
+        <div class="absolute inset-0 z-0 pointer-events-none">
+            <div
+                class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-egrafic-dark/20 rounded-full blur-[120px] mix-blend-screen">
+            </div>
+            <div
+                class="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-egrafic/10 rounded-full blur-[150px] mix-blend-screen">
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto relative z-10 text-center">
+            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.1] mb-6">
+                Elevamos tu <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-egrafic">Marca al
+                    Futuro.</span>
+            </h1>
+            <p class="text-agency-muted text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light">
+                Soluciones integrales de diseño, impresión y desarrollo espacial. Explora nuestro workspace digital
+                interactivo.
+            </p>
+        </div>
     </header>
 
-    <main class="p-5 space-y-6 max-w-md mx-auto">
-        <div>
-            <h1 class="text-2xl font-bold tracking-tight mb-1">Nuevo Producto</h1>
-            <p class="text-gray-400 text-sm">Actualiza tu catálogo en segundos.</p>
-        </div>
+    <section class="max-w-7xl mx-auto px-6 mb-12 sticky top-20 z-40">
+        <div class="flex gap-3 overflow-x-auto no-scrollbar pb-4 items-center justify-start md:justify-center"
+            id="category-filters"></div>
+    </section>
 
-        <form class="space-y-5" id="admin-form" onsubmit="event.preventDefault(); guardarProducto();">
-            <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-300 ml-1">Imagen (Cloudinary Automático)</label>
-                <div id="drop-zone"
-                    class="mobile-card border-dashed p-6 text-center cursor-pointer active:bg-zinc-800 transition-colors group">
-                    <input type="file" id="file-input" class="hidden" accept="image/*">
-                    <div class="space-y-2" id="upload-prompt">
-                        <div
-                            class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="ph ph-camera text-2xl text-egrafic"></i>
-                        </div>
-                        <p class="text-[15px] font-medium">Toca para subir foto</p>
-                        <p class="text-xs text-gray-500 px-4">Se optimizará el peso automáticamente para no gastar
-                            datos.</p>
-                    </div>
-
-                    <div id="preview-container" class="hidden relative w-full h-48 rounded-xl overflow-hidden">
-                        <img id="image-preview" class="w-full h-full object-cover" src="">
-                        <div
-                            class="absolute bottom-3 right-3 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1">
-                            <i class="ph ph-arrows-clockwise text-xs"></i>
-                            <span class="text-xs font-medium">Cambiar</span>
-                        </div>
-                    </div>
-                </div>
-                <input type="hidden" id="cloudinary-url-input" required>
-            </div>
-
-            <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-300 ml-1">Categoría</label>
-                <select id="producto-categoria"
-                    class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 appearance-none"
-                    required>
-                    <option value="" disabled selected>Selecciona una categoría...</option>
-                    <option value="Impresión">Impresión</option>
-                    <option value="Remodelaciones">Remodelaciones</option>
-                    <option value="Diseño de Marca 3D">Diseño de Marca 3D</option>
-                    <option value="Herramientas Digitales">Herramientas Digitales</option>
-                </select>
-                <i class="ph ph-caret-down absolute right-8 mt-[14px] text-gray-400 pointer-events-none"></i>
-            </div>
-
-            <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-300 ml-1">Título del Producto / Servicio</label>
-                <input type="text" id="producto-titulo" placeholder="Ej: Letreros 3D Luminosos"
-                    class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 placeholder-gray-600"
-                    required>
-            </div>
-
-            <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-300 ml-1">Precio o Inversión</label>
-                <div class="relative">
-                    <span class="absolute left-4 top-3.5 text-gray-500 font-medium">$</span>
-                    <input type="text" id="producto-precio" placeholder="0.00 o 'Previa Cotización'"
-                        class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl pl-8 pr-4 py-3.5 placeholder-gray-600"
-                        required>
-                </div>
-            </div>
-
-            <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-300 ml-1">Descripción corta</label>
-                <textarea id="producto-desc" rows="3" placeholder="Detalles principales..."
-                    class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 placeholder-gray-600 resize-none"
-                    required></textarea>
-            </div>
-
-            <div class="fixed bottom-0 left-0 w-full p-5 bg-gradient-to-t from-admin-bg via-admin-bg to-transparent">
-                <button type="submit"
-                    class="w-full max-w-md mx-auto block bg-egrafic text-white font-semibold text-[16px] py-4 rounded-2xl shadow-[0_8px_20px_rgba(109,187,59,0.3)] active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
-                    <i class="ph-bold ph-check-circle text-xl"></i>
-                    Publicar en Catálogo
-                </button>
-            </div>
-
-            <div class="h-8"></div>
-        </form>
+    <main class="max-w-7xl mx-auto px-6 mb-32">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="catalog-grid"></div>
     </main>
 
-    <script>
-        // ¡No olvides cambiar esto luego por tus datos reales!
-        const CLOUD_NAME = "TU_CLOUD_NAME";
-        const UPLOAD_PRESET = "TU_UPLOAD_PRESET_UNSIGNED";
+    <footer id="contacto" class="border-t border-agency-gray py-12 px-6 mt-20 relative overflow-hidden">
+        <div
+            class="absolute bottom-0 center w-full h-px bg-gradient-to-r from-transparent via-egrafic/50 to-transparent">
+        </div>
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+            <div class="font-display font-bold text-xl uppercase tracking-tighter flex items-center gap-2">
+                <i class="ph-fill ph-aperture text-egrafic"></i> E-Grafic Studio
+            </div>
+            <div class="flex gap-4">
+                <a href="#"
+                    class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-egrafic hover:text-white hover:border-egrafic transition-all"><i
+                        class="ph ph-instagram-logo text-xl"></i></a>
+                <a href="#"
+                    class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-egrafic hover:text-white hover:border-egrafic transition-all"><i
+                        class="ph ph-whatsapp-logo text-xl"></i></a>
+                <a href="#"
+                    class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-egrafic hover:text-white hover:border-egrafic transition-all"><i
+                        class="ph ph-envelope-simple text-xl"></i></a>
+            </div>
+            <div class="flex items-center gap-3">
+                <p class="text-agency-muted text-sm">© 2026 Todos los derechos reservados.</p>
+                <a href="admin.html"
+                    class="text-gray-600 opacity-40 hover:opacity-100 hover:text-egrafic transition-all duration-300 transform hover:scale-110"
+                    title="Acceso a Workspace">
+                    <i class="ph-fill ph-lock-key text-lg"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
 
-        const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
-
-        const dropZone = document.getElementById('drop-zone');
-        const fileInput = document.getElementById('file-input');
-        const urlInput = document.getElementById('cloudinary-url-input');
-        const previewContainer = document.getElementById('preview-container');
-        const imagePreview = document.getElementById('image-preview');
-        const uploadPrompt = document.getElementById('upload-prompt');
-
-        dropZone.onclick = () => fileInput.click();
-        fileInput.onchange = (e) => handleFile(e.target.files[0]);
-
-        async function handleFile(file) {
-            if (!file) return;
-            uploadPrompt.innerHTML = `
-                <div class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="ph ph-spinner animate-spin text-2xl text-egrafic"></i>
+    <div id="product-modal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeModal()"></div>
+        <div class="relative bg-agency-dark border border-agency-gray w-full max-w-4xl rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col md:flex-row transform scale-95 transition-transform duration-300"
+            id="modal-content-box">
+            <div
+                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-egrafic to-transparent opacity-50 z-20">
+            </div>
+            <button onclick="closeModal()"
+                class="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-egrafic hover:text-white transition-colors">
+                <i class="ph ph-x text-lg"></i>
+            </button>
+            <div class="w-full md:w-1/2 h-64 md:h-[500px] relative">
+                <img id="modal-img" src="" alt="Producto" class="w-full h-full object-cover">
+            </div>
+            <div class="w-full md:w-1/2 p-8 md:p-10 flex flex-col justify-center">
+                <div id="modal-category" class="text-xs font-bold tracking-widest uppercase text-egrafic mb-2"></div>
+                <h2 id="modal-title" class="font-display text-3xl md:text-4xl font-bold mb-4"></h2>
+                <p id="modal-desc" class="text-agency-muted mb-8 leading-relaxed"></p>
+                <div class="mt-auto">
+                    <div class="text-sm text-gray-400 mb-1">Inversión estimada</div>
+                    <div id="modal-price" class="text-2xl font-display font-medium mb-6 text-white"></div>
+                    <a href="https://wa.me/593990000000" target="_blank"
+                        class="w-full flex items-center justify-center gap-2 bg-egrafic text-white py-4 rounded-xl font-medium hover:bg-egrafic-light transition-all shadow-[0_0_0_rgba(109,187,59,0)] hover:shadow-[0_8px_20px_rgba(109,187,59,0.3)]">
+                        Solicitar Cotización <i class="ph-bold ph-whatsapp-logo text-lg"></i>
+                    </a>
                 </div>
-                <p class="text-[15px] font-medium text-egrafic">Optimizando foto...</p>
-            `;
-            uploadPrompt.classList.remove('hidden');
-            previewContainer.classList.add('hidden');
+            </div>
+        </div>
+    </div>
 
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', UPLOAD_PRESET);
+    <script>
+        const workspaceData = [
+            { id: 1, category: "Impresión", title: "Papelería Corporativa Premium", desc: "Tarjetas de presentación con acabados especiales, folletos y papelería fina.", price: "Desde $45.00", image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=1000&auto=format&fit=crop" },
+            { id: 2, category: "Impresión", title: "Gigantografías y Viniles", desc: "Impresión en gran formato para publicidad exterior e interior con tintas UV.", price: "Cotizar por m²", image: "https://images.unsplash.com/photo-1541462608143-67571c6738dd?q=80&w=1000&auto=format&fit=crop" },
+            { id: 3, category: "Remodelaciones", title: "Interiorismo Comercial", desc: "Diseño de espacios, iluminación estratégica y mobiliario a medida.", price: "Previa Visita Técnica", image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop" },
+            { id: 4, category: "Remodelaciones", title: "Stands y Exhibidores", desc: "Construcción de stands impactantes para ferias y puntos de venta.", price: "Previa Cotización", image: "https://images.unsplash.com/photo-1558442074-3c19857bc1dc?q=80&w=1000&auto=format&fit=crop" },
+            { id: 5, category: "Diseño de Marca 3D", title: "Letreros Corpóreos 3D", desc: "Letras en relieve en acrílico, MDF o PVC con iluminación LED.", price: "Desde $120.00", image: "https://images.unsplash.com/photo-1563206767-5b18f218e8de?q=80&w=1000&auto=format&fit=crop" },
+            { id: 6, category: "Diseño de Marca 3D", title: "Renders Arquitectónicos", desc: "Visualización 3D hiperrealista de proyectos comerciales.", price: "Desde $80.00 x Vista", image: "https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=1000&auto=format&fit=crop" },
+            { id: 7, category: "Herramientas Digitales", title: "Menús QR Dinámicos", desc: "Catálogos y menús digitales escaneables, actualizables en tiempo real.", price: "Plan Mensual / Anual", image: "https://images.unsplash.com/photo-1555421689-d68471e189f2?q=80&w=1000&auto=format&fit=crop" },
+            { id: 8, category: "Herramientas Digitales", title: "Desarrollo Web Agency", desc: "Páginas web corporativas de alto impacto y diseño responsivo.", price: "Desde $350.00", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop" }
+        ];
 
-            try {
-                const response = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
-                const data = await response.json();
+        const categories = ["Todos", "Impresión", "Remodelaciones", "Diseño de Marca 3D", "Herramientas Digitales"];
+        let currentFilter = "Todos";
 
-                if (data.secure_url) {
-                    const optimizedUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
-                    urlInput.value = optimizedUrl;
-                    imagePreview.src = optimizedUrl;
-                    uploadPrompt.classList.add('hidden');
-                    previewContainer.classList.remove('hidden');
-                }
-            } catch (error) {
-                console.error(error);
-                uploadPrompt.innerHTML = `<div class="w-14 h-14 bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-3"><i class="ph ph-warning-circle text-2xl text-red-500"></i></div><p class="text-[15px] font-medium text-red-400">Error al subir</p>`;
-            }
+        function renderFilters() {
+            const container = document.getElementById('category-filters');
+            container.innerHTML = '';
+            categories.forEach(cat => {
+                const isActive = currentFilter === cat;
+                const btn = document.createElement('button');
+                btn.className = `px-6 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 border ${isActive ? 'bg-egrafic text-white border-egrafic shadow-[0_0_15px_rgba(109,187,59,0.3)]' : 'bg-transparent text-agency-muted border-agency-gray hover:border-egrafic hover:text-white'}`;
+                btn.textContent = cat;
+                btn.onclick = () => { currentFilter = cat; renderFilters(); renderGrid(); };
+                container.appendChild(btn);
+            });
         }
 
-        function guardarProducto() {
-            if (!urlInput.value) { alert("Sube una imagen primero."); return; }
-            const btn = document.querySelector('button[type="submit"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-xl"></i> Publicando...';
-            btn.classList.add('opacity-80');
-
-            setTimeout(() => {
-                btn.innerHTML = '<i class="ph-fill ph-check-circle text-xl"></i> ¡Publicado!';
-                btn.classList.replace('bg-egrafic', 'bg-white');
-                btn.classList.replace('text-white', 'text-black');
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.classList.replace('bg-white', 'bg-egrafic');
-                    btn.classList.replace('text-black', 'text-white');
-                    btn.classList.remove('opacity-80');
-                    document.getElementById('admin-form').reset();
-                    urlInput.value = "";
-                    previewContainer.classList.add('hidden');
-                    uploadPrompt.classList.remove('hidden');
-                    uploadPrompt.innerHTML = `<div class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3"><i class="ph ph-camera text-2xl text-egrafic"></i></div><p class="text-[15px] font-medium">Toca para subir foto</p>`;
-                }, 2000);
-            }, 1500);
+        function renderGrid() {
+            const container = document.getElementById('catalog-grid');
+            container.innerHTML = '';
+            const filteredData = currentFilter === "Todos" ? workspaceData : workspaceData.filter(item => item.category === currentFilter);
+            filteredData.forEach((item, index) => {
+                const heightClass = index % 3 === 0 ? "h-96" : "h-80 md:h-96";
+                const card = document.createElement('div');
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.className = `group cursor-pointer rounded-2xl overflow-hidden glass-card relative flex flex-col justify-end p-6 animate-fade-up ${heightClass}`;
+                card.onclick = () => openModal(item);
+                card.innerHTML = `
+                    <div class="absolute inset-0 w-full h-full">
+                        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1">
+                        <div class="absolute inset-0 bg-gradient-to-t from-agency-black via-black/50 to-transparent opacity-80 group-hover:opacity-95 transition-opacity"></div>
+                    </div>
+                    <div class="relative z-10 transform transition-transform duration-300 group-hover:-translate-y-2">
+                        <span class="inline-block px-3 py-1 mb-3 text-[10px] font-bold tracking-widest uppercase border border-egrafic/50 text-egrafic-light rounded-full backdrop-blur-md bg-egrafic/10">${item.category}</span>
+                        <h3 class="font-display text-2xl font-bold leading-tight mb-1 text-white">${item.title}</h3>
+                        <p class="text-sm text-egrafic-light opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-0 group-hover:h-auto overflow-hidden mt-2 flex items-center gap-1">Ver detalles <i class="ph-bold ph-arrow-right"></i></p>
+                    </div>`;
+                container.appendChild(card);
+            });
         }
+
+        const modal = document.getElementById('product-modal');
+        const modalBox = document.getElementById('modal-content-box');
+
+        function openModal(item) {
+            document.getElementById('modal-img').src = item.image;
+            document.getElementById('modal-category').textContent = item.category;
+            document.getElementById('modal-title').textContent = item.title;
+            document.getElementById('modal-desc').textContent = item.desc;
+            document.getElementById('modal-price').textContent = item.price;
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            setTimeout(() => { modal.classList.remove('opacity-0'); modalBox.classList.remove('scale-95'); modalBox.classList.add('scale-100'); }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0'); modalBox.classList.remove('scale-100'); modalBox.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = 'auto'; }, 300);
+        }
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) { nav.classList.add('py-2', 'shadow-[0_10px_30px_rgba(0,0,0,0.5)]'); nav.classList.remove('py-4'); }
+            else { nav.classList.add('py-4'); nav.classList.remove('py-2', 'shadow-[0_10px_30px_rgba(0,0,0,0.5)]'); }
+        });
+
+        renderFilters(); renderGrid();
     </script>
 </body>
 

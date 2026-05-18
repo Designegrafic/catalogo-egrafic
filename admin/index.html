@@ -1,226 +1,226 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <!-- Evita el autozoom en iOS cuando se hace foco, se puede mejorar usando initial-scale y maximum-scale -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Admin - Decap CMS</title>
-  
-  <!-- Widget para Netlify Identity -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<html lang="es" class="scroll-smooth">
 
-  <!-- Bloque de estilos inyectados directamente para forzar Responsive Design en la UI de Decap CMS -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Workspace | Admin</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            egrafic: { DEFAULT: '#6DBB3B', light: '#88D455' },
+            admin: { bg: '#0f0f11', card: '#18181b', border: '#27272a' }
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    /* VARIABLES GLOBALES PARA MOVILES */
-    :root {
-      --touch-size: 48px;
+    body {
+      background-color: #0f0f11;
+      color: #ffffff;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    @media (max-width: 768px) {
-      /* 
-       * 1. Panel de Navegación (Sidebar colapsable o ajustable) 
-       * Hacemos que el layout principal ponga el sidebar arriba o abajo y ocupe el full width
-       */
-      div[class*="AppMainContainer"] {
-        flex-direction: column !important;
-      }
-      aside {
-        width: 100% !important;
-        min-width: 100% !important;
-        max-width: 100% !important;
-        padding: 16px !important;
-        border-right: none !important;
-        border-bottom: 2px solid #eaeaea !important;
-      }
-      
-      /* Ajuste a las tarjetas de colecciones en la página de inicio */
-      div[class*="CardContainer"] {
-        width: 100% !important;
-        margin: 0 0 16px 0 !important;
-      }
+    ::-webkit-scrollbar {
+      display: none;
+    }
 
-      /* 
-       * 2. Formularios Mobile-Friendly (Inputs y Selectores 100%)
-       * Usamos font-size: 16px para evitar Auto-Zoom de iOS 
-       */
-      input, select, textarea, div[role="textbox"] {
-        width: 100% !important;
-        font-size: 16px !important; 
-        box-sizing: border-box !important;
-        padding: 12px !important; /* Más área de tapeo */
-      }
-      
-      /* Las etiquetas de input más amigables */
-      label {
-        font-size: 15px !important;
-        margin-top: 12px !important;
-      }
+    .mobile-card {
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 20px;
+    }
 
-      /* 
-       * 3. Botones de Acción (Publish y Save más grandes y amigables)
-       */
-      button {
-        min-height: var(--touch-size) !important;
-        font-size: 16px !important;
-        border-radius: 8px !important;
-      }
-      
-      /* La Navbar de los botones de Guardar y Publicar en el Editor */
-      header[class*="ToolbarContainer"], 
-      div[class*="EditorToolbar"] {
-        flex-wrap: wrap !important;
-        height: auto !important;
-        padding: 10px !important;
-      }
-      /* Expandir botones específicos del Header/Editor */
-      header button, 
-      div[class*="EditorToolbar"] button {
-        width: 100% !important;
-        margin-bottom: 8px !important;
-        padding: 14px !important;
-        font-weight: 700 !important;
-      }
-
-      /* 
-       * 4. Previsualización (Ajustar Panel para no estorbar)
-       * Eliminamos la previsualización en vista móvil para que no interrumpa al escribir
-       */
-      div[class*="EditorContainer"] {
-        flex-direction: column !important;
-      }
-      div[class*="PreviewPaneContainer"] {
-        display: none !important; /* Ocultamos el Preview en mobile por defecto */
-      }
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #6DBB3B;
+      box-shadow: 0 0 0 1px #6DBB3B;
     }
   </style>
 </head>
-<body>
-  <!-- Incluye Decap CMS -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <script src="https://unpkg.com/decap-cms-media-library-cloudinary@^1.3.0/dist/decap-cms-media-library-cloudinary.js"></script>
-  
-  <!-- Inyección de Estilos CMS y Script de Previsualización Local -->
+
+<body class="antialiased pb-24">
+
+  <header
+    class="sticky top-0 z-50 bg-admin-bg/90 backdrop-blur-md border-b border-admin-border px-5 py-4 flex justify-between items-center">
+    <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+      <i class="ph-fill ph-aperture text-egrafic text-2xl"></i>
+      <span class="font-semibold tracking-tight">Workspace</span>
+    </a>
+    <a href="index.html"
+      class="w-9 h-9 rounded-full bg-admin-card flex items-center justify-center border border-admin-border active:scale-95 transition-transform text-gray-400 hover:text-egrafic hover:border-egrafic"
+      title="Volver al Catálogo">
+      <i class="ph ph-sign-out text-xl"></i>
+    </a>
+  </header>
+
+  <main class="p-5 space-y-6 max-w-md mx-auto">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight mb-1">Nuevo Producto</h1>
+      <p class="text-gray-400 text-sm">Actualiza tu catálogo en segundos.</p>
+    </div>
+
+    <form class="space-y-5" id="admin-form" onsubmit="event.preventDefault(); guardarProducto();">
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-300 ml-1">Imagen (Cloudinary Automático)</label>
+        <div id="drop-zone"
+          class="mobile-card border-dashed p-6 text-center cursor-pointer active:bg-zinc-800 transition-colors group">
+          <input type="file" id="file-input" class="hidden" accept="image/*">
+          <div class="space-y-2" id="upload-prompt">
+            <div class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3">
+              <i class="ph ph-camera text-2xl text-egrafic"></i>
+            </div>
+            <p class="text-[15px] font-medium">Toca para subir foto</p>
+            <p class="text-xs text-gray-500 px-4">Se optimizará el peso automáticamente para no gastar datos.</p>
+          </div>
+
+          <div id="preview-container" class="hidden relative w-full h-48 rounded-xl overflow-hidden">
+            <img id="image-preview" class="w-full h-full object-cover" src="">
+            <div
+              class="absolute bottom-3 right-3 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1">
+              <i class="ph ph-arrows-clockwise text-xs"></i>
+              <span class="text-xs font-medium">Cambiar</span>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" id="cloudinary-url-input" required>
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-300 ml-1">Categoría</label>
+        <select id="producto-categoria"
+          class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 appearance-none"
+          required>
+          <option value="" disabled selected>Selecciona una categoría...</option>
+          <option value="Impresión">Impresión</option>
+          <option value="Remodelaciones">Remodelaciones</option>
+          <option value="Diseño de Marca 3D">Diseño de Marca 3D</option>
+          <option value="Herramientas Digitales">Herramientas Digitales</option>
+        </select>
+        <i class="ph ph-caret-down absolute right-8 mt-[14px] text-gray-400 pointer-events-none"></i>
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-300 ml-1">Título del Producto / Servicio</label>
+        <input type="text" id="producto-titulo" placeholder="Ej: Letreros 3D Luminosos"
+          class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 placeholder-gray-600"
+          required>
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-300 ml-1">Precio o Inversión</label>
+        <div class="relative">
+          <span class="absolute left-4 top-3.5 text-gray-500 font-medium">$</span>
+          <input type="text" id="producto-precio" placeholder="0.00 o 'Previa Cotización'"
+            class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl pl-8 pr-4 py-3.5 placeholder-gray-600"
+            required>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-300 ml-1">Descripción corta</label>
+        <textarea id="producto-desc" rows="3" placeholder="Detalles principales..."
+          class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 placeholder-gray-600 resize-none"
+          required></textarea>
+      </div>
+
+      <div class="fixed bottom-0 left-0 w-full p-5 bg-gradient-to-t from-admin-bg via-admin-bg to-transparent">
+        <button type="submit"
+          class="w-full max-w-md mx-auto block bg-egrafic text-white font-semibold text-[16px] py-4 rounded-2xl shadow-[0_8px_20px_rgba(109,187,59,0.3)] active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
+          <i class="ph-bold ph-check-circle text-xl"></i>
+          Publicar en Catálogo
+        </button>
+      </div>
+
+      <div class="h-8"></div>
+    </form>
+  </main>
+
   <script>
-    // Registrar la librería de medios de Cloudinary
-    CMS.registerMediaLibrary(window.cloudinaryMediaLibrary);
+    // ¡No olvides cambiar esto luego por tus datos reales!
+    const CLOUD_NAME = "TU_CLOUD_NAME";
+    const UPLOAD_PRESET = "TU_UPLOAD_PRESET_UNSIGNED";
 
-    // Estilos base para la previsualización
-    const previewStyles = `
-      body {
-        font-family: system-ui, -apple-system, sans-serif;
-        line-height: 1.5;
-        padding: 20px;
-        margin: 0;
-        background-color: #f9f9f9;
-        font-size: 16px;
-      }
-      img {
-        max-width: 100%;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        height: auto;
-      }
-      .preview-category {
-        font-size: 0.9em;
-        text-transform: uppercase;
-        color: #128C7E;
-        letter-spacing: 1px;
-        font-weight: 600;
-        margin-top: 15px;
-      }
-      .preview-price {
-        font-size: 1.5em;
-        font-weight: bold;
-        color: #222;
-        margin: 10px 0;
-      }
-    `;
-    CMS.registerPreviewStyle(previewStyles, { raw: true });
+    const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
 
-    // Carga Local: Haz que el Dashboard use la imagen cargada en la memoria del navegador 
-    // Esto previene que las imágenes salgan 'rotas' antes de enviar a GitHub
-    var ProductPreview = createClass({
-      render: function() {
-        var entry = this.props.entry;
-        
-        // getAsset() es la función mágica: obtiene el Blob de la RAM
-        // Obtener la lista y extraer la primera imagen de forma robusta
-        var galleryList = entry.getIn(['data', 'gallery']);
-        var imageField = null;
-        
-        if (galleryList && galleryList.size > 0) {
-            var firstItem = galleryList.get(0);
-            if (typeof firstItem === 'string') {
-                imageField = firstItem; // Array de strings nativo
-            } else if (firstItem && typeof firstItem.get === 'function') {
-                imageField = firstItem.get('image') || firstItem.get('url'); // Si es un objeto complejo
-            } else {
-                imageField = firstItem;
-            }
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const urlInput = document.getElementById('cloudinary-url-input');
+    const previewContainer = document.getElementById('preview-container');
+    const imagePreview = document.getElementById('image-preview');
+    const uploadPrompt = document.getElementById('upload-prompt');
+
+    dropZone.onclick = () => fileInput.click();
+    fileInput.onchange = (e) => handleFile(e.target.files[0]);
+
+    async function handleFile(file) {
+      if (!file) return;
+      uploadPrompt.innerHTML = `
+                <div class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="ph ph-spinner animate-spin text-2xl text-egrafic"></i>
+                </div>
+                <p class="text-[15px] font-medium text-egrafic">Optimizando foto...</p>
+            `;
+      uploadPrompt.classList.remove('hidden');
+      previewContainer.classList.add('hidden');
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', UPLOAD_PRESET);
+
+      try {
+        const response = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
+        const data = await response.json();
+
+        if (data.secure_url) {
+          const optimizedUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
+          urlInput.value = optimizedUrl;
+          imagePreview.src = optimizedUrl;
+          uploadPrompt.classList.add('hidden');
+          previewContainer.classList.remove('hidden');
         }
-        
-        if (!imageField) {
-            imageField = entry.getIn(['data', 'image']);
-        }
-
-        var imageSrc = imageField ? this.props.getAsset(imageField) : null; 
-        
-        return h('div', { className: "product-preview" },
-          imageSrc ? h('img', { src: imageSrc.toString(), alt: entry.getIn(['data', 'title']), style: { width: '100%', objectFit: 'cover' } }) : null,
-          h('div', { className: "preview-category" }, 
-            (entry.getIn(['data', 'classification', 'category']) || entry.getIn(['data', 'category']) || "Categoría") + " | " + (entry.getIn(['data', 'classification', 'subcategory']) || entry.getIn(['data', 'subcategory']) || "Subcategoría")
-          ),
-          h('h1', {}, entry.getIn(['data', 'title']) || "Título del Producto"),
-          h('p', {}, entry.getIn(['data', 'description']) || "Descripción..."),
-          h('div', { className: "preview-price" }, "$" + (entry.getIn(['data', 'price']) || "0.00"))
-        );
+      } catch (error) {
+        console.error(error);
+        uploadPrompt.innerHTML = `<div class="w-14 h-14 bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-3"><i class="ph ph-warning-circle text-2xl text-red-500"></i></div><p class="text-[15px] font-medium text-red-400">Error al subir</p>`;
       }
-    });
+    }
 
-    // Registrar el componente de previsualización in-memory para la colección "products"
-    CMS.registerPreviewTemplate("products", ProductPreview);
+    function guardarProducto() {
+      if (!urlInput.value) { alert("Sube una imagen primero."); return; }
+      const btn = document.querySelector('button[type="submit"]');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="ph ph-spinner animate-spin text-xl"></i> Publicando...';
+      btn.classList.add('opacity-80');
 
-    // Inyección de estilos y logica para Cards de Imágenes de Galería y Botón elegante
-    window.addEventListener('DOMContentLoaded', () => {
-      // 1. Botón "Ver Catálogo" moderno y pequeño
-      const btn = document.createElement('a');
-      btn.href = 'https://catalogoegrafic.netlify.app';
-      btn.target = '_blank';
-      btn.innerHTML = '👁️ Catálogo';
-      btn.style.cssText = 'position:fixed; top:12px; right:150px; z-index:99999; background:rgba(0,0,0,0.8); color:#fff; padding:6px 12px; border-radius:20px; text-decoration:none; font-weight:500; font-size:12px; display:flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(0,0,0,0.15); backdrop-filter:blur(4px); transition:0.3s ease;';
-      
-      const style = document.createElement('style');
-      style.textContent = `
-        @media(max-width: 768px) {
-          #btn-ver-catalogo {
-            right: 16px !important;
-            top: auto !important;
-            bottom: 16px !important;
-          }
-        }
-        
-        /* Ocultar el texto crudo de imágenes en la tarjeta e insertar CSS en la vista */
-        .nc-collectionPage-card {
-           position:relative;
-        }
-      `;
-      document.head.appendChild(style);
-      btn.id = 'btn-ver-catalogo';
-      document.body.appendChild(btn);
-
-      // 2. Observer: Si en la vista de lista detecta una URL de imagen viva, la vuelve miniatura tipo thumbnail de 80px
-      const observer = new MutationObserver(() => {
-        document.querySelectorAll('span, p, div').forEach(node => {
-          if (node.childNodes.length === 1 && node.childNodes[0].nodeType === 3) {
-            const text = node.textContent.trim();
-            if ((text.startsWith('http') || text.startsWith('/assets/')) && (text.endsWith('.png') || text.endsWith('.jpg') || text.endsWith('.jpeg'))) {
-              node.innerHTML = \`<img src="\${text}" style="width:80px; height:80px; object-fit:cover; border-radius:8px; display:block; margin:8px 0;" alt="thumbnail">\`;
-            }
-          }
-        });
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
-    });
+      setTimeout(() => {
+        btn.innerHTML = '<i class="ph-fill ph-check-circle text-xl"></i> ¡Publicado!';
+        btn.classList.replace('bg-egrafic', 'bg-white');
+        btn.classList.replace('text-white', 'text-black');
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.classList.replace('bg-white', 'bg-egrafic');
+          btn.classList.replace('text-black', 'text-white');
+          btn.classList.remove('opacity-80');
+          document.getElementById('admin-form').reset();
+          urlInput.value = "";
+          previewContainer.classList.add('hidden');
+          uploadPrompt.classList.remove('hidden');
+          uploadPrompt.innerHTML = `<div class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3"><i class="ph ph-camera text-2xl text-egrafic"></i></div><p class="text-[15px] font-medium">Toca para subir foto</p>`;
+        }, 2000);
+      }, 1500);
+    }
   </script>
 </body>
+
 </html>
