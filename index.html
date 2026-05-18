@@ -76,7 +76,7 @@
         </div>
 
         <!-- Formulario (Pensado para dedos / Touch Friendly) -->
-        <form class="space-y-5" onsubmit="event.preventDefault(); guardarProducto();">
+        <form class="space-y-5" id="admin-form" onsubmit="event.preventDefault(); guardarProducto();">
 
             <!-- Zona de Subida Cloudinary (Táctil) -->
             <div class="space-y-2">
@@ -110,39 +110,43 @@
             <!-- Campos de Texto Amplios -->
             <div class="space-y-2">
                 <label class="block text-sm font-medium text-gray-300 ml-1">Categoría</label>
-                <select
-                    class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 appearance-none">
-                    <option>Impresión</option>
-                    <option>Remodelaciones</option>
-                    <option>Diseño de Marca 3D</option>
-                    <option>Herramientas Digitales</option>
+                <select id="producto-categoria"
+                    class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 appearance-none"
+                    required>
+                    <option value="" disabled selected>Selecciona una categoría...</option>
+                    <option value="Impresión">Impresión</option>
+                    <option value="Remodelaciones">Remodelaciones</option>
+                    <option value="Diseño de Marca 3D">Diseño de Marca 3D</option>
+                    <option value="Herramientas Digitales">Herramientas Digitales</option>
                 </select>
-                <!-- Icono de flecha para el select -->
                 <i class="ph ph-caret-down absolute right-8 mt-[14px] text-gray-400 pointer-events-none"></i>
             </div>
 
             <div class="space-y-2">
                 <label class="block text-sm font-medium text-gray-300 ml-1">Título del Producto / Servicio</label>
-                <input type="text" placeholder="Ej: Letreros 3D Luminosos"
-                    class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 placeholder-gray-600">
+                <input type="text" id="producto-titulo" placeholder="Ej: Letreros 3D Luminosos"
+                    class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 placeholder-gray-600"
+                    required>
             </div>
 
             <div class="space-y-2">
                 <label class="block text-sm font-medium text-gray-300 ml-1">Precio o Inversión</label>
                 <div class="relative">
                     <span class="absolute left-4 top-3.5 text-gray-500 font-medium">$</span>
-                    <input type="text" placeholder="0.00 o 'Previa Cotización'"
-                        class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl pl-8 pr-4 py-3.5 placeholder-gray-600">
+                    <input type="text" id="producto-precio" placeholder="0.00 o 'Previa Cotización'"
+                        class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl pl-8 pr-4 py-3.5 placeholder-gray-600"
+                        required>
                 </div>
             </div>
 
             <div class="space-y-2">
                 <label class="block text-sm font-medium text-gray-300 ml-1">Descripción corta</label>
-                <textarea rows="3" placeholder="Detalles principales..."
-                    class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 placeholder-gray-600 resize-none"></textarea>
+                <textarea id="producto-desc" rows="3" placeholder="Detalles principales..."
+                    class="w-full bg-admin-card border border-admin-border text-white text-[15px] rounded-xl px-4 py-3.5 placeholder-gray-600 resize-none"
+                    required></textarea>
             </div>
 
-            <!-- Botón de Guardar Pegajoso (Estilo App) -->
+            <!-- Botón de Guardar Pegajoso -->
             <div class="fixed bottom-0 left-0 w-full p-5 bg-gradient-to-t from-admin-bg via-admin-bg to-transparent">
                 <button type="submit"
                     class="w-full max-w-md mx-auto block bg-egrafic text-white font-semibold text-[16px] py-4 rounded-2xl shadow-[0_8px_20px_rgba(109,187,59,0.3)] active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
@@ -151,16 +155,19 @@
                 </button>
             </div>
 
-            <!-- Espaciador para que el botón fijo no tape el último input -->
             <div class="h-8"></div>
         </form>
     </main>
 
     <!-- Cloudinary Script Lógico -->
     <script>
-        // ¡RECUERDA CAMBIAR ESTOS DATOS POR LOS DE TU CLOUDINARY!
-        const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/TU_CLOUD_NAME/image/upload";
+        // ==========================================
+        // CONFIGURACIÓN DE CLOUDINARY (¡CAMBIA ESTO!)
+        // ==========================================
+        const CLOUD_NAME = "TU_CLOUD_NAME";
         const UPLOAD_PRESET = "TU_UPLOAD_PRESET_UNSIGNED";
+
+        const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
 
         const dropZone = document.getElementById('drop-zone');
         const fileInput = document.getElementById('file-input');
@@ -169,7 +176,7 @@
         const imagePreview = document.getElementById('image-preview');
         const uploadPrompt = document.getElementById('upload-prompt');
 
-        // Disparar selector al tocar la tarjeta (pensado en móvil)
+        // Disparar selector al tocar la tarjeta
         dropZone.onclick = () => fileInput.click();
 
         fileInput.onchange = (e) => handleFile(e.target.files[0]);
@@ -210,25 +217,43 @@
                     previewContainer.classList.remove('hidden');
                 }
             } catch (error) {
+                console.error(error);
                 uploadPrompt.innerHTML = `
                     <div class="w-14 h-14 bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
                         <i class="ph ph-warning-circle text-2xl text-red-500"></i>
                     </div>
                     <p class="text-[15px] font-medium text-red-400">Error al subir</p>
-                    <p class="text-xs text-gray-500 mt-1">Toca para intentar de nuevo.</p>
+                    <p class="text-xs text-gray-500 mt-1">Verifica tus datos de Cloudinary y toca de nuevo.</p>
                 `;
             }
         }
 
-        // Simulación de Guardado
+        // Simulación de Guardado (Aquí conectarás tu base de datos)
         function guardarProducto() {
+            // Verificar que se haya subido una imagen
+            if (!urlInput.value) {
+                alert("Por favor, sube una imagen primero.");
+                return;
+            }
+
             const btn = document.querySelector('button[type="submit"]');
             const originalText = btn.innerHTML;
 
             btn.innerHTML = '<i class="ph ph-spinner animate-spin text-xl"></i> Publicando...';
             btn.classList.add('opacity-80');
 
-            // Aquí iría la conexión a tu Base de Datos (Supabase/Firebase/JSON)
+            // Recopilamos los datos del formulario
+            const nuevoProducto = {
+                categoria: document.getElementById('producto-categoria').value,
+                titulo: document.getElementById('producto-titulo').value,
+                precio: document.getElementById('producto-precio').value,
+                desc: document.getElementById('producto-desc').value,
+                imagen: urlInput.value
+            };
+
+            console.log("Datos listos para enviar a la base de datos:", nuevoProducto);
+
+            // Simulación de tiempo de carga
             setTimeout(() => {
                 btn.innerHTML = '<i class="ph-fill ph-check-circle text-xl"></i> ¡Publicado!';
                 btn.classList.replace('bg-egrafic', 'bg-white');
@@ -239,6 +264,19 @@
                     btn.classList.replace('bg-white', 'bg-egrafic');
                     btn.classList.replace('text-black', 'text-white');
                     btn.classList.remove('opacity-80');
+
+                    // Limpiar formulario para un nuevo producto
+                    document.getElementById('admin-form').reset();
+                    urlInput.value = "";
+                    previewContainer.classList.add('hidden');
+                    uploadPrompt.classList.remove('hidden');
+                    uploadPrompt.innerHTML = `
+                        <div class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="ph ph-camera text-2xl text-egrafic"></i>
+                        </div>
+                        <p class="text-[15px] font-medium">Toca para subir foto</p>
+                        <p class="text-xs text-gray-500 px-4">Se optimizará el peso automáticamente para no gastar datos.</p>
+                    `;
                 }, 2000);
             }, 1500);
         }
