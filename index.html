@@ -30,7 +30,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Ocultar barra de scroll para que parezca app nativa */
         ::-webkit-scrollbar {
             display: none;
         }
@@ -41,7 +40,6 @@
             border-radius: 20px;
         }
 
-        /* Input focus sutil en móviles */
         input:focus,
         textarea:focus,
         select:focus {
@@ -54,16 +52,12 @@
 
 <body class="antialiased pb-24">
 
-    <!-- App Bar Superior (Estilo Móvil) -->
     <header
         class="sticky top-0 z-50 bg-admin-bg/90 backdrop-blur-md border-b border-admin-border px-5 py-4 flex justify-between items-center">
-        <!-- Logo clickeable para regresar -->
         <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <i class="ph-fill ph-aperture text-egrafic text-2xl"></i>
             <span class="font-semibold tracking-tight">Workspace</span>
         </a>
-
-        <!-- Botón de salir a la web principal -->
         <a href="index.html"
             class="w-9 h-9 rounded-full bg-admin-card flex items-center justify-center border border-admin-border active:scale-95 transition-transform text-gray-400 hover:text-egrafic hover:border-egrafic"
             title="Volver al Catálogo">
@@ -72,17 +66,12 @@
     </header>
 
     <main class="p-5 space-y-6 max-w-md mx-auto">
-
-        <!-- Saludo -->
         <div>
             <h1 class="text-2xl font-bold tracking-tight mb-1">Nuevo Producto</h1>
             <p class="text-gray-400 text-sm">Actualiza tu catálogo en segundos.</p>
         </div>
 
-        <!-- Formulario (Pensado para dedos / Touch Friendly) -->
         <form class="space-y-5" id="admin-form" onsubmit="event.preventDefault(); guardarProducto();">
-
-            <!-- Zona de Subida Cloudinary (Táctil) -->
             <div class="space-y-2">
                 <label class="block text-sm font-medium text-gray-300 ml-1">Imagen (Cloudinary Automático)</label>
                 <div id="drop-zone"
@@ -98,7 +87,6 @@
                             datos.</p>
                     </div>
 
-                    <!-- Vista previa -->
                     <div id="preview-container" class="hidden relative w-full h-48 rounded-xl overflow-hidden">
                         <img id="image-preview" class="w-full h-full object-cover" src="">
                         <div
@@ -111,7 +99,6 @@
                 <input type="hidden" id="cloudinary-url-input" required>
             </div>
 
-            <!-- Campos de Texto Amplios -->
             <div class="space-y-2">
                 <label class="block text-sm font-medium text-gray-300 ml-1">Categoría</label>
                 <select id="producto-categoria"
@@ -150,7 +137,6 @@
                     required></textarea>
             </div>
 
-            <!-- Botón de Guardar Pegajoso -->
             <div class="fixed bottom-0 left-0 w-full p-5 bg-gradient-to-t from-admin-bg via-admin-bg to-transparent">
                 <button type="submit"
                     class="w-full max-w-md mx-auto block bg-egrafic text-white font-semibold text-[16px] py-4 rounded-2xl shadow-[0_8px_20px_rgba(109,187,59,0.3)] active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
@@ -163,11 +149,8 @@
         </form>
     </main>
 
-    <!-- Cloudinary Script Lógico -->
     <script>
-        // ==========================================
-        // CONFIGURACIÓN DE CLOUDINARY (¡CAMBIA ESTO!)
-        // ==========================================
+        // ¡No olvides cambiar esto luego por tus datos reales!
         const CLOUD_NAME = "TU_CLOUD_NAME";
         const UPLOAD_PRESET = "TU_UPLOAD_PRESET_UNSIGNED";
 
@@ -180,21 +163,16 @@
         const imagePreview = document.getElementById('image-preview');
         const uploadPrompt = document.getElementById('upload-prompt');
 
-        // Disparar selector al tocar la tarjeta
         dropZone.onclick = () => fileInput.click();
-
         fileInput.onchange = (e) => handleFile(e.target.files[0]);
 
         async function handleFile(file) {
             if (!file) return;
-
-            // UI de Carga para el cliente
             uploadPrompt.innerHTML = `
                 <div class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3">
                     <i class="ph ph-spinner animate-spin text-2xl text-egrafic"></i>
                 </div>
                 <p class="text-[15px] font-medium text-egrafic">Optimizando foto...</p>
-                <p class="text-xs text-gray-500 px-4 mt-1">Por favor espera un momento.</p>
             `;
             uploadPrompt.classList.remove('hidden');
             previewContainer.classList.add('hidden');
@@ -204,83 +182,43 @@
             formData.append('upload_preset', UPLOAD_PRESET);
 
             try {
-                const response = await fetch(CLOUDINARY_URL, {
-                    method: 'POST',
-                    body: formData
-                });
+                const response = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
                 const data = await response.json();
 
                 if (data.secure_url) {
-                    // Magia de compresión automática de Cloudinary
                     const optimizedUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
-
                     urlInput.value = optimizedUrl;
                     imagePreview.src = optimizedUrl;
-
                     uploadPrompt.classList.add('hidden');
                     previewContainer.classList.remove('hidden');
                 }
             } catch (error) {
                 console.error(error);
-                uploadPrompt.innerHTML = `
-                    <div class="w-14 h-14 bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <i class="ph ph-warning-circle text-2xl text-red-500"></i>
-                    </div>
-                    <p class="text-[15px] font-medium text-red-400">Error al subir</p>
-                    <p class="text-xs text-gray-500 mt-1">Verifica tus datos de Cloudinary y toca de nuevo.</p>
-                `;
+                uploadPrompt.innerHTML = `<div class="w-14 h-14 bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-3"><i class="ph ph-warning-circle text-2xl text-red-500"></i></div><p class="text-[15px] font-medium text-red-400">Error al subir</p>`;
             }
         }
 
-        // Simulación de Guardado (Aquí conectarás tu base de datos)
         function guardarProducto() {
-            // Verificar que se haya subido una imagen
-            if (!urlInput.value) {
-                alert("Por favor, sube una imagen primero.");
-                return;
-            }
-
+            if (!urlInput.value) { alert("Sube una imagen primero."); return; }
             const btn = document.querySelector('button[type="submit"]');
             const originalText = btn.innerHTML;
-
             btn.innerHTML = '<i class="ph ph-spinner animate-spin text-xl"></i> Publicando...';
             btn.classList.add('opacity-80');
 
-            // Recopilamos los datos del formulario
-            const nuevoProducto = {
-                categoria: document.getElementById('producto-categoria').value,
-                titulo: document.getElementById('producto-titulo').value,
-                precio: document.getElementById('producto-precio').value,
-                desc: document.getElementById('producto-desc').value,
-                imagen: urlInput.value
-            };
-
-            console.log("Datos listos para enviar a la base de datos:", nuevoProducto);
-
-            // Simulación de tiempo de carga
             setTimeout(() => {
                 btn.innerHTML = '<i class="ph-fill ph-check-circle text-xl"></i> ¡Publicado!';
                 btn.classList.replace('bg-egrafic', 'bg-white');
                 btn.classList.replace('text-white', 'text-black');
-
                 setTimeout(() => {
                     btn.innerHTML = originalText;
                     btn.classList.replace('bg-white', 'bg-egrafic');
                     btn.classList.replace('text-black', 'text-white');
                     btn.classList.remove('opacity-80');
-
-                    // Limpiar formulario para un nuevo producto
                     document.getElementById('admin-form').reset();
                     urlInput.value = "";
                     previewContainer.classList.add('hidden');
                     uploadPrompt.classList.remove('hidden');
-                    uploadPrompt.innerHTML = `
-                        <div class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="ph ph-camera text-2xl text-egrafic"></i>
-                        </div>
-                        <p class="text-[15px] font-medium">Toca para subir foto</p>
-                        <p class="text-xs text-gray-500 px-4">Se optimizará el peso automáticamente para no gastar datos.</p>
-                    `;
+                    uploadPrompt.innerHTML = `<div class="w-14 h-14 bg-admin-border rounded-full flex items-center justify-center mx-auto mb-3"><i class="ph ph-camera text-2xl text-egrafic"></i></div><p class="text-[15px] font-medium">Toca para subir foto</p>`;
                 }, 2000);
             }, 1500);
         }
