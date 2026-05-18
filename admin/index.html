@@ -8,7 +8,7 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@600;700;800&family=Poppins:wght@400;600;700&family=Montserrat:wght@400;700&display=swap"
     rel="stylesheet">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -53,9 +53,9 @@
     }
 
     .mobile-card {
-      background: rgba(20, 20, 23, 0.7);
+      background: rgba(20, 20, 23, 0.75);
       border: 1px solid rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       border-radius: 24px;
     }
 
@@ -78,7 +78,7 @@
   </style>
 </head>
 
-<body class="antialiased pb-28">
+<body class="antialiased pb-32">
 
   <!-- Cabecera de la App -->
   <header
@@ -88,7 +88,7 @@
       <span class="font-display font-bold tracking-tight text-lg uppercase">Workspace</span>
     </a>
 
-    <!-- Botón Salir (Regresa a index.html en la raíz) -->
+    <!-- Botón Salir -->
     <a href="../index.html"
       class="w-10 h-10 rounded-full bg-admin-card flex items-center justify-center border border-admin-border text-gray-400 hover:text-egrafic hover:border-egrafic active:scale-90 transition-all"
       title="Salir al Catálogo">
@@ -96,7 +96,7 @@
     </a>
   </header>
 
-  <!-- Menú de Pestañas Deslizantes (Estilo T-Leva adaptado a E-Grafic) -->
+  <!-- Menú de Pestañas Deslizantes -->
   <div class="sticky top-[73px] z-40 bg-admin-bg border-b border-admin-border/50">
     <div class="flex gap-1 overflow-x-auto no-scrollbar py-2.5 px-5 max-w-md mx-auto">
       <button onclick="switchTab('productos')" id="btn-productos"
@@ -105,15 +105,15 @@
       </button>
       <button onclick="switchTab('identidad')" id="btn-identidad"
         class="tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 text-gray-400 hover:text-white bg-transparent">
-        <i class="ph ph-fingerprint"></i> Identidad
+        <i class="ph ph-palette"></i> Identidad / Footer
       </button>
       <button onclick="switchTab('textos')" id="btn-textos"
         class="tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 text-gray-400 hover:text-white bg-transparent">
-        <i class="ph ph-text-aa"></i> Textos
+        <i class="ph ph-text-aa"></i> Textos y Botones
       </button>
       <button onclick="switchTab('enlaces')" id="btn-enlaces"
         class="tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 text-gray-400 hover:text-white bg-transparent">
-        <i class="ph ph-share-network"></i> Enlaces
+        <i class="ph ph-share-network"></i> Redes / Enlaces
       </button>
     </div>
   </div>
@@ -125,7 +125,30 @@
     <div id="tab-productos" class="tab-content space-y-5">
       <div>
         <h2 class="text-xl font-bold tracking-tight">Gestión de Catálogo</h2>
-        <p class="text-gray-400 text-xs">Agrega o remueve elementos de tu galería.</p>
+        <p class="text-gray-400 text-xs">Crea categorías, añade productos y cambia su orden.</p>
+      </div>
+
+      <!-- Administrar Categorías Dinámicas -->
+      <div class="mobile-card p-5 space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-folder-open"></i> Crear Categorías
+        </h3>
+
+        <div class="flex gap-2">
+          <input type="text" id="new-category-name" placeholder="Ej: Corpóreos 3D"
+            class="flex-1 bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 placeholder-gray-600">
+          <button onclick="addCustomCategory()"
+            class="bg-egrafic hover:bg-egrafic-light text-white px-4 rounded-xl text-xs font-semibold transition-all flex items-center justify-center">
+            Agregar
+          </button>
+        </div>
+
+        <div class="space-y-1">
+          <p class="text-[10px] text-gray-500">Categorías actuales (toca para eliminar):</p>
+          <div id="categories-badge-container" class="flex flex-wrap gap-1.5 py-1">
+            <!-- Inyectado dinámicamente -->
+          </div>
+        </div>
       </div>
 
       <!-- Formulario Nuevo Producto -->
@@ -133,9 +156,9 @@
         <div class="mobile-card p-5 space-y-4">
           <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic">Nuevo Producto / Servicio</h3>
 
-          <!-- Drop Zone Cloudinary para Productos -->
+          <!-- Drop Zone Cloudinary -->
           <div class="space-y-1">
-            <label class="block text-xs font-semibold text-gray-400">Imagen</label>
+            <label class="block text-xs font-semibold text-gray-400">Imagen del Producto</label>
             <div id="drop-zone-product"
               class="border border-dashed border-zinc-700 hover:border-egrafic rounded-xl p-5 text-center cursor-pointer active:bg-zinc-900/40 transition-all group">
               <input type="file" id="file-product" class="hidden" accept="image/*">
@@ -161,11 +184,7 @@
             <select id="prod-category"
               class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 appearance-none"
               required>
-              <option value="" disabled selected>Selecciona una...</option>
-              <option value="Impresión">Impresión</option>
-              <option value="Remodelaciones">Remodelaciones</option>
-              <option value="Diseño de Marca 3D">Diseño de Marca 3D</option>
-              <option value="Herramientas Digitales">Herramientas Digitales</option>
+              <!-- Opciones cargadas dinámicamente por JS -->
             </select>
           </div>
 
@@ -197,23 +216,29 @@
         </div>
       </form>
 
-      <!-- Lista de Productos Existentes (Simulación Visual) -->
+      <!-- Lista de Productos Existentes con reordenamiento y eliminación -->
       <div class="space-y-3">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 px-1">Productos Publicados</h3>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 px-1">Productos Publicados (Reordenables)
+        </h3>
         <div class="space-y-2" id="products-list">
-          <!-- Inyectados de forma interactiva por JS -->
+          <!-- Inyectados con controles arriba/abajo por JS -->
         </div>
       </div>
     </div>
 
-    <!-- ================= PESTAÑA 2: IDENTIDAD ================= -->
+    <!-- ================= PESTAÑA 2: IDENTIDAD Y FOOTER ================= -->
     <div id="tab-identidad" class="tab-content space-y-5 hidden">
       <div>
-        <h2 class="text-xl font-bold tracking-tight">Identidad de Marca</h2>
-        <p class="text-gray-400 text-xs">Sube tu logo y personaliza la visualización.</p>
+        <h2 class="text-xl font-bold tracking-tight">Identidad y Footer</h2>
+        <p class="text-gray-400 text-xs">Ajusta tipografías, color del logo y diseño del pie de página.</p>
       </div>
 
-      <div class="mobile-card p-5 space-y-5">
+      <!-- Identidad Visual -->
+      <div class="mobile-card p-5 space-y-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-palette"></i> Nombre Comercial
+        </h3>
+
         <!-- Subida del Logo -->
         <div class="space-y-2">
           <label class="block text-xs font-semibold text-gray-400">Imagen del Logo</label>
@@ -223,7 +248,6 @@
             <div id="logo-upload-prompt" class="space-y-1">
               <i class="ph ph-image text-2xl text-egrafic"></i>
               <p class="text-xs font-medium">Toca para cambiar logo</p>
-              <p class="text-[10px] text-gray-500">Soporta formatos SVG, PNG y JPG</p>
             </div>
             <div id="logo-preview-container"
               class="hidden relative w-full h-24 flex items-center justify-center bg-zinc-950/60 rounded-lg overflow-hidden p-3">
@@ -237,113 +261,247 @@
           <input type="hidden" id="logo-image-url">
         </div>
 
-        <!-- Visibilidad del Texto del Logo -->
-        <div class="flex items-center justify-between py-2 border-b border-zinc-800/40">
+        <!-- Personalización de Nombre Comercial -->
+        <div class="space-y-3 pt-2 border-t border-zinc-800/50">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-semibold text-gray-400">Mostrar nombre de texto</label>
+            <div class="relative flex items-center">
+              <input type="checkbox" id="toggle-logo-text" class="switch-input hidden" checked
+                onchange="updateLogoPreview()">
+              <label for="toggle-logo-text"
+                class="switch-label w-10 h-5.5 bg-zinc-800 rounded-full cursor-pointer transition-colors flex items-center p-0.5">
+                <span
+                  class="switch-dot w-4.5 h-4.5 bg-white rounded-full shadow transition-transform duration-300"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Texto del Nombre</label>
+            <input type="text" id="logo-text-string" value="E-Grafic"
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
+              oninput="updateLogoPreview()">
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div class="space-y-1">
+              <label class="block text-xs font-semibold text-gray-400">Tipografía</label>
+              <select id="logo-font-family"
+                class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3 py-2.5 appearance-none"
+                onchange="updateLogoPreview()">
+                <option value="font-display">Syne (Default)</option>
+                <option value="font-sans">Inter</option>
+                <option value="font-poppins">Poppins</option>
+                <option value="font-montserrat">Montserrat</option>
+              </select>
+            </div>
+            <div class="space-y-1">
+              <label class="block text-xs font-semibold text-gray-400">Estilo</label>
+              <select id="logo-font-weight"
+                class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3 py-2.5 appearance-none"
+                onchange="updateLogoPreview()">
+                <option value="font-extrabold">Extra Bold</option>
+                <option value="font-bold" selected>Bold</option>
+                <option value="font-semibold">Semi Bold</option>
+                <option value="font-medium">Medium</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Color del Texto</label>
+            <div class="flex items-center gap-2">
+              <input type="color" id="logo-text-color" value="#ffffff"
+                class="w-10 h-10 bg-transparent border-0 cursor-pointer" oninput="updateLogoPreview()">
+              <input type="text" id="logo-text-color-hex" value="#ffffff"
+                class="flex-1 bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
+                oninput="syncColorPicker(this.value, 'logo')">
+            </div>
+          </div>
+
+          <!-- Control Deslizante de Tamaño -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label class="text-xs font-semibold text-gray-400">Tamaño del Texto</label>
+              <span id="logo-size-val" class="text-xs font-bold text-egrafic">24px</span>
+            </div>
+            <input type="range" id="logo-size-slider" min="16" max="36" value="24"
+              class="w-full accent-egrafic bg-zinc-800 rounded-lg appearance-none h-1.5 cursor-pointer"
+              oninput="updateLogoPreview()">
+          </div>
+        </div>
+
+        <!-- Preview del Logo Real-time -->
+        <div class="p-4 bg-zinc-950/60 rounded-2xl border border-zinc-800/40 text-center">
+          <p class="text-[9px] text-zinc-500 uppercase tracking-wider mb-2">Vista Previa del Encabezado</p>
+          <div class="flex items-center justify-center gap-2 p-2">
+            <i class="ph-fill ph-aperture text-egrafic text-3xl"></i>
+            <span id="preview-logo-text"
+              class="font-display font-bold text-2xl tracking-tighter uppercase">E-Grafic</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personalización del Footer -->
+      <div class="mobile-card p-5 space-y-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-layout"></i> Diseño de Pie de Página (Footer)
+        </h3>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400">Texto de Derechos Reservados</label>
+          <input type="text" id="footer-copyright" value="© 2026 Todos los derechos reservados."
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
+            oninput="updateFooterPreview()">
+        </div>
+
+        <div class="flex items-center justify-between py-1">
           <div class="space-y-0.5">
-            <label class="text-xs font-semibold text-white">Mostrar nombre comercial</label>
-            <p class="text-[10px] text-gray-500">Muestra el texto "E-Grafic" al lado del logo.</p>
+            <label class="text-xs font-semibold text-white">Línea brillante acentuada</label>
+            <p class="text-[10px] text-gray-500">Muestra la barra brillante verde arriba del pie de página.</p>
           </div>
           <div class="relative flex items-center">
-            <input type="checkbox" id="toggle-logo-text" class="switch-input hidden" checked>
-            <label for="toggle-logo-text"
-              class="switch-label w-11 h-6 bg-zinc-800 rounded-full cursor-pointer transition-colors flex items-center p-0.5">
-              <span class="switch-dot w-5 h-5 bg-white rounded-full shadow transition-transform duration-300"></span>
+            <input type="checkbox" id="footer-accent-line" class="switch-input hidden" checked
+              onchange="updateFooterPreview()">
+            <label for="footer-accent-line"
+              class="switch-label w-10 h-5.5 bg-zinc-800 rounded-full cursor-pointer transition-colors flex items-center p-0.5">
+              <span
+                class="switch-dot w-4.5 h-4.5 bg-white rounded-full shadow transition-transform duration-300"></span>
             </label>
           </div>
         </div>
 
-        <!-- Slider del Tamaño del Logo -->
-        <div class="space-y-2">
-          <div class="flex justify-between items-center">
-            <label class="text-xs font-semibold text-white">Tamaño del Logo</label>
-            <span id="logo-size-val" class="text-xs font-bold text-egrafic">32px</span>
+        <!-- Preview del Footer Real-time -->
+        <div class="p-4 bg-zinc-950/60 rounded-2xl border border-zinc-800/40">
+          <p class="text-[9px] text-zinc-500 uppercase tracking-wider mb-2 text-center">Vista Previa del Footer</p>
+          <div id="preview-footer-box" class="pt-3 border-t border-zinc-800 relative text-center">
+            <div id="preview-footer-line"
+              class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-egrafic to-transparent">
+            </div>
+            <p id="preview-footer-text" class="text-[10px] text-zinc-400">© 2026 Todos los derechos reservados.</p>
           </div>
-          <input type="range" id="logo-size-slider" min="20" max="60" value="32"
-            class="w-full accent-egrafic bg-zinc-800 rounded-lg appearance-none h-1.5 cursor-pointer">
-          <p class="text-[10px] text-gray-500">Regula la altura del logotipo en la barra de navegación móvil.</p>
         </div>
       </div>
     </div>
 
-    <!-- ================= PESTAÑA 3: TEXTOS ================= -->
+    <!-- ================= PESTAÑA 3: TEXTOS Y BOTONES ================= -->
     <div id="tab-textos" class="tab-content space-y-5 hidden">
       <div>
-        <h2 class="text-xl font-bold tracking-tight">Textos Principales</h2>
-        <p class="text-gray-400 text-xs">Configura los llamados a la acción de la portada.</p>
+        <h2 class="text-xl font-bold tracking-tight">Textos y Botones</h2>
+        <p class="text-gray-400 text-xs">Configura los textos principales y enlaces de tus llamados a la acción.</p>
       </div>
 
+      <!-- Textos de Hero -->
       <div class="mobile-card p-5 space-y-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-text-aa"></i> Textos de Bienvenida
+        </h3>
+
         <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-gray-400">Título del Encabezado</label>
+          <label class="block text-xs font-semibold text-gray-400">Título de Portada</label>
           <input type="text" id="hero-title" value="Elevamos tu Marca al Futuro."
             class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3" required>
         </div>
 
         <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-gray-400">Subtítulo Descriptivo</label>
+          <label class="block text-xs font-semibold text-gray-400">Descripción / Subtítulo</label>
           <textarea id="hero-subtitle" rows="3"
             class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 resize-none"
             required>Soluciones integrales de diseño, impresión y desarrollo espacial. Explora nuestro catálogo interactivo.</textarea>
         </div>
+      </div>
+
+      <!-- Botones Personalizados -->
+      <div class="mobile-card p-5 space-y-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-mouse-pointer-click"></i> Botón Visita Técnica
+        </h3>
 
         <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-gray-400">Texto Botón de Cabecera</label>
-          <input type="text" id="hero-btn-text" value="Visita Técnica"
+          <label class="block text-xs font-semibold text-gray-400">Texto del Botón</label>
+          <input type="text" id="btn-visita-text" value="Visita Técnica"
             class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3" required>
         </div>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400">Enlace del Botón (Acción / Link)</label>
+          <input type="text" id="btn-visita-link" value="#contacto"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
+            placeholder="Ej: #contacto o https://wa.me/..." required>
+          <p class="text-[9px] text-gray-500">Puedes poner `#contacto` para ir al footer o ingresar un enlace de
+            WhatsApp externo.</p>
+        </div>
       </div>
     </div>
 
-    <!-- ================= PESTAÑA 4: ENLACES ================= -->
+    <!-- ================= PESTAÑA 4: ENLACES / REDES SOCIALES ================= -->
     <div id="tab-enlaces" class="tab-content space-y-5 hidden">
       <div>
-        <h2 class="text-xl font-bold tracking-tight">Enlaces y Contacto</h2>
-        <p class="text-gray-400 text-xs">Conecta tus canales de comunicación.</p>
+        <h2 class="text-xl font-bold tracking-tight">Enlaces y Canales</h2>
+        <p class="text-gray-400 text-xs">Crea y conecta de forma dinámica redes sociales con tus íconos.</p>
       </div>
 
+      <!-- Añadir Redes Sociales Dinámicas -->
       <div class="mobile-card p-5 space-y-4">
-        <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-gray-400">Número de WhatsApp</label>
-          <div class="relative">
-            <i class="ph ph-whatsapp-logo absolute left-4 top-3 text-lg text-emerald-500"></i>
-            <input type="text" id="contact-whatsapp" value="593990000000"
-              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl pl-11 pr-4 py-3" required>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-plus-circle"></i> Agregar Red Social
+        </h3>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Canal / Red</label>
+            <select id="new-social-platform"
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3 py-2.5 appearance-none">
+              <option value="WhatsApp" data-icon="ph-whatsapp-logo">WhatsApp</option>
+              <option value="Instagram" data-icon="ph-instagram-logo">Instagram</option>
+              <option value="Facebook" data-icon="ph-facebook-logo">Facebook</option>
+              <option value="TikTok" data-icon="ph-tiktok-logo">TikTok</option>
+              <option value="YouTube" data-icon="ph-youtube-logo">YouTube</option>
+              <option value="LinkedIn" data-icon="ph-linkedin-logo">LinkedIn</option>
+              <option value="Twitter" data-icon="ph-twitter-logo">Twitter / X</option>
+              <option value="Email" data-icon="ph-envelope-simple">Correo Electrónico</option>
+            </select>
           </div>
-          <p class="text-[9px] text-gray-500 pl-1">Ingresa el código de país sin el símbolo "+" (ej. 593 para Ecuador).
-          </p>
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Nombre de Enlace</label>
+            <input type="text" id="new-social-name" placeholder="Ej: Mi Facebook"
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3 py-2.5">
+          </div>
         </div>
 
         <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-gray-400">Perfil de Instagram</label>
-          <div class="relative">
-            <i class="ph ph-instagram-logo absolute left-4 top-3 text-lg text-pink-500"></i>
-            <input type="text" id="contact-instagram" value="https://instagram.com/egrafic"
-              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl pl-11 pr-4 py-3" required>
-          </div>
+          <label class="block text-xs font-semibold text-gray-400">Enlace Completo (URL)</label>
+          <input type="text" id="new-social-url" placeholder="https://..."
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3">
         </div>
 
-        <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-gray-400">Correo Electrónico</label>
-          <div class="relative">
-            <i class="ph ph-envelope-simple absolute left-4 top-3 text-lg text-blue-400"></i>
-            <input type="email" id="contact-email" value="contacto@egrafic.com"
-              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl pl-11 pr-4 py-3" required>
-          </div>
+        <button type="button" onclick="addNewSocialLink()"
+          class="w-full bg-egrafic/10 text-egrafic hover:bg-egrafic hover:text-white border border-egrafic/20 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 flex items-center justify-center gap-1.5">
+          <i class="ph-bold ph-plus"></i> Añadir Enlace de Red
+        </button>
+      </div>
+
+      <!-- Listado de Redes Activas -->
+      <div class="space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 px-1">Tus Redes Conectadas (Se mostrarán en
+          el Footer)</h3>
+        <div id="socials-list-container" class="space-y-2">
+          <!-- Inyectados por JS con íconos automáticos y botones de remover -->
         </div>
       </div>
     </div>
 
-    <!-- Botón de Guardado Flotante en la parte inferior (Estilo T-Leva) -->
+    <!-- Botón de Guardado Estilo T-Leva -->
     <div class="fixed bottom-0 left-0 w-full p-5 bg-gradient-to-t from-admin-bg via-admin-bg/95 to-transparent z-50">
       <button onclick="saveAllChanges();" id="btn-save"
         class="w-full max-w-md mx-auto bg-egrafic hover:bg-egrafic-light text-white font-bold text-sm py-4 rounded-2xl shadow-[0_8px_25px_rgba(109,187,59,0.3)] active:scale-95 transition-all flex items-center justify-center gap-2">
         <i class="ph-bold ph-floppy-disk text-lg"></i>
-        GUARDAR Y SALIR
+        GUARDAR CONFIGURACIÓN
       </button>
     </div>
 
     <!-- Espaciador de seguridad para scroll -->
-    <div class="h-14"></div>
+    <div class="h-16"></div>
   </main>
 
   <!-- Notificación emergente flotante (Toast) -->
@@ -356,13 +514,16 @@
   <!-- CONTROLADORES Y LÓGICA DE INTERFAZ -->
   <script>
     // ==========================================
-    // CONFIGURACIÓN DE CLOUDINARY (¡Reemplazar!)
+    // CONFIGURACIÓN DE CLOUDINARY
     // ==========================================
     const CLOUD_NAME = "TU_CLOUD_NAME";
     const UPLOAD_PRESET = "TU_UPLOAD_PRESET_UNSIGNED";
     const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
 
-    // Datos del catálogo (Inicializados con datos estáticos del index)
+    // CATEGORÍAS INICIALES (Dinámicas)
+    let categories = ["Impresión", "Remodelaciones", "Diseño de Marca 3D", "Herramientas Digitales"];
+
+    // DATOS DEL CATÁLOGO (Ordenables)
     let mockProducts = [
       { id: 1, category: "Impresión", title: "Papelería Corporativa Premium", desc: "Tarjetas de presentación con acabados especiales, folletos y papelería fina.", price: "Desde $45.00", image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=1000&auto=format&fit=crop" },
       { id: 2, category: "Impresión", title: "Gigantografías y Viniles", desc: "Impresión en gran formato para publicidad exterior e interior con tintas UV.", price: "Cotizar por m²", image: "https://images.unsplash.com/photo-1541462608143-67571c6738dd?q=80&w=1000&auto=format&fit=crop" },
@@ -370,25 +531,79 @@
       { id: 4, category: "Remodelaciones", title: "Stands y Exhibidores", desc: "Construcción de stands impactantes para ferias y puntos de venta.", price: "Previa Cotización", image: "https://images.unsplash.com/photo-1558442074-3c19857bc1dc?q=80&w=1000&auto=format&fit=crop" }
     ];
 
+    // REDES SOCIALES DINÁMICAS INICIALES
+    let socialLinks = [
+      { id: 1, platform: "Instagram", name: "Instagram", url: "https://instagram.com/egrafic", icon: "ph-instagram-logo" },
+      { id: 2, platform: "WhatsApp", name: "WhatsApp", url: "https://wa.me/593990000000", icon: "ph-whatsapp-logo" },
+      { id: 3, platform: "Email", name: "Correo", url: "mailto:contacto@egrafic.com", icon: "ph-envelope-simple" }
+    ];
+
     // Cambiar pestañas de manera fluida
     function switchTab(tabId) {
-      // Ocultar todos los contenidos
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
-
-      // Mostrar la pestaña seleccionada
       document.getElementById(`tab-${tabId}`).classList.remove('hidden');
 
-      // Resetear estilos de todos los botones de pestañas
       document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.className = "tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 text-gray-400 hover:text-white bg-transparent";
       });
 
-      // Dar estilo de pestaña activa
       const activeBtn = document.getElementById(`btn-${tabId}`);
       activeBtn.className = "tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 bg-egrafic text-white";
     }
 
-    // --- SUBIDA IMAGEN PRODUCTO (CLOUDINARY) ---
+    // --- MANEJO DE CATEGORÍAS ---
+    function renderCategories() {
+      // Render de select en formulario de creación de producto
+      const select = document.getElementById('prod-category');
+      select.innerHTML = '<option value="" disabled selected>Selecciona una...</option>';
+      categories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
+      });
+
+      // Render de Badges de categorías con botón de borrado
+      const container = document.getElementById('categories-badge-container');
+      container.innerHTML = '';
+      categories.forEach(cat => {
+        const badge = document.createElement('span');
+        badge.className = "inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-zinc-900 border border-zinc-800 text-gray-300 hover:border-red-500 hover:text-red-400 cursor-pointer transition-colors";
+        badge.innerHTML = `${cat} <i class="ph ph-x text-[10px]"></i>`;
+        badge.onclick = () => removeCategory(cat);
+        container.appendChild(badge);
+      });
+    }
+
+    function addCustomCategory() {
+      const input = document.getElementById('new-category-name');
+      const catName = input.value.trim();
+      if (!catName) return;
+
+      if (categories.includes(catName)) {
+        showToast("Esta categoría ya existe.");
+        return;
+      }
+
+      categories.push(catName);
+      input.value = '';
+      renderCategories();
+      showToast(`Categoría "${catName}" creada.`);
+    }
+
+    function removeCategory(catName) {
+      // Verificar si hay algún producto que use esta categoría
+      const used = mockProducts.some(p => p.category === catName);
+      if (used) {
+        showToast("No puedes borrar una categoría en uso.");
+        return;
+      }
+      categories = categories.filter(c => c !== catName);
+      renderCategories();
+      showToast("Categoría removida.");
+    }
+
+    // --- SUBIDA IMAGEN PRODUCTO ---
     const dropZoneProduct = document.getElementById('drop-zone-product');
     const fileProduct = document.getElementById('file-product');
     const productImgPreview = document.getElementById('product-img-preview');
@@ -399,7 +614,7 @@
     dropZoneProduct.onclick = () => fileProduct.click();
     fileProduct.onchange = (e) => handleImageUpload(e.target.files[0], 'product');
 
-    // --- SUBIDA IMAGEN LOGO (CLOUDINARY) ---
+    // --- SUBIDA IMAGEN LOGO ---
     const dropZoneLogo = document.getElementById('drop-zone-logo');
     const fileLogo = document.getElementById('file-logo');
     const logoImgPreview = document.getElementById('logo-img-preview');
@@ -410,7 +625,6 @@
     dropZoneLogo.onclick = () => fileLogo.click();
     fileLogo.onchange = (e) => handleImageUpload(e.target.files[0], 'logo');
 
-    // Función de subida unificada
     async function handleImageUpload(file, type) {
       if (!file) return;
 
@@ -437,58 +651,138 @@
         const data = await response.json();
 
         if (data.secure_url) {
-          // Parámetro f_auto,q_auto inyectado dinámicamente
           const optimizedUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
-
           inputVal.value = optimizedUrl;
           imgPreview.src = optimizedUrl;
           prompt.classList.add('hidden');
           container.classList.remove('hidden');
-
           showToast("¡Imagen subida y optimizada exitosamente!");
+          if (type === 'logo') updateLogoPreview();
         }
       } catch (error) {
         console.error(error);
         prompt.innerHTML = `
                     <i class="ph ph-warning-circle text-xl text-red-500 mb-1"></i>
                     <p class="text-xs text-red-400">Error al subir</p>
-                    <p class="text-[9px] text-gray-500">Toca de nuevo</p>
                 `;
       }
     }
 
-    // Actualizar visualización del slider de tamaño de logo
-    const slider = document.getElementById('logo-size-slider');
-    const sliderVal = document.getElementById('logo-size-val');
-    slider.oninput = function () {
-      sliderVal.textContent = this.value + "px";
+    // --- ENLACES Y REDES SOCIALES DINÁMICAS ---
+    function renderSocialsList() {
+      const container = document.getElementById('socials-list-container');
+      container.innerHTML = '';
+
+      socialLinks.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "flex items-center justify-between p-3.5 bg-admin-card border border-admin-border/50 rounded-2xl gap-3";
+        card.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-egrafic text-xl">
+                            <i class="ph-bold ${item.icon}"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-white">${item.name}</h4>
+                            <p class="text-[10px] text-zinc-500 line-clamp-1 max-w-[200px]">${item.url}</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="removeSocialLink(${item.id})" class="w-8 h-8 rounded-full bg-red-950/20 hover:bg-red-950/40 border border-red-900/15 flex items-center justify-center text-red-400 active:scale-90 transition-all">
+                        <i class="ph ph-trash text-sm"></i>
+                    </button>
+                `;
+        container.appendChild(card);
+      });
     }
 
-    // Renderizar lista de productos en el admin para poder administrarlos
+    function addNewSocialLink() {
+      const platformSel = document.getElementById('new-social-platform');
+      const platformName = platformSel.value;
+      const platformIcon = platformSel.options[platformSel.selectedIndex].getAttribute('data-icon');
+
+      const customNameInput = document.getElementById('new-social-name');
+      const customName = customNameInput.value.trim() || platformName;
+
+      const urlInput = document.getElementById('new-social-url');
+      const url = urlInput.value.trim();
+
+      if (!url) {
+        showToast("Por favor ingresa un enlace.");
+        return;
+      }
+
+      const newId = socialLinks.length > 0 ? Math.max(...socialLinks.map(s => s.id)) + 1 : 1;
+      socialLinks.push({
+        id: newId,
+        platform: platformName,
+        name: customName,
+        url: url,
+        icon: platformIcon
+      });
+
+      customNameInput.value = '';
+      urlInput.value = '';
+      renderSocialsList();
+      showToast(`¡Red ${platformName} conectada con éxito!`);
+    }
+
+    function removeSocialLink(id) {
+      socialLinks = socialLinks.filter(s => s.id !== id);
+      renderSocialsList();
+      showToast("Red social removida.");
+    }
+
+    // --- GESTIÓN DE PRODUCTOS Y REORDENAMIENTO CON FLECHAS ---
     function renderAdminProducts() {
       const container = document.getElementById('products-list');
       container.innerHTML = '';
 
-      mockProducts.forEach(prod => {
+      mockProducts.forEach((prod, index) => {
+        const isFirst = index === 0;
+        const isLast = index === mockProducts.length - 1;
+
         const row = document.createElement('div');
-        row.className = 'flex items-center justify-between p-3 bg-admin-card border border-admin-border/50 rounded-xl gap-3';
+        row.className = 'flex items-center justify-between p-3.5 bg-admin-card border border-admin-border/50 rounded-2xl gap-3 transition-all';
         row.innerHTML = `
                     <div class="flex items-center gap-3">
-                        <img src="${prod.image}" alt="${prod.title}" class="w-12 h-12 rounded-lg object-cover">
+                        <img src="${prod.image}" alt="${prod.title}" class="w-12 h-12 rounded-xl object-cover">
                         <div>
                             <h4 class="text-xs font-bold text-white line-clamp-1">${prod.title}</h4>
-                            <p class="text-[10px] text-egrafic font-medium">${prod.category} • ${prod.price}</p>
+                            <p class="text-[10px] text-egrafic font-semibold">${prod.category} • ${prod.price}</p>
                         </div>
                     </div>
-                    <button onclick="deleteProduct(${prod.id})" class="w-8 h-8 rounded-full bg-red-950/20 hover:bg-red-950/40 border border-red-900/15 flex items-center justify-center text-red-400 active:scale-90 transition-all">
-                        <i class="ph ph-trash text-sm"></i>
-                    </button>
+                    <div class="flex items-center gap-1.5">
+                        <!-- Flechas de reordenamiento -->
+                        <button onclick="moveProduct(${index}, -1)" ${isFirst ? 'disabled' : ''} class="w-7.5 h-7.5 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-gray-400 hover:text-egrafic active:scale-90 transition-all disabled:opacity-30 disabled:pointer-events-none">
+                            <i class="ph ph-arrow-up text-xs"></i>
+                        </button>
+                        <button onclick="moveProduct(${index}, 1)" ${isLast ? 'disabled' : ''} class="w-7.5 h-7.5 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-gray-400 hover:text-egrafic active:scale-90 transition-all disabled:opacity-30 disabled:pointer-events-none">
+                            <i class="ph ph-arrow-down text-xs"></i>
+                        </button>
+                        
+                        <!-- Borrado -->
+                        <button onclick="deleteProduct(${prod.id})" class="w-8 h-8 ml-1.5 rounded-full bg-red-950/20 hover:bg-red-950/40 border border-red-900/15 flex items-center justify-center text-red-400 active:scale-90 transition-all">
+                            <i class="ph ph-trash text-sm"></i>
+                        </button>
+                    </div>
                 `;
         container.appendChild(row);
       });
     }
 
-    // Añadir nuevo producto a la lista temporal
+    // Mover un producto hacia arriba o abajo
+    function moveProduct(index, direction) {
+      const targetIndex = index + direction;
+      if (targetIndex < 0 || targetIndex >= mockProducts.length) return;
+
+      // Intercambiar
+      const temp = mockProducts[index];
+      mockProducts[index] = mockProducts[targetIndex];
+      mockProducts[targetIndex] = temp;
+
+      renderAdminProducts();
+      showToast("Orden de producto cambiado.");
+    }
+
     function publishProduct() {
       const title = document.getElementById('prod-title').value;
       const category = document.getElementById('prod-category').value;
@@ -497,7 +791,7 @@
       const image = productImageInput.value;
 
       if (!image) {
-        showToast("Por favor sube una imagen de producto primero.");
+        showToast("Por favor sube una imagen primero.");
         return;
       }
 
@@ -511,7 +805,6 @@
         image
       });
 
-      // Limpiar formulario de producto
       document.getElementById('product-form').reset();
       productImageInput.value = "";
       productPreviewContainer.classList.add('hidden');
@@ -524,17 +817,64 @@
             `;
 
       renderAdminProducts();
-      showToast("¡Producto añadido al catálogo!");
+      showToast("¡Producto añadido con éxito!");
     }
 
-    // Eliminar producto de la lista
     function deleteProduct(id) {
       mockProducts = mockProducts.filter(p => p.id !== id);
       renderAdminProducts();
-      showToast("Producto removido del catálogo.");
+      showToast("Producto eliminado del catálogo.");
     }
 
-    // Mostrar notificación sutil en la pantalla (Toast)
+    // --- PREVIEWS DE IDENTIDAD Y FOOTER ---
+    function updateLogoPreview() {
+      const toggle = document.getElementById('toggle-logo-text').checked;
+      const textString = document.getElementById('logo-text-string').value;
+      const font = document.getElementById('logo-font-family').value;
+      const weight = document.getElementById('logo-font-weight').value;
+      const color = document.getElementById('logo-text-color').value;
+      const size = document.getElementById('logo-size-slider').value;
+
+      document.getElementById('logo-text-color-hex').value = color;
+      document.getElementById('logo-size-val').textContent = size + "px";
+
+      const previewText = document.getElementById('preview-logo-text');
+      previewText.textContent = textString;
+      previewText.style.color = color;
+      previewText.style.fontSize = size + "px";
+
+      // Sincronizar clases de tipografía de Tailwind
+      previewText.className = `${font} ${weight} tracking-tighter uppercase transition-all duration-200`;
+
+      if (toggle) {
+        previewText.classList.remove('hidden');
+      } else {
+        previewText.classList.add('hidden');
+      }
+    }
+
+    function updateFooterPreview() {
+      const copyright = document.getElementById('footer-copyright').value;
+      const line = document.getElementById('footer-accent-line').checked;
+
+      document.getElementById('preview-footer-text').textContent = copyright;
+
+      const previewLine = document.getElementById('preview-footer-line');
+      if (line) {
+        previewLine.classList.remove('hidden');
+      } else {
+        previewLine.classList.add('hidden');
+      }
+    }
+
+    function syncColorPicker(hex, type) {
+      if (hex.startsWith('#') && hex.length === 7) {
+        document.getElementById('logo-text-color').value = hex;
+        updateLogoPreview();
+      }
+    }
+
+    // --- GENERAL UI INTERFACES ---
     function showToast(message) {
       const toast = document.getElementById('toast');
       const msgSpan = document.getElementById('toast-message');
@@ -549,50 +889,54 @@
       }, 3000);
     }
 
-    // Guardar todos los cambios y salir
+    // --- GUARDADO COMPLETO Y EXPORTACIÓN ---
     function saveAllChanges() {
       const saveBtn = document.getElementById('btn-save');
-      const originalHTML = saveBtn.innerHTML;
-
-      saveBtn.innerHTML = `<i class="ph ph-spinner animate-spin text-lg"></i> Guardando cambios...`;
+      saveBtn.innerHTML = `<i class="ph ph-spinner animate-spin text-lg"></i> Publicando cambios...`;
       saveBtn.classList.add('opacity-80');
 
-      // Aquí se estructuran todos los cambios finales del cliente
-      const configuracionCompleta = {
+      const exportedData = {
         productos: mockProducts,
+        categorias: categories,
         identidad: {
-          logo_url: logoImageInput.value,
+          logo_url: document.getElementById('logo-image-url').value,
           mostrar_nombre: document.getElementById('toggle-logo-text').checked,
-          tamano_logo: document.getElementById('logo-size-slider').value
+          texto_nombre: document.getElementById('logo-text-string').value,
+          fuente: document.getElementById('logo-font-family').value,
+          peso: document.getElementById('logo-font-weight').value,
+          color_texto: document.getElementById('logo-text-color').value,
+          tamano_texto: document.getElementById('logo-size-slider').value
         },
-        textos: {
-          titulo_hero: document.getElementById('hero-title').value,
-          subtitulo_hero: document.getElementById('hero-subtitle').value,
-          btn_hero: document.getElementById('hero-btn-text').value
+        footer: {
+          copyright: document.getElementById('footer-copyright').value,
+          linea_acento: document.getElementById('footer-accent-line').checked
         },
-        enlaces: {
-          whatsapp: document.getElementById('contact-whatsapp').value,
-          instagram: document.getElementById('contact-instagram').value,
-          email: document.getElementById('contact-email').value
-        }
+        botones: {
+          visita_tecnica_text: document.getElementById('btn-visita-text').value,
+          visita_tecnica_link: document.getElementById('btn-visita-link').value
+        },
+        redes: socialLinks
       };
 
-      console.log("CONFIGURACIÓN EXPORTABLE PARA BASE DE DATOS:", configuracionCompleta);
+      console.log("¡WORKSPACE CONFIG GUARDADO CON ÉXITO!", exportedData);
 
       setTimeout(() => {
-        saveBtn.innerHTML = `<i class="ph-fill ph-check-circle text-lg"></i> ¡Guardado Exitosamente!`;
+        saveBtn.innerHTML = `<i class="ph-fill ph-check-circle text-lg"></i> ¡Listo en Vivo!`;
         saveBtn.classList.replace('bg-egrafic', 'bg-white');
         saveBtn.classList.replace('text-white', 'text-black');
 
         setTimeout(() => {
-          // Viajar de vuelta al Catálogo Principal
           window.location.href = "../index.html";
         }, 1000);
       }, 1500);
     }
 
-    // Iniciar productos en pantalla al cargar
+    // Inicio automático de la App
+    renderCategories();
     renderAdminProducts();
+    renderSocialsList();
+    updateLogoPreview();
+    updateFooterPreview();
   </script>
 </body>
 
