@@ -81,6 +81,7 @@
 
 <body class="antialiased pb-32">
 
+  <!-- Cabecera -->
   <header
     class="sticky top-0 z-50 bg-admin-bg/95 backdrop-blur-md border-b border-admin-border/50 px-5 py-4 flex justify-between items-center">
     <a href="../index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
@@ -93,6 +94,7 @@
     </a>
   </header>
 
+  <!-- Menú de Pestañas Deslizantes -->
   <div class="sticky top-[73px] z-40 bg-admin-bg border-b border-admin-border/50">
     <div class="flex gap-1 overflow-x-auto no-scrollbar py-2.5 px-5 max-w-md mx-auto">
       <button onclick="switchTab('productos')" id="btn-productos"
@@ -114,29 +116,42 @@
     </div>
   </div>
 
+  <!-- Contenido Principal -->
   <main class="p-5 max-w-md mx-auto space-y-6">
 
+    <!-- ================= PESTAÑA 1: PRODUCTOS ================= -->
     <div id="tab-productos" class="tab-content space-y-5">
       <div>
         <h2 class="text-xl font-bold tracking-tight">Gestión de Catálogo</h2>
-        <p class="text-gray-400 text-xs">Crea categorías, añade productos y cambia su orden con las flechas.</p>
+        <p class="text-gray-400 text-xs">Crea, edita y administra tus categorías y productos.</p>
       </div>
 
+      <!-- Panel Avanzado de Gestión de Categorías -->
       <div class="mobile-card p-5 space-y-3">
         <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
-          <i class="ph-bold ph-folder-open"></i> Crear Categorías
+          <i class="ph-bold ph-folder-open"></i> Crear y Editar Categorías
         </h3>
+
+        <!-- Input de creación -->
         <div class="flex gap-2">
           <input type="text" id="new-category-name" placeholder="Ej: Corpóreos 3D"
             class="flex-1 bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 placeholder-gray-600">
           <button type="button" onclick="addCustomCategory()"
-            class="bg-egrafic hover:bg-egrafic-light text-white px-4 rounded-xl text-xs font-semibold transition-all flex items-center justify-center">Agregar</button>
+            class="bg-egrafic hover:bg-egrafic-light text-white px-4 rounded-xl text-xs font-semibold transition-all flex items-center justify-center">
+            Agregar
+          </button>
         </div>
-        <div class="space-y-1">
-          <div id="categories-badge-container" class="flex flex-wrap gap-1.5 py-1"></div>
+
+        <!-- Lista de Categorías con Edición -->
+        <div class="space-y-1.5 pt-2">
+          <p class="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">Tus Categorías Activas</p>
+          <div id="categories-editor-list" class="space-y-2 max-h-48 overflow-y-auto no-scrollbar pr-1">
+            <!-- Inyectado dinámicamente por JS -->
+          </div>
         </div>
       </div>
 
+      <!-- Formulario Producto -->
       <form id="product-form" class="space-y-4" onsubmit="event.preventDefault(); publishProduct();">
         <div class="mobile-card p-5 space-y-4">
           <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic">Nuevo Producto / Servicio</h3>
@@ -194,6 +209,7 @@
       <div class="space-y-2" id="products-list"></div>
     </div>
 
+    <!-- ================= PESTAÑA 2: IDENTIDAD Y FOOTER ================= -->
     <div id="tab-identidad" class="tab-content space-y-5 hidden">
       <div>
         <h2 class="text-xl font-bold tracking-tight">Identidad y Footer</h2>
@@ -380,6 +396,7 @@
 
     let categories = config.categorias;
     let mockProducts = config.productos;
+    let editingCategoryIndex = null; // Índice de la categoría que se está editando
 
     function populateFields() {
       // Cargar datos en los inputs del formulario
@@ -423,27 +440,145 @@
       document.getElementById(`btn-${tabId}`).className = "tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 bg-egrafic text-white";
     }
 
-    // Categorías
+    // Renderizar Categorías (Crear y Editar con input inline)
     function renderCategories() {
+      // Render de select en formulario de creación de producto
       const select = document.getElementById('prod-category');
       select.innerHTML = '<option value="" disabled selected>Selecciona una...</option>';
       categories.forEach(cat => {
-        const opt = document.createElement('option'); opt.value = cat; opt.textContent = cat; select.appendChild(opt);
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
       });
-      const container = document.getElementById('categories-badge-container'); container.innerHTML = '';
-      categories.forEach(cat => {
-        const badge = document.createElement('span');
-        badge.className = "inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-zinc-900 border border-zinc-800 text-gray-300 hover:border-red-500 hover:text-red-400 cursor-pointer transition-colors";
-        badge.innerHTML = `${cat} <i class="ph ph-x text-[10px]"></i>`;
-        badge.onclick = () => { categories = categories.filter(c => c !== cat); renderCategories(); };
-        container.appendChild(badge);
+
+      // Render de la lista de gestión interactiva de categorías
+      const container = document.getElementById('categories-editor-list');
+      container.innerHTML = '';
+
+      categories.forEach((cat, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = "flex items-center justify-between p-2.5 bg-zinc-900 border border-zinc-800/80 rounded-xl gap-2 transition-all";
+
+        if (editingCategoryIndex === index) {
+          // Estado de edición (Input inline)
+          itemDiv.innerHTML = `
+                        <input type="text" id="edit-cat-input-${index}" value="${cat}" class="flex-1 bg-zinc-950 border border-egrafic/40 text-white text-xs rounded-lg px-2.5 py-1.5">
+                        <div class="flex items-center gap-1">
+                            <button type="button" onclick="saveCategoryEdit(${index}, '${cat}')" class="w-8 h-8 rounded-lg bg-egrafic/20 hover:bg-egrafic/30 border border-egrafic/20 flex items-center justify-center text-egrafic active:scale-90 transition-all" title="Guardar">
+                                <i class="ph-bold ph-check text-xs"></i>
+                            </button>
+                            <button type="button" onclick="cancelCategoryEdit()" class="w-8 h-8 rounded-lg bg-zinc-800 hover:bg-zinc-750 flex items-center justify-center text-gray-400 active:scale-90 transition-all" title="Cancelar">
+                                <i class="ph-bold ph-x text-xs"></i>
+                            </button>
+                        </div>
+                    `;
+        } else {
+          // Estado normal
+          itemDiv.innerHTML = `
+                        <span class="text-xs font-medium text-gray-300 pl-1.5">${cat}</span>
+                        <div class="flex items-center gap-1">
+                            <button type="button" onclick="startCategoryEdit(${index})" class="w-8 h-8 rounded-lg bg-zinc-800 hover:bg-zinc-750 flex items-center justify-center text-gray-300 hover:text-egrafic active:scale-90 transition-all" title="Editar">
+                                <i class="ph ph-pencil-line text-xs"></i>
+                            </button>
+                            <button type="button" onclick="removeCategory('${cat}')" class="w-8 h-8 rounded-lg bg-red-950/20 hover:bg-red-950/40 border border-red-900/15 flex items-center justify-center text-red-400 active:scale-90 transition-all" title="Eliminar">
+                                <i class="ph ph-trash text-xs"></i>
+                            </button>
+                        </div>
+                    `;
+        }
+        container.appendChild(itemDiv);
       });
     }
 
+    // Crear nueva categoría
     function addCustomCategory() {
-      const input = document.getElementById('new-category-name'); const name = input.value.trim();
-      if (!name || categories.includes(name)) return;
-      categories.push(name); input.value = ''; renderCategories();
+      const input = document.getElementById('new-category-name');
+      const name = input.value.trim();
+      if (!name) return;
+      if (categories.includes(name)) {
+        showToast("Esta categoría ya existe.");
+        return;
+      }
+      categories.push(name);
+      input.value = '';
+      renderCategories();
+      showToast(`Categoría "${name}" creada.`);
+    }
+
+    // Iniciar modo edición
+    function startCategoryEdit(index) {
+      editingCategoryIndex = index;
+      renderCategories();
+      setTimeout(() => {
+        const input = document.getElementById(`edit-cat-input-${index}`);
+        if (input) {
+          input.focus();
+          input.select();
+        }
+      }, 50);
+    }
+
+    // Cancelar edición
+    function cancelCategoryEdit() {
+      editingCategoryIndex = null;
+      renderCategories();
+    }
+
+    // Guardar edición de categoría y actualizar productos asociados automáticamente
+    function saveCategoryEdit(index, oldName) {
+      const input = document.getElementById(`edit-cat-input-${index}`);
+      const newName = input ? input.value.trim() : "";
+
+      if (!newName) {
+        showToast("El nombre no puede estar vacío.");
+        return;
+      }
+
+      if (oldName === newName) {
+        cancelCategoryEdit();
+        return;
+      }
+
+      if (categories.includes(newName) && categories.indexOf(newName) !== index) {
+        showToast("Esa categoría ya existe.");
+        return;
+      }
+
+      // Actualizar en el arreglo de categorías
+      categories[index] = newName;
+
+      // ¡ACTUALIZACIÓN INTELIGENTE DE PRODUCTOS!
+      // Busca todos los productos que usaban la categoría vieja y les pone la nueva
+      let updatedCount = 0;
+      mockProducts.forEach(prod => {
+        if (prod.category === oldName) {
+          prod.category = newName;
+          updatedCount++;
+        }
+      });
+
+      editingCategoryIndex = null;
+      renderCategories();
+      renderAdminProducts(); // Volver a pintar para reflejar cambios
+
+      if (updatedCount > 0) {
+        showToast(`Categoría actualizada. Se modificaron ${updatedCount} productos.`);
+      } else {
+        showToast("Categoría actualizada exitosamente.");
+      }
+    }
+
+    // Remover categoría
+    function removeCategory(catName) {
+      const used = mockProducts.some(p => p.category === catName);
+      if (used) {
+        showToast("No puedes eliminar una categoría con productos asignados.");
+        return;
+      }
+      categories = categories.filter(c => c !== catName);
+      renderCategories();
+      showToast("Categoría eliminada.");
     }
 
     // Subidas Cloudinary Básicas
@@ -481,11 +616,11 @@
       const container = document.getElementById('products-list'); container.innerHTML = '';
       mockProducts.forEach((prod, index) => {
         const row = document.createElement('div');
-        row.className = 'flex items-center justify-between p-3.5 bg-admin-card border border-admin-border/50 rounded-2xl gap-3';
+        row.className = 'flex items-center justify-between p-3.5 bg-admin-card border border-admin-border/50 rounded-2xl gap-3 animate-fade-up';
         row.innerHTML = `
                     <div class="flex items-center gap-3">
                         <img src="${prod.image}" class="w-12 h-12 rounded-xl object-cover">
-                        <div><h4 class="text-xs font-bold text-white">${prod.title}</h4><p class="text-[10px] text-egrafic">${prod.category}</p></div>
+                        <div><h4 class="text-xs font-bold text-white line-clamp-1">${prod.title}</h4><p class="text-[10px] text-egrafic">${prod.category}</p></div>
                     </div>
                     <div class="flex items-center gap-1.5">
                         <button type="button" onclick="move(${index}, -1)" ${index === 0 ? 'disabled' : ''} class="w-7.5 h-7.5 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-gray-400 hover:text-egrafic disabled:opacity-30"><i class="ph ph-arrow-up text-xs"></i></button>
@@ -510,9 +645,11 @@
       if (!image) return;
       mockProducts.unshift({ id: Date.now(), title, category, price, desc, image });
       document.getElementById('product-form').reset();
-      document.getElementById('product-preview-container').add('hidden');
-      document.getElementById('product-upload-prompt').remove('hidden');
+      document.getElementById('product-image-url').value = "";
+      document.getElementById('product-preview-container').classList.add('hidden');
+      document.getElementById('product-upload-prompt').classList.remove('hidden');
       renderAdminProducts();
+      showToast("Producto publicado exitosamente.");
     }
 
     function showToast(m) {
