@@ -435,7 +435,7 @@
       </div>
     </div>
 
-    <!-- ================= PESTAÑA 4: BOTONES Y ENLACES ================= -->
+    <!-- ================= PESTAÑA 4: BOTONES Y ENLACES (CON PREVIO) ================= -->
     <div id="tab-botones" class="tab-content space-y-5 hidden">
       <div>
         <h2 class="text-xl font-bold tracking-tight">Botones y Enlaces</h2>
@@ -453,10 +453,12 @@
           <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">1. Botón Superior (Menú Nav)</p>
           <div class="space-y-2">
             <input type="text" id="btn-visita-text" value="Visita Técnica" placeholder="Texto del botón"
-              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3 py-2.5">
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3 py-2.5"
+              oninput="updateButtonsPreview()">
             <input type="text" id="btn-visita-link" value="#contacto"
               placeholder="Destino (ej: #contacto o link de WhatsApp)"
-              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3 py-2.5">
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3 py-2.5"
+              oninput="updateButtonsPreview()">
           </div>
         </div>
 
@@ -466,7 +468,8 @@
           <div class="space-y-2">
             <input type="text" id="btn-modal-text" value="Solicitar Cotización"
               placeholder="Texto para cotizar por WhatsApp"
-              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3 py-2.5">
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3 py-2.5"
+              oninput="updateButtonsPreview()">
           </div>
         </div>
       </div>
@@ -486,7 +489,8 @@
           </div>
           <input type="text" id="link-whatsapp" value="https://wa.me/593990000000"
             placeholder="https://wa.me/tu-numero-con-codigo-pais"
-            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3">
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
+            oninput="updateButtonsPreview()">
         </div>
 
         <!-- Instagram -->
@@ -496,7 +500,8 @@
           </div>
           <input type="text" id="link-instagram" value="https://instagram.com/egrafic"
             placeholder="https://instagram.com/tu-usuario"
-            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3">
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
+            oninput="updateButtonsPreview()">
         </div>
 
         <!-- Facebook -->
@@ -505,7 +510,8 @@
             <i class="ph-bold ph-facebook-logo text-lg"></i> Enlace de Facebook
           </div>
           <input type="text" id="link-facebook" value="" placeholder="https://facebook.com/tu-pagina"
-            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3">
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
+            oninput="updateButtonsPreview()">
         </div>
 
         <!-- TikTok -->
@@ -514,7 +520,44 @@
             <i class="ph-bold ph-tiktok-logo text-lg"></i> Enlace de TikTok
           </div>
           <input type="text" id="link-tiktok" value="" placeholder="https://tiktok.com/@tu-usuario"
-            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3">
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
+            oninput="updateButtonsPreview()">
+        </div>
+      </div>
+
+      <!-- VISTA PREVIA DE BOTONES Y ENLACES (MOCKUP INTERACTIVO) -->
+      <div class="mobile-card p-5 space-y-3 bg-zinc-950/80 border border-zinc-800">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-eye"></i> Vista Previa (Botones y Redes)
+        </h3>
+
+        <div class="p-5 bg-[#0a0a0c] border border-zinc-800/80 rounded-2xl space-y-4">
+          <!-- Preview Botón de Menú Superior -->
+          <div class="space-y-1">
+            <p class="text-[9px] text-zinc-500 uppercase">Botón Menú Superior</p>
+            <div class="flex justify-center">
+              <span id="preview-btn-visita"
+                class="px-5 py-2 bg-white text-black text-xs rounded-full font-medium shadow-[0_0_10px_rgba(109,187,59,0.2)]">Visita
+                Técnica</span>
+            </div>
+          </div>
+
+          <!-- Preview Botón Modal -->
+          <div class="space-y-1">
+            <p class="text-[9px] text-zinc-500 uppercase">Botón de Cotización (Modal)</p>
+            <span id="preview-btn-modal"
+              class="w-full py-2.5 bg-egrafic text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 shadow-[0_4px_12px_rgba(109,187,59,0.2)]">
+              Solicitar Cotización <i class="ph-bold ph-whatsapp-logo text-sm"></i>
+            </span>
+          </div>
+
+          <!-- Preview Redes Sociales en el Footer -->
+          <div class="space-y-1 pt-2 border-t border-zinc-900">
+            <p class="text-[9px] text-zinc-500 uppercase text-center mb-2">Redes en Footer (Color de la Página)</p>
+            <div id="preview-socials-row" class="flex justify-center gap-3">
+              <!-- Los iconos fijos activos se pintan aquí en color egrafic/cristal -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -804,6 +847,48 @@
       }
     }
 
+    // --- MANEJO DE VISTA PREVIA DE BOTONES Y ENLACES ---
+    function updateButtonsPreview() {
+      const visitaText = document.getElementById('btn-visita-text').value;
+      const modalText = document.getElementById('btn-modal-text').value;
+
+      const linkWhatsapp = document.getElementById('link-whatsapp').value.trim();
+      const linkInstagram = document.getElementById('link-instagram').value.trim();
+      const linkFacebook = document.getElementById('link-facebook').value.trim();
+      const linkTiktok = document.getElementById('link-tiktok').value.trim();
+
+      // Actualizar botones del mockup
+      document.getElementById('preview-btn-visita').textContent = visitaText || "Visita Técnica";
+
+      const previewBtnModal = document.getElementById('preview-btn-modal');
+      previewBtnModal.innerHTML = `${modalText || "Solicitar Cotización"} <i class="ph-bold ph-whatsapp-logo text-sm"></i>`;
+
+      // Actualizar iconos de redes del footer interactivo
+      const socialRow = document.getElementById('preview-socials-row');
+      socialRow.innerHTML = '';
+
+      const activeRedes = [
+        { url: linkWhatsapp, icon: "ph-whatsapp-logo", name: "WhatsApp" },
+        { url: linkInstagram, icon: "ph-instagram-logo", name: "Instagram" },
+        { url: linkFacebook, icon: "ph-facebook-logo", name: "Facebook" },
+        { url: linkTiktok, icon: "ph-tiktok-logo", name: "TikTok" }
+      ];
+
+      activeRedes.forEach(red => {
+        if (red.url) {
+          const iconSpan = document.createElement('span');
+          iconSpan.className = "w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-egrafic text-sm shadow-[0_2px_8px_rgba(109,187,59,0.15)]";
+          iconSpan.innerHTML = `<i class="ph-bold ${red.icon}"></i>`;
+          iconSpan.title = red.name;
+          socialRow.appendChild(iconSpan);
+        }
+      });
+
+      if (socialRow.children.length === 0) {
+        socialRow.innerHTML = `<p class="text-[9px] text-zinc-600 italic">No hay redes enlazadas</p>`;
+      }
+    }
+
     function syncColorPicker(hex, target) {
       if (hex.startsWith('#') && hex.length === 7) {
         if (target === 'logo') {
@@ -818,7 +903,12 @@
 
     function showToast(m) {
       const t = document.getElementById('toast'); document.getElementById('toast-message').textContent = m;
-      t.classList.replace('opacity-0', 'opacity-100'); setTimeout(() => t.classList.replace('opacity-100', 'opacity-0'), 2500);
+      t.classList.remove('opacity-0');
+      t.classList.add('opacity-100');
+      setTimeout(() => {
+        t.classList.remove('opacity-100');
+        t.classList.add('opacity-0');
+      }, 2500);
     }
 
     // GUARDAR TODO EN LOCALSTORAGE
@@ -865,7 +955,7 @@
     }
 
     populateFields(); renderCategories(); renderAdminProducts();
-    updateIdentityPreview(); updateHeroPreview();
+    updateIdentityPreview(); updateHeroPreview(); updateButtonsPreview();
   </script>
 </body>
 
