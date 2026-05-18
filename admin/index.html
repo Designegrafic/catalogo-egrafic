@@ -52,13 +52,14 @@
 
 <body class="antialiased pb-24">
 
+  <!-- App Bar Superior con botón para salir apuntando a ../index.html (para ir a la raíz) -->
   <header
     class="sticky top-0 z-50 bg-admin-bg/90 backdrop-blur-md border-b border-admin-border px-5 py-4 flex justify-between items-center">
-    <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+    <a href="../index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
       <i class="ph-fill ph-aperture text-egrafic text-2xl"></i>
       <span class="font-semibold tracking-tight">Workspace</span>
     </a>
-    <a href="index.html"
+    <a href="../index.html"
       class="w-9 h-9 rounded-full bg-admin-card flex items-center justify-center border border-admin-border active:scale-95 transition-transform text-gray-400 hover:text-egrafic hover:border-egrafic"
       title="Volver al Catálogo">
       <i class="ph ph-sign-out text-xl"></i>
@@ -148,7 +149,7 @@
   </main>
 
   <script>
-    // ¡No olvides cambiar esto luego por tus datos reales!
+    // ¡No olvides cambiar esto luego por tus datos reales de Cloudinary!
     const CLOUD_NAME = "TU_CLOUD_NAME";
     const UPLOAD_PRESET = "TU_UPLOAD_PRESET_UNSIGNED";
 
