@@ -1,215 +1,810 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Workspace - Corrección Pestañas</title>
-  <!-- Usando la fuente y estilos oscuros de tu diseño -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Workspace | Admin E-Grafic</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@600;700;800&family=Poppins:wght@400;600;700&family=Montserrat:wght@400;700&display=swap"
+    rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Syne', 'sans-serif'],
+            poppins: ['Poppins', 'sans-serif'],
+            montserrat: ['Montserrat', 'sans-serif']
+          },
+          colors: {
+            egrafic: {
+              DEFAULT: '#6DBB3B',
+              light: '#88D455',
+              dark: '#4A8A24'
+            },
+            admin: {
+              bg: '#0a0a0c',
+              card: '#141417',
+              border: '#27272a'
+            }
+          }
+        }
+      }
+    }
+  </script>
   <style>
     body {
-      background-color: #0B0F1A;
-      /* Fondo oscuro profundo */
-      color: #F9FAFB;
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 40px;
+      background-color: #0a0a0c;
+      color: #ffffff;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .workspace-header {
-      margin-bottom: 30px;
-      border-bottom: 1px solid #1F2937;
-      padding-bottom: 20px;
-    }
-
-    h1 {
-      color: #22C55E;
-      margin: 0 0 10px 0;
-    }
-
-    /* EL MENÚ DE PESTAÑAS */
-    .menu-pestanas {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 30px;
-    }
-
-    .btn-pestana {
-      background-color: #111827;
-      color: #9CA3AF;
-      border: 1px solid #374151;
-      padding: 12px 24px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all 0.3s ease;
-    }
-
-    .btn-pestana:hover {
-      border-color: #4B5563;
-      color: #FFF;
-    }
-
-    /* EL BOTÓN ACTIVO (Verde Neón) */
-    .btn-pestana.activo {
-      background-color: rgba(34, 197, 94, 0.1);
-      color: #22C55E;
-      border-color: #22C55E;
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
-    }
-
-    /* LAS SECCIONES DE CONTENIDO */
-    .seccion-contenido {
+    ::-webkit-scrollbar {
       display: none;
-      /* Ocultamos todas por defecto */
-      background-color: #111827;
-      border: 1px solid #1F2937;
-      border-radius: 12px;
-      padding: 30px;
-      animation: fadeIn 0.4s ease;
     }
 
-    /* La sección que esté activa sí se muestra */
-    .seccion-contenido.activa {
-      display: block;
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .mobile-card {
+      background: rgba(20, 20, 23, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
     }
 
-    /* Estilos del formulario de botones */
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      color: #D1D5DB;
-      font-size: 14px;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 12px;
-      background-color: #030712;
-      border: 1px solid #374151;
-      border-radius: 6px;
-      color: #FFF;
-      box-sizing: border-box;
-    }
-
-    .form-group input:focus {
+    input:focus,
+    textarea:focus,
+    select:focus {
       outline: none;
-      border-color: #22C55E;
+      border-color: #6DBB3B;
+      box-shadow: 0 0 0 1px #6DBB3B;
     }
 
-    .btn-guardar {
-      background-color: #22C55E;
-      color: #000;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: background 0.3s;
+    .switch-input:checked+.switch-label {
+      background-color: #6DBB3B;
     }
 
-    .btn-guardar:hover {
-      background-color: #16a34a;
+    .switch-input:checked+.switch-label .switch-dot {
+      transform: translateX(100%);
     }
   </style>
 </head>
 
-<body>
+<body class="antialiased pb-32">
 
-  <div class="workspace-header">
-    <h1>Workspace E-Grafic</h1>
-    <p style="color: #9CA3AF; margin: 0;">Panel de Administración General</p>
+  <!-- Cabecera de Navegación Original -->
+  <header
+    class="sticky top-0 z-50 bg-admin-bg/95 backdrop-blur-md border-b border-admin-border/50 px-5 py-4 flex justify-between items-center">
+    <a href="../index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+      <i class="ph-fill ph-aperture text-egrafic text-2xl"></i>
+      <span class="font-display font-bold tracking-tight text-lg uppercase">Workspace</span>
+    </a>
+    <a href="../index.html"
+      class="w-10 h-10 rounded-full bg-admin-card flex items-center justify-center border border-admin-border text-gray-400 hover:text-egrafic hover:border-egrafic active:scale-90 transition-all">
+      <i class="ph ph-sign-out text-lg"></i>
+    </a>
+  </header>
+
+  <!-- Menú de Pestañas Deslizantes Original con la 4ta Pestaña -->
+  <div class="sticky top-[73px] z-40 bg-admin-bg border-b border-admin-border/50">
+    <div class="flex gap-1 overflow-x-auto no-scrollbar py-2.5 px-5 max-w-md mx-auto">
+      <button onclick="switchTab('productos')" id="btn-productos"
+        class="tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 bg-egrafic text-white">
+        <i class="ph-fill ph-shopping-bag"></i> Productos
+      </button>
+      <button onclick="switchTab('identidad')" id="btn-identidad"
+        class="tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 text-gray-400 hover:text-white bg-transparent">
+        <i class="ph ph-palette"></i> Identidad / Footer
+      </button>
+      <button onclick="switchTab('textos')" id="btn-textos"
+        class="tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 text-gray-400 hover:text-white bg-transparent">
+        <i class="ph ph-text-aa"></i> Textos Portada
+      </button>
+      <!-- AQUÍ ESTÁ LA NUEVA PESTAÑA LIMPIA -->
+      <button onclick="switchTab('enlaces')" id="btn-enlaces"
+        class="tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 text-gray-400 hover:text-white bg-transparent">
+        <i class="ph ph-link"></i> Enlaces y Redes
+      </button>
+    </div>
   </div>
 
-  <!-- 1. EL MENÚ CON TUS 4 BOTONES -->
-  <div class="menu-pestanas">
-    <button class="btn-pestana activo" onclick="abrirPestana('sec-productos', this)">Productos</button>
-    <button class="btn-pestana" onclick="abrirPestana('sec-identidad', this)">Identidad / Footer</button>
-    <button class="btn-pestana" onclick="abrirPestana('sec-textos', this)">Textos Portada</button>
-    <!-- ESTE ES EL BOTÓN NUEVO QUE TE FALTABA CONECTAR -->
-    <button class="btn-pestana" onclick="abrirPestana('sec-botones', this)">🔗 Botones y Links</button>
-  </div>
+  <!-- Contenido Principal de Formularios -->
+  <main class="p-5 max-w-md mx-auto space-y-6">
 
-  <!-- 2. LAS SECCIONES DE CONTENIDO -->
+    <!-- ================= PESTAÑA 1: PRODUCTOS ================= -->
+    <div id="tab-productos" class="tab-content space-y-5">
+      <div>
+        <h2 class="text-xl font-bold tracking-tight">Gestión de Catálogo</h2>
+        <p class="text-gray-400 text-xs">Administra tus categorías de forma dinámica y actualiza productos.</p>
+      </div>
 
-  <div id="sec-productos" class="seccion-contenido activa">
-    <h2>Gestión de Productos</h2>
-    <p>Aquí va tu código actual de productos...</p>
-  </div>
+      <!-- Panel de Gestión de Categorías -->
+      <div class="mobile-card p-5 space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-folder-open"></i> Crear y Editar Categorías
+        </h3>
 
-  <div id="sec-identidad" class="seccion-contenido">
-    <h2>Identidad y Footer</h2>
-    <p>Aquí va tu código actual de identidad...</p>
-  </div>
+        <div class="flex gap-2">
+          <input type="text" id="new-category-name" placeholder="Ej: Corpóreos 3D"
+            class="flex-1 bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 placeholder-gray-600">
+          <button type="button" onclick="addCustomCategory()"
+            class="bg-egrafic hover:bg-egrafic-light text-white px-4 rounded-xl text-xs font-semibold transition-all flex items-center justify-center">
+            Agregar
+          </button>
+        </div>
 
-  <div id="sec-textos" class="seccion-contenido">
-    <h2>Textos Portada</h2>
-    <p>Aquí va tu código actual de textos...</p>
-  </div>
+        <div class="space-y-1.5 pt-2">
+          <p class="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">Tus Categorías Activas</p>
+          <div id="categories-editor-list" class="space-y-2 max-h-48 overflow-y-auto no-scrollbar pr-1"></div>
+        </div>
+      </div>
 
-  <!-- 3. LA NUEVA SECCIÓN DE BOTONES -->
-  <div id="sec-botones" class="seccion-contenido">
-    <h2>Gestión de Botones y Enlaces</h2>
-    <p style="color: #9CA3AF; margin-bottom: 25px;">Configura hacia dónde llevan los clics de tus clientes.</p>
+      <!-- Formulario Producto -->
+      <form id="product-form" class="space-y-4" onsubmit="event.preventDefault(); publishProduct();">
+        <div class="mobile-card p-5 space-y-4">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic">Nuevo Producto / Servicio</h3>
 
-    <div class="form-group">
-      <label>Link del Botón de WhatsApp</label>
-      <input type="text" placeholder="Ej: https://wa.me/593999999999" value="">
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Imagen del Producto</label>
+            <div id="drop-zone-product"
+              class="border border-dashed border-zinc-700 hover:border-egrafic rounded-xl p-5 text-center cursor-pointer active:bg-zinc-900/40 transition-all group">
+              <input type="file" id="file-product" class="hidden" accept="image/*">
+              <div id="product-upload-prompt" class="space-y-1">
+                <i class="ph ph-camera text-xl text-egrafic"></i>
+                <p class="text-xs font-medium">Sube una foto</p>
+              </div>
+              <div id="product-preview-container" class="hidden relative w-full h-32 rounded-lg overflow-hidden">
+                <img id="product-img-preview" class="w-full h-full object-cover" src="">
+              </div>
+            </div>
+            <input type="hidden" id="product-image-url" required>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Categoría</label>
+            <select id="prod-category"
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 appearance-none"
+              required></select>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Título</label>
+            <input type="text" id="prod-title" placeholder="Ej: Letreros 3D Premium"
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 placeholder-gray-600"
+              required>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Precio / Inversión</label>
+            <input type="text" id="prod-price" placeholder="Desde $120.00"
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 placeholder-gray-600"
+              required>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Descripción</label>
+            <textarea id="prod-desc" rows="2" placeholder="Detalles clave..."
+              class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 resize-none"
+              required></textarea>
+          </div>
+
+          <button type="submit"
+            class="w-full bg-egrafic/10 text-egrafic border border-egrafic/20 py-3 rounded-xl text-xs font-bold transition-all active:scale-95">Agregar
+            Producto</button>
+        </div>
+      </form>
+
+      <div class="space-y-2" id="products-list"></div>
     </div>
 
-    <div class="form-group">
-      <label>Link del Catálogo en PDF (Google Drive, etc.)</label>
-      <input type="text" placeholder="Ej: https://drive.google.com/file/d/..." value="">
+    <!-- ================= PESTAÑA 2: IDENTIDAD Y FOOTER ================= -->
+    <div id="tab-identidad" class="tab-content space-y-5 hidden">
+      <div>
+        <h2 class="text-xl font-bold tracking-tight">Identidad y Footer</h2>
+        <p class="text-gray-400 text-xs">Personaliza tu logotipo comercial de texto, tipografía y pie de página.</p>
+      </div>
+
+      <!-- Identidad Visual -->
+      <div class="mobile-card p-5 space-y-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-palette"></i> Nombre de Marca
+        </h3>
+
+        <div class="space-y-2">
+          <label class="block text-xs font-semibold text-gray-400">Imagen del Logo (Opcional)</label>
+          <div id="drop-zone-logo"
+            class="border border-dashed border-zinc-700 hover:border-egrafic rounded-xl p-5 text-center cursor-pointer transition-all">
+            <input type="file" id="file-logo" class="hidden" accept="image/*">
+            <div id="logo-upload-prompt">
+              <p class="text-xs text-egrafic font-medium">Toca para subir logo</p>
+            </div>
+            <div id="logo-preview-container" class="hidden"><img id="logo-img-preview"
+                class="h-12 mx-auto object-contain" src=""></div>
+          </div>
+          <input type="hidden" id="logo-image-url">
+        </div>
+
+        <div class="space-y-3 pt-2 border-t border-zinc-800/50">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-semibold text-gray-400">Mostrar nombre de texto</label>
+            <input type="checkbox" id="toggle-logo-text" class="switch-input hidden" checked
+              onchange="updateIdentityPreview()">
+            <label for="toggle-logo-text"
+              class="switch-label w-10 h-5.5 bg-zinc-800 rounded-full cursor-pointer flex p-0.5"><span
+                class="switch-dot w-4.5 h-4.5 bg-white rounded-full shadow transition-transform"></span></label>
+          </div>
+
+          <input type="text" id="logo-text-string" value="E-Grafic"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
+            oninput="updateIdentityPreview()">
+
+          <div class="grid grid-cols-2 gap-2">
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 font-semibold">Tipografía</label>
+              <select id="logo-font-family"
+                class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl p-3 appearance-none"
+                onchange="updateIdentityPreview()">
+                <option value="Syne">Syne (Default)</option>
+                <option value="Inter">Inter</option>
+                <option value="Poppins">Poppins</option>
+                <option value="Montserrat">Montserrat</option>
+              </select>
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 font-semibold">Estilo</label>
+              <select id="logo-font-weight"
+                class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl p-3 appearance-none"
+                onchange="updateIdentityPreview()">
+                <option value="800">Extra Bold</option>
+                <option value="700" selected>Bold</option>
+                <option value="600">Semi Bold</option>
+                <option value="500">Medium</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Color del Texto</label>
+            <div class="flex items-center gap-2">
+              <input type="color" id="logo-text-color" value="#ffffff"
+                class="w-10 h-10 bg-transparent border-0 cursor-pointer" oninput="updateIdentityPreview()">
+              <input type="text" id="logo-text-color-hex" value="#ffffff"
+                class="flex-1 bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
+                oninput="syncColorPicker(this.value, 'logo')">
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label class="text-xs font-semibold text-gray-400">Tamaño del Texto</label>
+              <span id="logo-size-val" class="text-xs font-bold text-egrafic">24px</span>
+            </div>
+            <input type="range" id="logo-size-slider" min="16" max="36" value="24"
+              class="w-full accent-egrafic cursor-pointer" oninput="updateIdentityPreview()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Configuración del Footer -->
+      <div class="mobile-card p-5 space-y-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic">Diseño del Pie de Página</h3>
+
+        <input type="text" id="footer-copyright" value="© 2026 Todos los derechos reservados."
+          class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
+          oninput="updateIdentityPreview()">
+
+        <div class="flex items-center justify-between">
+          <label class="text-xs font-semibold text-gray-400">Línea verde brillante decorativa</label>
+          <input type="checkbox" id="footer-accent-line" class="switch-input hidden" checked
+            onchange="updateIdentityPreview()">
+          <label for="footer-accent-line"
+            class="switch-label w-10 h-5.5 bg-zinc-800 rounded-full cursor-pointer flex p-0.5"><span
+              class="switch-dot w-4.5 h-4.5 bg-white rounded-full shadow transition-transform"></span></label>
+        </div>
+      </div>
+
+      <!-- VISTA PREVIA DE IDENTIDAD -->
+      <div class="mobile-card p-5 space-y-3 bg-zinc-950/80 border border-zinc-800">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-eye"></i> Vista Previa (Navbar & Footer)
+        </h3>
+
+        <div
+          class="p-3 bg-[#0a0a0c] border border-zinc-800/80 rounded-xl flex justify-between items-center overflow-hidden">
+          <div class="flex items-center gap-1.5">
+            <i class="ph-fill ph-aperture text-egrafic text-xl"></i>
+            <span id="preview-logo-text" class="uppercase tracking-tighter">E-Grafic</span>
+          </div>
+          <div class="px-3 py-1 bg-white text-black text-[9px] rounded-full font-medium">Visita Técnica</div>
+        </div>
+
+        <div id="preview-footer-box" class="pt-3 border-t border-zinc-800 relative text-center">
+          <div id="preview-footer-line"
+            class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-egrafic to-transparent">
+          </div>
+          <p id="preview-footer-text" class="text-[9px] text-zinc-500">© 2026 Todos los derechos reservados.</p>
+        </div>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>Link de Instagram</label>
-      <input type="text" placeholder="Ej: https://instagram.com/egrafic" value="">
+    <!-- ================= PESTAÑA 3: TEXTOS PORTADA ================= -->
+    <div id="tab-textos" class="tab-content space-y-5 hidden">
+      <div>
+        <h2 class="text-xl font-bold tracking-tight">Textos de Portada</h2>
+        <p class="text-gray-400 text-xs">Modifica eslóganes, tipografías y el diseño completo de bienvenida.</p>
+      </div>
+
+      <div class="mobile-card p-5 space-y-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-text-aa"></i> Estilo de Título
+        </h3>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400">Texto del Título</label>
+          <input type="text" id="hero-title" value="Elevamos tu Marca al Futuro."
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
+            oninput="updateHeroPreview()">
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400">Texto del Subtítulo</label>
+          <textarea id="hero-subtitle" rows="3"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 resize-none"
+            oninput="updateHeroPreview()">Soluciones integrales de diseño, impresión y desarrollo espacial. Explora nuestro catálogo interactivo.</textarea>
+        </div>
+
+        <div class="space-y-3 pt-2 border-t border-zinc-800/50">
+          <div class="grid grid-cols-2 gap-2">
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 font-semibold">Tipografía Título</label>
+              <select id="hero-font-family"
+                class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl p-3 appearance-none"
+                onchange="updateHeroPreview()">
+                <option value="Syne">Syne (Default)</option>
+                <option value="Inter">Inter</option>
+                <option value="Poppins">Poppins</option>
+                <option value="Montserrat">Montserrat</option>
+              </select>
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 font-semibold">Alineación</label>
+              <select id="hero-alignment"
+                class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl p-3 appearance-none"
+                onchange="updateHeroPreview()">
+                <option value="center" selected>Centrado</option>
+                <option value="left">Izquierda</option>
+                <option value="right">Derecha</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-400">Color Base del Título</label>
+            <div class="flex items-center gap-2">
+              <input type="color" id="hero-text-color" value="#ffffff"
+                class="w-10 h-10 bg-transparent border-0 cursor-pointer" oninput="updateHeroPreview()">
+              <input type="text" id="hero-text-color-hex" value="#ffffff"
+                class="flex-1 bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
+                oninput="syncColorPicker(this.value, 'hero')">
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label class="text-xs font-semibold text-gray-400">Tamaño del Título</label>
+              <span id="hero-size-val" class="text-xs font-bold text-egrafic">28px</span>
+            </div>
+            <input type="range" id="hero-size-slider" min="20" max="44" value="28"
+              class="w-full accent-egrafic cursor-pointer" oninput="updateHeroPreview()">
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA PREVIA DE TEXTOS DE PORTADA -->
+      <div class="mobile-card p-5 space-y-3 bg-zinc-950/80 border border-zinc-800">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-eye"></i> Vista Previa (Portada del Catálogo)
+        </h3>
+
+        <div
+          class="p-6 bg-[#0a0a0c] border border-zinc-800/80 rounded-2xl relative overflow-hidden min-h-[160px] flex flex-col justify-center">
+          <div class="absolute -top-10 -right-10 w-24 h-24 bg-egrafic/10 rounded-full blur-2xl"></div>
+          <div class="absolute -bottom-10 -left-10 w-24 h-24 bg-egrafic/10 rounded-full blur-2xl"></div>
+
+          <div id="preview-hero-container" class="relative z-10 text-center">
+            <h1 id="preview-hero-title" class="font-bold leading-tight mb-2 tracking-tight">Elevamos tu Marca al Futuro.
+            </h1>
+            <p id="preview-hero-subtitle"
+              class="text-zinc-400 text-[10px] leading-relaxed max-w-[280px] mx-auto font-light">Soluciones integrales
+              de diseño, impresión y desarrollo espacial.</p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <button class="btn-guardar">Guardar Enlaces</button>
+    <!-- ================= PESTAÑA 4: ENLACES Y REDES (SÓLO LINKS, SIN ROMPER DISEÑO) ================= -->
+    <div id="tab-enlaces" class="tab-content space-y-5 hidden">
+      <div>
+        <h2 class="text-xl font-bold tracking-tight">Enlaces y Redes</h2>
+        <p class="text-gray-400 text-xs">Administra los links de contacto de tu catálogo y botones.</p>
+      </div>
+
+      <div class="mobile-card p-5 space-y-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-link"></i> Link Principal
+        </h3>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400">Destino del botón "Visita Técnica" (Menú
+            Superior)</label>
+          <input type="text" id="link-visita" placeholder="Ej: #contacto"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3">
+        </div>
+      </div>
+
+      <div class="mobile-card p-5 space-y-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-share-network"></i> Redes y Contacto
+        </h3>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400 flex items-center gap-1">
+            <i class="ph-fill ph-whatsapp-logo text-emerald-400 text-sm"></i> WhatsApp (Número con código)
+          </label>
+          <input type="text" id="link-whatsapp" placeholder="Ej: 593990000000"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3">
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400 flex items-center gap-1">
+            <i class="ph-fill ph-whatsapp-logo text-emerald-400 text-sm"></i> Mensaje predeterminado de Cotización
+          </label>
+          <textarea id="link-whatsapp-msg" rows="2" placeholder="Hola E-Grafic, me interesa cotizar..."
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 resize-none"></textarea>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400 flex items-center gap-1">
+            <i class="ph-fill ph-instagram-logo text-pink-400 text-sm"></i> Link de Instagram
+          </label>
+          <input type="text" id="link-instagram" placeholder="Ej: https://instagram.com/egrafic"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3">
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-gray-400 flex items-center gap-1">
+            <i class="ph-fill ph-envelope-simple text-blue-400 text-sm"></i> Correo Electrónico
+          </label>
+          <input type="text" id="link-correo" placeholder="Ej: contacto@egrafic.com"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3">
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón de Guardado Flotante -->
+    <div class="fixed bottom-0 left-0 w-full p-5 bg-gradient-to-t from-admin-bg via-admin-bg/95 to-transparent z-50">
+      <button onclick="saveAllChanges();" id="btn-save"
+        class="w-full max-w-md mx-auto bg-egrafic hover:bg-egrafic-light text-white font-bold text-sm py-4 rounded-2xl shadow-[0_8px_25px_rgba(109,187,59,0.3)] active:scale-95 transition-all flex items-center justify-center gap-2">
+        <i class="ph-bold ph-floppy-disk text-lg"></i> GUARDAR CONFIGURACIÓN
+      </button>
+    </div>
+    <div class="h-16"></div>
+  </main>
+
+  <!-- Notificación Toast -->
+  <div id="toast"
+    class="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-zinc-900 border border-egrafic/30 px-5 py-3 rounded-full flex items-center gap-2 shadow-2xl z-50 opacity-0 pointer-events-none transition-all duration-300">
+    <i class="ph-fill ph-check-circle text-egrafic text-lg"></i><span id="toast-message"
+      class="text-xs font-medium text-white"></span>
   </div>
 
-  <!-- 4. EL MOTOR (JAVASCRIPT) QUE HACE QUE FUNCIONE -->
+  <!-- SCRIPT CONTROLADOR -->
   <script>
-    function abrirPestana(idPestana, botonClickeado) {
-      // Paso 1: Ocultar todas las secciones quitándoles la clase 'activa'
-      const secciones = document.querySelectorAll('.seccion-contenido');
-      secciones.forEach(seccion => {
-        seccion.classList.remove('activa');
-      });
+    // ¡RECUERDA CONFIGURAR CLOUDINARY!
+    const CLOUD_NAME = "TU_CLOUD_NAME";
+    const UPLOAD_PRESET = "TU_UPLOAD_PRESET_UNSIGNED";
+    const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
 
-      // Paso 2: Quitar el color verde (clase 'activo') de todos los botones del menú
-      const botones = document.querySelectorAll('.btn-pestana');
-      botones.forEach(boton => {
-        boton.classList.remove('activo');
-      });
+    const defaultSettings = {
+      productos: [
+        { id: 1, category: "Impresión", title: "Papelería Premium", desc: "Tarjetas y folletos.", price: "Desde $45.00", image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=1000" }
+      ],
+      categorias: ["Impresión", "Remodelaciones", "Diseño de Marca 3D", "Herramientas Digitales"],
+      identidad: { logo_url: "", mostrar_nombre: true, texto_nombre: "E-Grafic", fuente: "Syne", peso: "700", color_texto: "#ffffff", tamano_texto: "24" },
+      footer: { copyright: "© 2026 Todos los derechos reservados.", linea_acento: true },
+      textos: { titulo_hero: "Elevamos tu Marca al Futuro.", subtitulo_hero: "Soluciones integrales de diseño.", hero_font: "Syne", hero_alignment: "center", hero_color: "#ffffff", hero_size: "28" },
+      enlaces: { visita_link: "#contacto", whatsapp: "593990000000", whatsapp_msg: "Hola E-Grafic, me interesa cotizar un servicio.", instagram: "https://instagram.com/egrafic", correo: "contacto@egrafic.com" }
+    };
 
-      // Paso 3: Mostrar solo la sección que queremos y pintar de verde el botón clickeado
-      document.getElementById(idPestana).classList.add('activa');
-      botonClickeado.classList.add('activo');
+    let config = JSON.parse(localStorage.getItem('egrafic_config')) || defaultSettings;
+    let categories = config.categorias || defaultSettings.categorias;
+    let mockProducts = config.productos || defaultSettings.productos;
+    let editingCategoryIndex = null;
+
+    function populateFields() {
+      // Identidad y Footer
+      document.getElementById('logo-image-url').value = config.identidad?.logo_url || "";
+      document.getElementById('toggle-logo-text').checked = config.identidad?.mostrar_nombre !== false;
+      document.getElementById('logo-text-string').value = config.identidad?.texto_nombre || "E-Grafic";
+      document.getElementById('logo-font-family').value = config.identidad?.fuente || "Syne";
+      document.getElementById('logo-font-weight').value = config.identidad?.peso || "700";
+      document.getElementById('logo-text-color').value = config.identidad?.color_texto || "#ffffff";
+      document.getElementById('logo-size-slider').value = config.identidad?.tamano_texto || "24";
+
+      document.getElementById('footer-copyright').value = config.footer?.copyright || "© 2026 Todos los derechos reservados.";
+      document.getElementById('footer-accent-line').checked = config.footer?.linea_acento !== false;
+
+      // Textos Portada
+      document.getElementById('hero-title').value = config.textos?.titulo_hero || "Elevamos tu Marca al Futuro.";
+      document.getElementById('hero-subtitle').value = config.textos?.subtitulo_hero || "Soluciones integrales de diseño.";
+      document.getElementById('hero-font-family').value = config.textos?.hero_font || "Syne";
+      document.getElementById('hero-alignment').value = config.textos?.hero_alignment || "center";
+      document.getElementById('hero-text-color').value = config.textos?.hero_color || "#ffffff";
+      document.getElementById('hero-size-slider').value = config.textos?.hero_size || "28";
+
+      // Enlaces y Redes
+      document.getElementById('link-visita').value = config.enlaces?.visita_link || "#contacto";
+      document.getElementById('link-whatsapp').value = config.enlaces?.whatsapp || "593990000000";
+      document.getElementById('link-whatsapp-msg').value = config.enlaces?.whatsapp_msg || "Hola E-Grafic, me interesa cotizar un servicio.";
+      document.getElementById('link-instagram').value = config.enlaces?.instagram || "https://instagram.com/egrafic";
+      document.getElementById('link-correo').value = config.enlaces?.correo || "contacto@egrafic.com";
+
+      // Preview Logo
+      if (config.identidad?.logo_url) {
+        document.getElementById('logo-img-preview').src = config.identidad.logo_url;
+        document.getElementById('logo-preview-container').classList.remove('hidden');
+        document.getElementById('logo-upload-prompt').classList.add('hidden');
+      }
     }
-  </script>
 
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.className = "tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 text-gray-400 hover:text-white bg-transparent";
+      });
+      document.getElementById(`btn-${tabId}`).className = "tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 bg-egrafic text-white";
+    }
+
+    function renderCategories() {
+      const select = document.getElementById('prod-category');
+      select.innerHTML = '<option value="" disabled selected>Selecciona una...</option>';
+      categories.forEach(cat => {
+        const opt = document.createElement('option'); opt.value = cat; opt.textContent = cat; select.appendChild(opt);
+      });
+      const container = document.getElementById('categories-editor-list'); container.innerHTML = '';
+      categories.forEach((cat, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = "flex items-center justify-between p-2.5 bg-zinc-900 border border-zinc-800/80 rounded-xl gap-2 transition-all";
+        if (editingCategoryIndex === index) {
+          itemDiv.innerHTML = `
+                        <input type="text" id="edit-cat-input-${index}" value="${cat}" class="flex-1 bg-zinc-950 border border-egrafic/40 text-white text-xs rounded-lg px-2.5 py-1.5">
+                        <div class="flex items-center gap-1">
+                            <button type="button" onclick="saveCategoryEdit(${index}, '${cat}')" class="w-8 h-8 rounded-lg bg-egrafic/20 border border-egrafic/20 flex items-center justify-center text-egrafic"><i class="ph-bold ph-check text-xs"></i></button>
+                            <button type="button" onclick="cancelCategoryEdit()" class="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center text-gray-400"><i class="ph-bold ph-x text-xs"></i></button>
+                        </div>`;
+        } else {
+          itemDiv.innerHTML = `
+                        <span class="text-xs font-medium text-gray-300 pl-1.5">${cat}</span>
+                        <div class="flex items-center gap-1">
+                            <button type="button" onclick="startCategoryEdit(${index})" class="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center text-gray-300"><i class="ph ph-pencil-line text-xs"></i></button>
+                            <button type="button" onclick="removeCategory('${cat}')" class="w-8 h-8 rounded-lg bg-red-950/20 text-red-400 flex items-center justify-center"><i class="ph ph-trash text-xs"></i></button>
+                        </div>`;
+        }
+        container.appendChild(itemDiv);
+      });
+    }
+
+    function addCustomCategory() {
+      const input = document.getElementById('new-category-name'); const name = input.value.trim();
+      if (!name || categories.includes(name)) return;
+      categories.push(name); input.value = ''; renderCategories();
+    }
+    function startCategoryEdit(index) { editingCategoryIndex = index; renderCategories(); }
+    function cancelCategoryEdit() { editingCategoryIndex = null; renderCategories(); }
+    function saveCategoryEdit(index, oldName) {
+      const input = document.getElementById(`edit-cat-input-${index}`);
+      const newName = input ? input.value.trim() : "";
+      if (!newName || categories.includes(newName)) return;
+      categories[index] = newName;
+      mockProducts.forEach(prod => { if (prod.category === oldName) prod.category = newName; });
+      editingCategoryIndex = null; renderCategories(); renderAdminProducts();
+    }
+    function removeCategory(catName) {
+      if (mockProducts.some(p => p.category === catName)) return showToast("No puedes eliminar una categoría con productos asignados.");
+      categories = categories.filter(c => c !== catName); renderCategories();
+    }
+
+    // Subidas de Cloudinary
+    document.getElementById('drop-zone-product').onclick = () => document.getElementById('file-product').click();
+    document.getElementById('file-product').onchange = (e) => handleUpload(e.target.files[0], 'product');
+    document.getElementById('drop-zone-logo').onclick = () => document.getElementById('file-logo').click();
+    document.getElementById('file-logo').onchange = (e) => handleUpload(e.target.files[0], 'logo');
+
+    async function handleUpload(file, type) {
+      if (!file) return;
+      const formData = new FormData(); formData.append('file', file); formData.append('upload_preset', UPLOAD_PRESET);
+      try {
+        const response = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
+        const data = await response.json();
+        if (data.secure_url) {
+          const optUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
+          if (type === 'product') {
+            document.getElementById('product-image-url').value = optUrl;
+            document.getElementById('product-img-preview').src = optUrl;
+            document.getElementById('product-preview-container').classList.remove('hidden');
+            document.getElementById('product-upload-prompt').classList.add('hidden');
+          } else {
+            document.getElementById('logo-image-url').value = optUrl;
+            document.getElementById('logo-img-preview').src = optUrl;
+            document.getElementById('logo-preview-container').classList.remove('hidden');
+            document.getElementById('logo-upload-prompt').classList.add('hidden');
+            updateIdentityPreview();
+          }
+          showToast("Imagen cargada.");
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    function renderAdminProducts() {
+      const container = document.getElementById('products-list'); container.innerHTML = '';
+      mockProducts.forEach((prod, index) => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between p-3.5 bg-admin-card border border-admin-border/50 rounded-2xl gap-3 animate-fade-up';
+        row.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <img src="${prod.image}" class="w-12 h-12 rounded-xl object-cover">
+                        <div><h4 class="text-xs font-bold text-white line-clamp-1">${prod.title}</h4><p class="text-[10px] text-egrafic">${prod.category}</p></div>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button type="button" onclick="move(${index}, -1)" ${index === 0 ? 'disabled' : ''} class="w-7.5 h-7.5 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-gray-400 hover:text-egrafic disabled:opacity-30"><i class="ph ph-arrow-up text-xs"></i></button>
+                        <button type="button" onclick="move(${index}, 1)" ${index === mockProducts.length - 1 ? 'disabled' : ''} class="w-7.5 h-7.5 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-gray-400 hover:text-egrafic disabled:opacity-30"><i class="ph ph-arrow-down text-xs"></i></button>
+                        <button type="button" onclick="del(${prod.id})" class="w-8 h-8 rounded-full bg-red-950/20 text-red-400 flex items-center justify-center"><i class="ph ph-trash text-sm"></i></button>
+                    </div>`;
+        container.appendChild(row);
+      });
+    }
+
+    function move(idx, dir) {
+      const item = mockProducts[idx]; mockProducts[idx] = mockProducts[idx + dir]; mockProducts[idx + dir] = item; renderAdminProducts();
+    }
+    function del(id) { mockProducts = mockProducts.filter(p => p.id !== id); renderAdminProducts(); }
+
+    function publishProduct() {
+      const title = document.getElementById('prod-title').value;
+      const category = document.getElementById('prod-category').value;
+      const price = document.getElementById('prod-price').value;
+      const desc = document.getElementById('prod-desc').value;
+      const image = document.getElementById('product-image-url').value;
+      if (!image) return;
+      mockProducts.unshift({ id: Date.now(), title, category, price, desc, image });
+      document.getElementById('product-form').reset();
+      document.getElementById('product-image-url').value = "";
+      document.getElementById('product-preview-container').classList.add('hidden');
+      document.getElementById('product-upload-prompt').classList.remove('hidden');
+      renderAdminProducts();
+      showToast("Producto añadido.");
+    }
+
+    function updateIdentityPreview() {
+      const toggleText = document.getElementById('toggle-logo-text').checked;
+      const textString = document.getElementById('logo-text-string').value;
+      const font = document.getElementById('logo-font-family').value;
+      const weight = document.getElementById('logo-font-weight').value;
+      const color = document.getElementById('logo-text-color').value;
+      const size = document.getElementById('logo-size-slider').value;
+      const copyright = document.getElementById('footer-copyright').value;
+      const line = document.getElementById('footer-accent-line').checked;
+
+      document.getElementById('logo-text-color-hex').value = color;
+      document.getElementById('logo-size-val').textContent = size + "px";
+
+      const previewText = document.getElementById('preview-logo-text');
+      previewText.textContent = textString;
+      previewText.style.color = color;
+      previewText.style.fontSize = (size * 0.75) + "px";
+      previewText.style.fontFamily = font;
+      previewText.style.fontWeight = weight;
+      if (toggleText) previewText.classList.remove('hidden');
+      else previewText.classList.add('hidden');
+
+      document.getElementById('preview-footer-text').textContent = copyright;
+      const footerLine = document.getElementById('preview-footer-line');
+      if (line) footerLine.classList.remove('hidden');
+      else footerLine.classList.add('hidden');
+    }
+
+    function updateHeroPreview() {
+      const title = document.getElementById('hero-title').value;
+      const subtitle = document.getElementById('hero-subtitle').value;
+      const font = document.getElementById('hero-font-family').value;
+      const align = document.getElementById('hero-alignment').value;
+      const color = document.getElementById('hero-text-color').value;
+      const size = document.getElementById('hero-size-slider').value;
+
+      document.getElementById('hero-text-color-hex').value = color;
+      document.getElementById('hero-size-val').textContent = size + "px";
+
+      const container = document.getElementById('preview-hero-container');
+      container.style.textAlign = align;
+
+      const previewTitle = document.getElementById('preview-hero-title');
+      previewTitle.textContent = title;
+      previewTitle.style.color = color;
+      previewTitle.style.fontFamily = font;
+      previewTitle.style.fontSize = (size * 0.6) + "px";
+
+      const previewSubtitle = document.getElementById('preview-hero-subtitle');
+      previewSubtitle.textContent = subtitle;
+      if (align === 'center') previewSubtitle.className = "text-zinc-400 text-[10px] leading-relaxed max-w-[280px] mx-auto font-light";
+      else if (align === 'left') previewSubtitle.className = "text-zinc-400 text-[10px] leading-relaxed max-w-[280px] mr-auto font-light";
+      else previewSubtitle.className = "text-zinc-400 text-[10px] leading-relaxed max-w-[280px] ml-auto font-light";
+    }
+
+    function syncColorPicker(hex, target) {
+      if (hex.startsWith('#') && hex.length === 7) {
+        if (target === 'logo') { document.getElementById('logo-text-color').value = hex; updateIdentityPreview(); }
+        else { document.getElementById('hero-text-color').value = hex; updateHeroPreview(); }
+      }
+    }
+
+    function showToast(m) {
+      const t = document.getElementById('toast'); document.getElementById('toast-message').textContent = m;
+      t.classList.remove('opacity-0'); t.classList.add('opacity-100');
+      setTimeout(() => { t.classList.remove('opacity-100'); t.classList.add('opacity-0'); }, 2500);
+    }
+
+    function saveAllChanges() {
+      const saveBtn = document.getElementById('btn-save');
+      saveBtn.innerHTML = `<i class="ph-bold ph-spinner animate-spin text-lg"></i> GUARDANDO...`;
+
+      config = {
+        productos: mockProducts,
+        categorias: categories,
+        identidad: {
+          logo_url: document.getElementById('logo-image-url').value,
+          mostrar_nombre: document.getElementById('toggle-logo-text').checked,
+          texto_nombre: document.getElementById('logo-text-string').value,
+          fuente: document.getElementById('logo-font-family').value,
+          peso: document.getElementById('logo-font-weight').value,
+          color_texto: document.getElementById('logo-text-color').value,
+          tamano_texto: document.getElementById('logo-size-slider').value
+        },
+        footer: { copyright: document.getElementById('footer-copyright').value, linea_acento: document.getElementById('footer-accent-line').checked },
+        textos: {
+          titulo_hero: document.getElementById('hero-title').value,
+          subtitulo_hero: document.getElementById('hero-subtitle').value,
+          hero_font: document.getElementById('hero-font-family').value,
+          hero_alignment: document.getElementById('hero-alignment').value,
+          hero_color: document.getElementById('hero-text-color').value,
+          hero_size: document.getElementById('hero-size-slider').value
+        },
+        enlaces: {
+          visita_link: document.getElementById('link-visita').value,
+          whatsapp: document.getElementById('link-whatsapp').value,
+          whatsapp_msg: document.getElementById('link-whatsapp-msg').value,
+          instagram: document.getElementById('link-instagram').value,
+          correo: document.getElementById('link-correo').value
+        }
+      };
+
+      localStorage.setItem('egrafic_config', JSON.stringify(config));
+      setTimeout(() => window.location.href = "../index.html", 1000);
+    }
+
+    // Iniciar
+    populateFields(); renderCategories(); renderAdminProducts();
+    updateIdentityPreview(); updateHeroPreview();
+  </script>
 </body>
 
 </html>
