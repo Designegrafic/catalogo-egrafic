@@ -111,7 +111,7 @@
       </button>
       <button onclick="switchTab('botones')" id="btn-botones"
         class="tab-btn px-4 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 text-gray-400 hover:text-white bg-transparent">
-        <i class="ph ph-mouse-pointer-click"></i> Botones y Enlaces
+        <i class="ph ph-link"></i> Botones
       </button>
     </div>
   </div>
@@ -435,13 +435,76 @@
       </div>
     </div>
 
-    <!-- ================= PESTAÑA 4: BOTONES Y ENLACES (CON PREVIO MEJORADO) ================= -->
+    <!-- ================= PESTAÑA 4: BOTONES ================= -->
     <div id="tab-botones" class="tab-content space-y-5 hidden">
       <div>
-        <h2 class="text-xl font-bold tracking-tight">Botones y Enlaces</h2>
-        <p class="text-gray-400 text-xs">Personaliza de forma visual la tipografía, colores, formas y enlaces de todos
-          los botones.</p>
+        <h2 class="text-xl font-bold tracking-tight">Gestión de Botones y Enlaces</h2>
+        <p class="text-gray-400 text-xs">Administra los links de WhatsApp y redirecciones del catálogo.</p>
       </div>
+
+      <!-- Módulo: Enlaces del Catálogo -->
+      <div class="mobile-card p-5 space-y-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-link"></i> Enlaces Principales
+        </h3>
+
+        <!-- Catálogo PDF -->
+        <div class="space-y-1">
+          <div class="flex items-center gap-2 text-xs font-semibold text-gray-400">
+            <i class="ph-bold ph-file-pdf text-lg"></i> Link de PDF
+          </div>
+          <input type="text" id="link-catalogo-pdf" value=""
+            placeholder="https://tu-sitio.com/catalogo.pdf"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 placeholder-gray-600">
+        </div>
+
+        <!-- WhatsApp -->
+        <div class="space-y-1">
+          <div class="flex items-center gap-2 text-xs font-semibold text-emerald-400">
+            <i class="ph-bold ph-whatsapp-logo text-lg"></i> Link de WhatsApp
+          </div>
+          <input type="text" id="link-whatsapp" value="https://wa.me/593990000000"
+            placeholder="https://wa.me/tu-numero-con-codigo-pais"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 placeholder-gray-600"
+            oninput="updateButtonsPreview()">
+        </div>
+      </div>
+
+      <!-- Módulo: Redes Sociales -->
+      <div class="mobile-card p-5 space-y-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
+          <i class="ph-bold ph-share-network"></i> Link de Redes
+        </h3>
+
+        <!-- Instagram -->
+        <div class="space-y-1">
+          <label class="block text-xs font-semibold text-gray-400">Instagram</label>
+          <input type="text" id="link-instagram" value="https://instagram.com/egrafic"
+            placeholder="https://instagram.com/tu-usuario"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 placeholder-gray-600"
+            oninput="updateButtonsPreview()">
+        </div>
+
+        <!-- Facebook -->
+        <div class="space-y-1">
+          <label class="block text-xs font-semibold text-gray-400">Facebook</label>
+          <input type="text" id="link-facebook" value="" placeholder="https://facebook.com/tu-pagina"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 placeholder-gray-600"
+            oninput="updateButtonsPreview()">
+        </div>
+
+        <!-- TikTok -->
+        <div class="space-y-1">
+          <label class="block text-xs font-semibold text-gray-400">TikTok</label>
+          <input type="text" id="link-tiktok" value="" placeholder="https://tiktok.com/@tu-usuario"
+            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3 placeholder-gray-600"
+            oninput="updateButtonsPreview()">
+        </div>
+      </div>
+
+      <button type="button" onclick="saveAllChanges()" class="w-full bg-egrafic hover:bg-egrafic-light text-white font-bold text-sm py-4 rounded-xl shadow-[0_4px_15px_rgba(109,187,59,0.2)] active:scale-95 transition-all">
+        Guardar Configuración
+      </button>
 
       <!-- Módulo 1: Diseño General de Botones -->
       <div class="mobile-card p-5 space-y-4">
@@ -528,57 +591,6 @@
         </div>
       </div>
 
-      <!-- Módulo 3: Redes Sociales del Footer -->
-      <div class="mobile-card p-5 space-y-4">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
-          <i class="ph-bold ph-share-network"></i> Redes Sociales Activas
-        </h3>
-        <p class="text-[10px] text-gray-500">Pega los enlaces directos. Las redes cuyos campos dejes vacíos se ocultarán
-          automáticamente.</p>
-
-        <!-- WhatsApp -->
-        <div class="space-y-1">
-          <div class="flex items-center gap-2 text-xs font-semibold text-emerald-400">
-            <i class="ph-bold ph-whatsapp-logo text-lg"></i> Enlace de WhatsApp
-          </div>
-          <input type="text" id="link-whatsapp" value="https://wa.me/593990000000"
-            placeholder="https://wa.me/tu-numero-con-codigo-pais"
-            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
-            oninput="updateButtonsPreview()">
-        </div>
-
-        <!-- Instagram -->
-        <div class="space-y-1">
-          <div class="flex items-center gap-2 text-xs font-semibold text-pink-400">
-            <i class="ph-bold ph-instagram-logo text-lg"></i> Enlace de Instagram
-          </div>
-          <input type="text" id="link-instagram" value="https://instagram.com/egrafic"
-            placeholder="https://instagram.com/tu-usuario"
-            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
-            oninput="updateButtonsPreview()">
-        </div>
-
-        <!-- Facebook -->
-        <div class="space-y-1">
-          <div class="flex items-center gap-2 text-xs font-semibold text-blue-500">
-            <i class="ph-bold ph-facebook-logo text-lg"></i> Enlace de Facebook
-          </div>
-          <input type="text" id="link-facebook" value="" placeholder="https://facebook.com/tu-pagina"
-            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
-            oninput="updateButtonsPreview()">
-        </div>
-
-        <!-- TikTok -->
-        <div class="space-y-1">
-          <div class="flex items-center gap-2 text-xs font-semibold text-teal-400">
-            <i class="ph-bold ph-tiktok-logo text-lg"></i> Enlace de TikTok
-          </div>
-          <input type="text" id="link-tiktok" value="" placeholder="https://tiktok.com/@tu-usuario"
-            class="w-full bg-zinc-900 border border-zinc-800 text-white text-xs rounded-xl px-3.5 py-3"
-            oninput="updateButtonsPreview()">
-        </div>
-      </div>
-
       <!-- VISTA PREVIA EN VIVO DE BOTONES Y ENLACES (MOCKUP INTERACTIVO) -->
       <div class="mobile-card p-5 space-y-3 bg-zinc-950/80 border border-zinc-800">
         <h3 class="text-xs font-bold uppercase tracking-wider text-egrafic flex items-center gap-1">
@@ -614,6 +626,7 @@
         </div>
       </div>
     </div>
+
 
     <!-- Botón de Guardado Estilo T-Leva -->
     <div class="fixed bottom-0 left-0 w-full p-5 bg-gradient-to-t from-admin-bg via-admin-bg/95 to-transparent z-50">
@@ -660,7 +673,7 @@
         border_radius: "12",
         font_size: "14"
       },
-      redesFijas: { whatsapp: "https://wa.me/593990000000", instagram: "https://instagram.com/egrafic", facebook: "", tiktok: "" }
+      redesFijas: { catalogo_pdf: "", whatsapp: "https://wa.me/593990000000", instagram: "https://instagram.com/egrafic", facebook: "", tiktok: "" }
     };
 
     let config = JSON.parse(localStorage.getItem('egrafic_config')) || defaultSettings;
@@ -701,6 +714,7 @@
       document.getElementById('btn-visita-link').value = config.botones.visita_tecnica_link || "#contacto";
       document.getElementById('btn-modal-text').value = config.botones.modal_cotizar_text || "Solicitar Cotización";
 
+      document.getElementById('link-catalogo-pdf').value = config.redesFijas?.catalogo_pdf || "";
       document.getElementById('link-whatsapp').value = config.redesFijas?.whatsapp || "";
       document.getElementById('link-instagram').value = config.redesFijas?.instagram || "";
       document.getElementById('link-facebook').value = config.redesFijas?.facebook || "";
@@ -1053,6 +1067,7 @@
           font_size: document.getElementById('btn-font-size-slider').value
         },
         redesFijas: {
+          catalogo_pdf: document.getElementById('link-catalogo-pdf').value,
           whatsapp: document.getElementById('link-whatsapp').value,
           instagram: document.getElementById('link-instagram').value,
           facebook: document.getElementById('link-facebook').value,
